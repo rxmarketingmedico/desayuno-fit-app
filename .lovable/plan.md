@@ -1,69 +1,53 @@
 
-# Etapa 1: Banco + Auth + Seed + Onboarding
+# Etapa 2: Landing pública + Login estilizado
 
-Vou executar a primeira fase do Desayuno Fit. Ao final, mostro o schema SQL, 3-5 receitas seed para revisar o tom em espanhol neutro, e o fluxo login + onboarding funcionando.
+## Arquivos a criar/editar
 
-## 1. Configuração base
-- Conectar **Lovable Cloud** (Supabase) ao projeto
-- Configurar paleta de cores (coral/oliva/creme/mostarda) em `src/styles.css` via tokens semânticos Tailwind v4
-- Adicionar fontes **Playfair Display** (títulos) + **Inter** (corpo) no `__root.tsx`
+### 1. `src/routes/index.tsx` (REESCREVER) — Landing pública
+Remover placeholder atual e criar landing completa com:
+- **Header sticky** com logo "Desayuno Fit" + botão "Ya compré, acceder" → `/login`
+- **Hero**: título grande, subtítulo, CTA principal "Empieza hoy" (scroll pra planos), foto Unsplash de café da manhã
+- **Sección "¿Qué incluye?"**: 4 cards com ícones (Lucide) — recetas, plan semanal, lista de compras, app mobile
+- **3 cards de planos** (Mensual $9, Semestral $29 com badge "Más popular", Anual $47 com badge "Mejor valor") — cada um abre URL Hotmart em nova aba
+- **3 testimonios** (cards com nome + cidade + texto)
+- **FAQ** (4 perguntas em accordion shadcn)
+- **Footer** com link login + texto institucional
+- `head()` com title/description/og em espanhol LATAM
+- Tom caloroso, mulheres 28-55, espanhol neutro
 
-## 2. Schema do banco (migration)
+### 2. `src/routes/login.tsx` (REESCREVER) — Login estilizado
+- Layout split em 2 colunas no desktop: foto à esquerda + formulário à direita
+- Mobile: só formulário, com header colorido em cima
+- **Remover botão "Crear cuenta"** (signup público não faz sentido — só Hotmart cria contas) — substituir por link "¿Aún no tienes cuenta? Empieza aquí" que abre URL Hotmart Mensual
+- Manter campos email/senha + esqueci a senha + login funcional
+- Aplicar paleta coral/oliva/creme
 
-**Enum:**
-- `app_role` ('admin', 'user')
-- `plan_type` ('mensual', 'semestral', 'anual', 'inactivo')
+### 3. Configuração de URLs Hotmart
+Como você ainda não passou os links Hotmart reais, vou:
+- Criar arquivo `src/config/hotmart.ts` com 3 constantes lendo de `import.meta.env`
+- Usar placeholders `#` quando env vars não estiverem definidas + mostrar toast "Próximamente disponible" no clique
+- Adicionar 3 env vars no `.env`:
+  - `VITE_HOTMART_CHECKOUT_URL_MENSUAL`
+  - `VITE_HOTMART_CHECKOUT_URL_SEMESTRAL`
+  - `VITE_HOTMART_CHECKOUT_URL_ANUAL`
 
-**Tabelas:**
-- `profiles` — id (FK auth.users), email, nombre, plan_type, plan_start_date, plan_end_date, hotmart_transaction_id, preferencias (jsonb), onboarding_completado (bool), created_at
-- `recetas` — id, slug, titulo, descripcion, tiempo_minutos, calorias, porciones, dificultad, categoria, badges (text[]), imagen_url, ingredientes (jsonb), pasos (jsonb), tip_nutricionista, info_nutricional (jsonb), categoria_ingrediente_principal, created_at
-- `favoritos` — user_id, receta_id, UNIQUE(user_id, receta_id)
-- `recetas_hechas` — user_id, receta_id, fecha, rating
-- `lista_compras` — user_id, items (jsonb), semana, updated_at
-- `semana_planificada` — user_id, semana, dias (jsonb com 7 receta_ids)
-- `user_roles` — user_id, role + função `has_role()` SECURITY DEFINER
+### 4. Componentes auxiliares
+- `src/components/landing/PricingCard.tsx` — card de plano reutilizável
+- `src/components/landing/FeatureCard.tsx` — card de benefício
+- `src/components/landing/TestimonialCard.tsx` — card de depoimento
 
-**RLS:** ativo em todas. Receitas legíveis apenas por usuários com plano ativo (`plan_end_date > now()`). Resto: cada usuário só acessa seus dados.
+### 5. Imagens
+Usar URLs Unsplash diretas (sem upload) pra:
+- Hero da landing (mesa de café da manhã saudável)
+- Coluna lateral do login (smoothie bowl ou similar)
 
-**Trigger:** `handle_new_user()` cria perfil automaticamente após signup com `plan_type = 'inactivo'` (signups manuais — Hotmart sobrescreverá depois via webhook).
+## O que NÃO faz parte desta etapa
+- Catálogo real de receitas → Etapa 3
+- Configuração de domínio de email → Etapa 6
+- Webhook Hotmart → Etapa 6
+- Página `/plan-expirado` → Etapa 5
 
-## 3. Auth (email/senha)
-- Cliente Supabase já existente em `src/integrations/supabase/client.ts`
-- Hook `useAuth` com `onAuthStateChange` (configurado ANTES de `getSession`)
-- Rotas:
-  - `/login` — email + senha + link "¿Olvidaste tu contraseña?" + link "Empieza aquí" → Hotmart
-  - `/forgot-password` — envia email com `redirectTo: /reset-password`
-  - `/reset-password` — define nova senha (rota pública, fora de `_authenticated`)
-- Layout protegido `_authenticated.tsx` com `beforeLoad` redirecionando para `/login` se não autenticado
+## Entregável
+Preview navegável: `/` (landing completa) → clicar "Ya compré, acceder" → `/login` estilizado → login funciona → `/app` (placeholder).
 
-## 4. Onboarding `/onboarding`
-- Tela de boas-vindas após primeiro login
-- **Botão "Saltar por ahora"** bem visível no canto superior direito
-- Campos: nombre + checkboxes de preferências (sin gluten, alta proteína, sin azúcar, vegetariano)
-- Salva em `profiles.preferencias` e marca `onboarding_completado = true`
-- Pular também marca `onboarding_completado = true` (não força de novo)
-- Após concluir → redireciona para `/app` (placeholder por enquanto, conteúdo real na Etapa 3)
-
-## 5. Seed das 20 receitas
-- Migration de seed inserindo 20 receitas em **espanhol neutro LATAM**
-- Termos: "aguacate", "jugo", "fresa", "frijoles" (não "judías"/"zumo"/"frutilla")
-- Tom caloroso e direto: "Listo en 5 minutos, perfecto para empezar el día con energía"
-- Imagens via Unsplash (`https://images.unsplash.com/photo-...?auto=format&fit=crop&w=800&q=80`)
-- Variedade: 8 doces, 6 salgados, 3 bebidas, 2 panes, 1 snack
-- Cada receita: 3-8 ingredientes, 4-7 passos, 1-3 badges, tip da nutricionista em 1-2 frases
-
-## 6. Placeholder `/app` mínimo
-- Rota `/app` em `_authenticated/app.tsx` apenas com mensagem "Bienvenida [nombre] — el catálogo llega en la próxima etapa"
-- Permite testar o fluxo completo de login + onboarding + redirect
-
-## Detalhes técnicos
-- **Tela "plan inactivo"** ainda NÃO nesta etapa (vai junto com guarda de plano na Etapa 5) — por enquanto, qualquer usuário autenticado entra em `/app` mesmo com plano inativo
-- Rota `_authenticated.tsx` verifica apenas autenticação nesta fase
-- Após login, lógica decide: se `onboarding_completado = false` → `/onboarding`; senão → `/app`
-
-## O que entrego para revisão
-1. **SQL completo** da migration (tabelas, RLS, função `has_role`, trigger)
-2. **5 receitas seed em destaque** com título/descrição/passos/tip para você validar tom e espanhol
-3. **Fluxo navegável**: criar conta → login → onboarding (com botão Saltar visível) → `/app`
-
-Após sua aprovação, sigo para a Etapa 2 (landing pública com 3 planos + login estilizado).
+Após validação, sigo pra Etapa 3 (catálogo + filtros + detalhe + favoritos).
