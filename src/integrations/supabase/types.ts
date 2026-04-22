@@ -14,16 +14,255 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      favoritos: {
+        Row: {
+          created_at: string
+          id: string
+          receta_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          receta_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          receta_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favoritos_receta_id_fkey"
+            columns: ["receta_id"]
+            isOneToOne: false
+            referencedRelation: "recetas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lista_compras: {
+        Row: {
+          id: string
+          items: Json
+          semana: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          items?: Json
+          semana: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          items?: Json
+          semana?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          hotmart_transaction_id: string | null
+          id: string
+          nombre: string | null
+          onboarding_completado: boolean
+          plan_end_date: string | null
+          plan_start_date: string | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          preferencias: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          hotmart_transaction_id?: string | null
+          id: string
+          nombre?: string | null
+          onboarding_completado?: boolean
+          plan_end_date?: string | null
+          plan_start_date?: string | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          preferencias?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          hotmart_transaction_id?: string | null
+          id?: string
+          nombre?: string | null
+          onboarding_completado?: boolean
+          plan_end_date?: string | null
+          plan_start_date?: string | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          preferencias?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      recetas: {
+        Row: {
+          badges: string[]
+          calorias: number
+          categoria: string
+          categoria_ingrediente_principal: string | null
+          created_at: string
+          descripcion: string
+          dificultad: string
+          id: string
+          imagen_url: string
+          info_nutricional: Json
+          ingredientes: Json
+          pasos: Json
+          porciones: number
+          slug: string
+          tiempo_minutos: number
+          tip_nutricionista: string | null
+          titulo: string
+        }
+        Insert: {
+          badges?: string[]
+          calorias: number
+          categoria: string
+          categoria_ingrediente_principal?: string | null
+          created_at?: string
+          descripcion: string
+          dificultad?: string
+          id?: string
+          imagen_url: string
+          info_nutricional?: Json
+          ingredientes: Json
+          pasos: Json
+          porciones?: number
+          slug: string
+          tiempo_minutos: number
+          tip_nutricionista?: string | null
+          titulo: string
+        }
+        Update: {
+          badges?: string[]
+          calorias?: number
+          categoria?: string
+          categoria_ingrediente_principal?: string | null
+          created_at?: string
+          descripcion?: string
+          dificultad?: string
+          id?: string
+          imagen_url?: string
+          info_nutricional?: Json
+          ingredientes?: Json
+          pasos?: Json
+          porciones?: number
+          slug?: string
+          tiempo_minutos?: number
+          tip_nutricionista?: string | null
+          titulo?: string
+        }
+        Relationships: []
+      }
+      recetas_hechas: {
+        Row: {
+          fecha: string
+          id: string
+          rating: number | null
+          receta_id: string
+          user_id: string
+        }
+        Insert: {
+          fecha?: string
+          id?: string
+          rating?: number | null
+          receta_id: string
+          user_id: string
+        }
+        Update: {
+          fecha?: string
+          id?: string
+          rating?: number | null
+          receta_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recetas_hechas_receta_id_fkey"
+            columns: ["receta_id"]
+            isOneToOne: false
+            referencedRelation: "recetas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      semana_planificada: {
+        Row: {
+          created_at: string
+          dias: Json
+          id: string
+          semana: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dias?: Json
+          id?: string
+          semana: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dias?: Json
+          id?: string
+          semana?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_active_plan: { Args: { _user_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      plan_type: "mensual" | "semestral" | "anual" | "inactivo"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +389,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      plan_type: ["mensual", "semestral", "anual", "inactivo"],
+    },
   },
 } as const
