@@ -17,6 +17,12 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
+import { Route as AuthenticatedAppSemanaRouteImport } from './routes/_authenticated.app.semana'
+import { Route as AuthenticatedAppRecetasRouteImport } from './routes/_authenticated.app.recetas'
+import { Route as AuthenticatedAppPerfilRouteImport } from './routes/_authenticated.app.perfil'
+import { Route as AuthenticatedAppFavoritosRouteImport } from './routes/_authenticated.app.favoritos'
+import { Route as AuthenticatedAppComprasRouteImport } from './routes/_authenticated.app.compras'
+import { Route as AuthenticatedAppRecetasSlugRouteImport } from './routes/_authenticated.app.recetas.$slug'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -57,6 +63,38 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAppSemanaRoute = AuthenticatedAppSemanaRouteImport.update({
+  id: '/semana',
+  path: '/semana',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const AuthenticatedAppRecetasRoute = AuthenticatedAppRecetasRouteImport.update({
+  id: '/recetas',
+  path: '/recetas',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const AuthenticatedAppPerfilRoute = AuthenticatedAppPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const AuthenticatedAppFavoritosRoute =
+  AuthenticatedAppFavoritosRouteImport.update({
+    id: '/favoritos',
+    path: '/favoritos',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppComprasRoute = AuthenticatedAppComprasRouteImport.update({
+  id: '/compras',
+  path: '/compras',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const AuthenticatedAppRecetasSlugRoute =
+  AuthenticatedAppRecetasSlugRouteImport.update({
+    id: '/$slug',
+    path: '/$slug',
+    getParentRoute: () => AuthenticatedAppRecetasRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -64,8 +102,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/app': typeof AuthenticatedAppRoute
+  '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/app/compras': typeof AuthenticatedAppComprasRoute
+  '/app/favoritos': typeof AuthenticatedAppFavoritosRoute
+  '/app/perfil': typeof AuthenticatedAppPerfilRoute
+  '/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
+  '/app/semana': typeof AuthenticatedAppSemanaRoute
+  '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -73,8 +117,14 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/app': typeof AuthenticatedAppRoute
+  '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/app/compras': typeof AuthenticatedAppComprasRoute
+  '/app/favoritos': typeof AuthenticatedAppFavoritosRoute
+  '/app/perfil': typeof AuthenticatedAppPerfilRoute
+  '/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
+  '/app/semana': typeof AuthenticatedAppSemanaRoute
+  '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -84,8 +134,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/app': typeof AuthenticatedAppRoute
+  '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/app/compras': typeof AuthenticatedAppComprasRoute
+  '/_authenticated/app/favoritos': typeof AuthenticatedAppFavoritosRoute
+  '/_authenticated/app/perfil': typeof AuthenticatedAppPerfilRoute
+  '/_authenticated/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
+  '/_authenticated/app/semana': typeof AuthenticatedAppSemanaRoute
+  '/_authenticated/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +153,12 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app'
     | '/onboarding'
+    | '/app/compras'
+    | '/app/favoritos'
+    | '/app/perfil'
+    | '/app/recetas'
+    | '/app/semana'
+    | '/app/recetas/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +168,12 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app'
     | '/onboarding'
+    | '/app/compras'
+    | '/app/favoritos'
+    | '/app/perfil'
+    | '/app/recetas'
+    | '/app/semana'
+    | '/app/recetas/$slug'
   id:
     | '__root__'
     | '/'
@@ -116,6 +184,12 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/app'
     | '/_authenticated/onboarding'
+    | '/_authenticated/app/compras'
+    | '/_authenticated/app/favoritos'
+    | '/_authenticated/app/perfil'
+    | '/_authenticated/app/recetas'
+    | '/_authenticated/app/semana'
+    | '/_authenticated/app/recetas/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -185,16 +259,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/app/semana': {
+      id: '/_authenticated/app/semana'
+      path: '/semana'
+      fullPath: '/app/semana'
+      preLoaderRoute: typeof AuthenticatedAppSemanaRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/recetas': {
+      id: '/_authenticated/app/recetas'
+      path: '/recetas'
+      fullPath: '/app/recetas'
+      preLoaderRoute: typeof AuthenticatedAppRecetasRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/perfil': {
+      id: '/_authenticated/app/perfil'
+      path: '/perfil'
+      fullPath: '/app/perfil'
+      preLoaderRoute: typeof AuthenticatedAppPerfilRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/favoritos': {
+      id: '/_authenticated/app/favoritos'
+      path: '/favoritos'
+      fullPath: '/app/favoritos'
+      preLoaderRoute: typeof AuthenticatedAppFavoritosRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/compras': {
+      id: '/_authenticated/app/compras'
+      path: '/compras'
+      fullPath: '/app/compras'
+      preLoaderRoute: typeof AuthenticatedAppComprasRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/recetas/$slug': {
+      id: '/_authenticated/app/recetas/$slug'
+      path: '/$slug'
+      fullPath: '/app/recetas/$slug'
+      preLoaderRoute: typeof AuthenticatedAppRecetasSlugRouteImport
+      parentRoute: typeof AuthenticatedAppRecetasRoute
+    }
   }
 }
 
+interface AuthenticatedAppRecetasRouteChildren {
+  AuthenticatedAppRecetasSlugRoute: typeof AuthenticatedAppRecetasSlugRoute
+}
+
+const AuthenticatedAppRecetasRouteChildren: AuthenticatedAppRecetasRouteChildren =
+  {
+    AuthenticatedAppRecetasSlugRoute: AuthenticatedAppRecetasSlugRoute,
+  }
+
+const AuthenticatedAppRecetasRouteWithChildren =
+  AuthenticatedAppRecetasRoute._addFileChildren(
+    AuthenticatedAppRecetasRouteChildren,
+  )
+
+interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppComprasRoute: typeof AuthenticatedAppComprasRoute
+  AuthenticatedAppFavoritosRoute: typeof AuthenticatedAppFavoritosRoute
+  AuthenticatedAppPerfilRoute: typeof AuthenticatedAppPerfilRoute
+  AuthenticatedAppRecetasRoute: typeof AuthenticatedAppRecetasRouteWithChildren
+  AuthenticatedAppSemanaRoute: typeof AuthenticatedAppSemanaRoute
+}
+
+const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppComprasRoute: AuthenticatedAppComprasRoute,
+  AuthenticatedAppFavoritosRoute: AuthenticatedAppFavoritosRoute,
+  AuthenticatedAppPerfilRoute: AuthenticatedAppPerfilRoute,
+  AuthenticatedAppRecetasRoute: AuthenticatedAppRecetasRouteWithChildren,
+  AuthenticatedAppSemanaRoute: AuthenticatedAppSemanaRoute,
+}
+
+const AuthenticatedAppRouteWithChildren =
+  AuthenticatedAppRoute._addFileChildren(AuthenticatedAppRouteChildren)
+
 interface AuthenticatedRouteChildren {
-  AuthenticatedAppRoute: typeof AuthenticatedAppRoute
+  AuthenticatedAppRoute: typeof AuthenticatedAppRouteWithChildren
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedAppRoute: AuthenticatedAppRoute,
+  AuthenticatedAppRoute: AuthenticatedAppRouteWithChildren,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
 }
 
