@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthVerifyRouteImport } from './routes/auth.verify'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
@@ -54,6 +55,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVerifyRoute = AuthVerifyRouteImport.update({
+  id: '/auth/verify',
+  path: '/auth/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/app/compras': typeof AuthenticatedAppComprasRoute
   '/app/favoritos': typeof AuthenticatedAppFavoritosRoute
   '/app/perfil': typeof AuthenticatedAppPerfilRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/app/compras': typeof AuthenticatedAppComprasRoute
   '/app/favoritos': typeof AuthenticatedAppFavoritosRoute
   '/app/perfil': typeof AuthenticatedAppPerfilRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/_authenticated/app/compras': typeof AuthenticatedAppComprasRoute
   '/_authenticated/app/favoritos': typeof AuthenticatedAppFavoritosRoute
   '/_authenticated/app/perfil': typeof AuthenticatedAppPerfilRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/auth/callback'
+    | '/auth/verify'
     | '/app/compras'
     | '/app/favoritos'
     | '/app/perfil'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/auth/callback'
+    | '/auth/verify'
     | '/app/compras'
     | '/app/favoritos'
     | '/app/perfil'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app'
     | '/_authenticated/onboarding'
     | '/auth/callback'
+    | '/auth/verify'
     | '/_authenticated/app/compras'
     | '/_authenticated/app/favoritos'
     | '/_authenticated/app/perfil'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   PlanExpiradoRoute: typeof PlanExpiradoRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthVerifyRoute: typeof AuthVerifyRoute
   ApiPublicHotmartWebhookRoute: typeof ApiPublicHotmartWebhookRoute
   ApiPublicTestWelcomeEmailRoute: typeof ApiPublicTestWelcomeEmailRoute
 }
@@ -283,6 +296,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/verify': {
+      id: '/auth/verify'
+      path: '/auth/verify'
+      fullPath: '/auth/verify'
+      preLoaderRoute: typeof AuthVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/callback': {
@@ -420,6 +440,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanExpiradoRoute: PlanExpiradoRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   AuthCallbackRoute: AuthCallbackRoute,
+  AuthVerifyRoute: AuthVerifyRoute,
   ApiPublicHotmartWebhookRoute: ApiPublicHotmartWebhookRoute,
   ApiPublicTestWelcomeEmailRoute: ApiPublicTestWelcomeEmailRoute,
 }
