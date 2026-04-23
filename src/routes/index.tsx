@@ -24,11 +24,11 @@ import {
 } from "lucide-react";
 import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
-import logo from "@/assets/logo.png";
-import sofiaImg from "@/assets/sofia-herrera.png";
+import logo from "@/assets/logo.webp";
+import sofiaImg from "@/assets/sofia-herrera.webp";
 
 const HERO_IMG =
-  "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=80";
+  "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=70&fm=webp";
 
 const RECIPE_PREVIEW = [
   { img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Tostada de aguacate y huevo pochado", meta: "10 min · 285 cal" },
@@ -130,7 +130,7 @@ function LandingPage() {
       <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2" aria-label="Desayuno Fit">
-            <img src={logo} alt="Desayuno Fit" className="h-12 w-12 md:h-14 md:w-14 object-contain" />
+            <img src={logo} alt="Desayuno Fit" width="56" height="56" className="h-12 w-12 md:h-14 md:w-14 object-contain" />
           </Link>
           <Link to="/login">
             <Button variant="ghost" size="sm">Ya compré, acceder</Button>
@@ -152,7 +152,16 @@ function LandingPage() {
           </p>
 
           <div className="mt-8 rounded-3xl overflow-hidden shadow-xl shadow-primary/10 border border-border max-w-2xl mx-auto">
-            <img src={HERO_IMG} alt="Desayuno saludable con fruta y yogur" className="w-full aspect-[16/10] object-cover" loading="eager" />
+            <img
+              src={HERO_IMG}
+              alt="Desayuno saludable con fruta y yogur"
+              width="1200"
+              height="750"
+              className="w-full aspect-[16/10] object-cover"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
           </div>
 
           <Button size="lg" onClick={scrollToPlanes} className="mt-8 text-base px-8 py-6 rounded-full shadow-lg shadow-primary/30">
@@ -258,7 +267,7 @@ function LandingPage() {
             {RECIPE_PREVIEW.map((r, i) => (
               <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-md transition-shadow">
                 <div className="aspect-[4/3] overflow-hidden bg-muted">
-                  <img src={r.img} alt={r.name} loading="lazy" className="w-full h-full object-cover" />
+                  <img src={r.img} alt={r.name} loading="lazy" decoding="async" width="600" height="450" className="w-full h-full object-cover" />
                 </div>
                 <div className="p-3.5 md:p-4">
                   <span className={`inline-block text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
@@ -295,8 +304,11 @@ function LandingPage() {
                 <img
                   src={sofiaImg}
                   alt="Sofía Herrera, nutricionista creadora de Desayuno Fit"
+                  width="800"
+                  height="800"
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>
