@@ -17,6 +17,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
+import { Route as ApiPublicTestWelcomeEmailRouteImport } from './routes/api.public.test-welcome-email'
 import { Route as ApiPublicHotmartWebhookRouteImport } from './routes/api.public.hotmart-webhook'
 import { Route as AuthenticatedAppSemanaRouteImport } from './routes/_authenticated.app.semana'
 import { Route as AuthenticatedAppRecetasRouteImport } from './routes/_authenticated.app.recetas'
@@ -64,6 +65,12 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiPublicTestWelcomeEmailRoute =
+  ApiPublicTestWelcomeEmailRouteImport.update({
+    id: '/api/public/test-welcome-email',
+    path: '/api/public/test-welcome-email',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHotmartWebhookRoute = ApiPublicHotmartWebhookRouteImport.update({
   id: '/api/public/hotmart-webhook',
   path: '/api/public/hotmart-webhook',
@@ -116,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
   '/app/semana': typeof AuthenticatedAppSemanaRoute
   '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
+  '/api/public/test-welcome-email': typeof ApiPublicTestWelcomeEmailRoute
   '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesByTo {
@@ -132,6 +140,7 @@ export interface FileRoutesByTo {
   '/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
   '/app/semana': typeof AuthenticatedAppSemanaRoute
   '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
+  '/api/public/test-welcome-email': typeof ApiPublicTestWelcomeEmailRoute
   '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesById {
@@ -150,6 +159,7 @@ export interface FileRoutesById {
   '/_authenticated/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
   '/_authenticated/app/semana': typeof AuthenticatedAppSemanaRoute
   '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
+  '/api/public/test-welcome-email': typeof ApiPublicTestWelcomeEmailRoute
   '/_authenticated/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRouteTypes {
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/app/recetas'
     | '/app/semana'
     | '/api/public/hotmart-webhook'
+    | '/api/public/test-welcome-email'
     | '/app/recetas/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/app/recetas'
     | '/app/semana'
     | '/api/public/hotmart-webhook'
+    | '/api/public/test-welcome-email'
     | '/app/recetas/$slug'
   id:
     | '__root__'
@@ -201,6 +213,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/recetas'
     | '/_authenticated/app/semana'
     | '/api/public/hotmart-webhook'
+    | '/api/public/test-welcome-email'
     | '/_authenticated/app/recetas/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -212,6 +225,7 @@ export interface RootRouteChildren {
   PlanExpiradoRoute: typeof PlanExpiradoRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiPublicHotmartWebhookRoute: typeof ApiPublicHotmartWebhookRoute
+  ApiPublicTestWelcomeEmailRoute: typeof ApiPublicTestWelcomeEmailRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -271,6 +285,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app'
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/test-welcome-email': {
+      id: '/api/public/test-welcome-email'
+      path: '/api/public/test-welcome-email'
+      fullPath: '/api/public/test-welcome-email'
+      preLoaderRoute: typeof ApiPublicTestWelcomeEmailRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/hotmart-webhook': {
       id: '/api/public/hotmart-webhook'
@@ -379,6 +400,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanExpiradoRoute: PlanExpiradoRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiPublicHotmartWebhookRoute: ApiPublicHotmartWebhookRoute,
+  ApiPublicTestWelcomeEmailRoute: ApiPublicTestWelcomeEmailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
