@@ -90,7 +90,7 @@ function PerfilPage() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ preferencias: prefs })
+      .update({ preferencias: prefs as Record<string, boolean> })
       .eq("id", user.id);
     setSaving(false);
     if (error) {
