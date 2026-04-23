@@ -169,6 +169,75 @@ export type Database = {
         }
         Relationships: []
       }
+      recetas_audit_log: {
+        Row: {
+          applied_at: string
+          campo: string
+          id: string
+          motivo: string
+          receta_id: string
+          slug: string
+          valor_anterior: string | null
+          valor_nuevo: string | null
+        }
+        Insert: {
+          applied_at?: string
+          campo: string
+          id?: string
+          motivo: string
+          receta_id: string
+          slug: string
+          valor_anterior?: string | null
+          valor_nuevo?: string | null
+        }
+        Update: {
+          applied_at?: string
+          campo?: string
+          id?: string
+          motivo?: string
+          receta_id?: string
+          slug?: string
+          valor_anterior?: string | null
+          valor_nuevo?: string | null
+        }
+        Relationships: []
+      }
+      recetas_backup_20260423: {
+        Row: {
+          backed_up_at: string
+          calorias: number
+          id: string
+          ingredientes: Json
+          motivo: string | null
+          pasos: Json
+          porciones: number
+          slug: string
+          titulo: string
+        }
+        Insert: {
+          backed_up_at?: string
+          calorias: number
+          id: string
+          ingredientes: Json
+          motivo?: string | null
+          pasos: Json
+          porciones: number
+          slug: string
+          titulo: string
+        }
+        Update: {
+          backed_up_at?: string
+          calorias?: number
+          id?: string
+          ingredientes?: Json
+          motivo?: string | null
+          pasos?: Json
+          porciones?: number
+          slug?: string
+          titulo?: string
+        }
+        Relationships: []
+      }
       recetas_hechas: {
         Row: {
           fecha: string
