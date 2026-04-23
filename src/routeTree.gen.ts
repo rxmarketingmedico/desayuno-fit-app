@@ -20,6 +20,7 @@ import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated.admin.index'
 import { Route as ApiPublicTestWelcomeEmailRouteImport } from './routes/api.public.test-welcome-email'
 import { Route as ApiPublicHotmartWebhookRouteImport } from './routes/api.public.hotmart-webhook'
 import { Route as AuthenticatedAppSemanaRouteImport } from './routes/_authenticated.app.semana'
@@ -27,6 +28,7 @@ import { Route as AuthenticatedAppRecetasRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAppPerfilRouteImport } from './routes/_authenticated.app.perfil'
 import { Route as AuthenticatedAppFavoritosRouteImport } from './routes/_authenticated.app.favoritos'
 import { Route as AuthenticatedAppComprasRouteImport } from './routes/_authenticated.app.compras'
+import { Route as AuthenticatedAdminAdminsRouteImport } from './routes/_authenticated.admin.admins'
 import { Route as AuthenticatedAppRecetasSlugRouteImport } from './routes/_authenticated.app.recetas.$slug'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -83,6 +85,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const ApiPublicTestWelcomeEmailRoute =
   ApiPublicTestWelcomeEmailRouteImport.update({
     id: '/api/public/test-welcome-email',
@@ -120,6 +127,12 @@ const AuthenticatedAppComprasRoute = AuthenticatedAppComprasRouteImport.update({
   path: '/compras',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAdminAdminsRoute =
+  AuthenticatedAdminAdminsRouteImport.update({
+    id: '/admins',
+    path: '/admins',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAppRecetasSlugRoute =
   AuthenticatedAppRecetasSlugRouteImport.update({
     id: '/$slug',
@@ -133,11 +146,12 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/verify': typeof AuthVerifyRoute
+  '/admin/admins': typeof AuthenticatedAdminAdminsRoute
   '/app/compras': typeof AuthenticatedAppComprasRoute
   '/app/favoritos': typeof AuthenticatedAppFavoritosRoute
   '/app/perfil': typeof AuthenticatedAppPerfilRoute
@@ -145,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/app/semana': typeof AuthenticatedAppSemanaRoute
   '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
   '/api/public/test-welcome-email': typeof ApiPublicTestWelcomeEmailRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesByTo {
@@ -153,11 +168,11 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/verify': typeof AuthVerifyRoute
+  '/admin/admins': typeof AuthenticatedAdminAdminsRoute
   '/app/compras': typeof AuthenticatedAppComprasRoute
   '/app/favoritos': typeof AuthenticatedAppFavoritosRoute
   '/app/perfil': typeof AuthenticatedAppPerfilRoute
@@ -165,6 +180,7 @@ export interface FileRoutesByTo {
   '/app/semana': typeof AuthenticatedAppSemanaRoute
   '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
   '/api/public/test-welcome-email': typeof ApiPublicTestWelcomeEmailRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesById {
@@ -175,11 +191,12 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/verify': typeof AuthVerifyRoute
+  '/_authenticated/admin/admins': typeof AuthenticatedAdminAdminsRoute
   '/_authenticated/app/compras': typeof AuthenticatedAppComprasRoute
   '/_authenticated/app/favoritos': typeof AuthenticatedAppFavoritosRoute
   '/_authenticated/app/perfil': typeof AuthenticatedAppPerfilRoute
@@ -187,6 +204,7 @@ export interface FileRoutesById {
   '/_authenticated/app/semana': typeof AuthenticatedAppSemanaRoute
   '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
   '/api/public/test-welcome-email': typeof ApiPublicTestWelcomeEmailRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRouteTypes {
@@ -202,6 +220,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/auth/callback'
     | '/auth/verify'
+    | '/admin/admins'
     | '/app/compras'
     | '/app/favoritos'
     | '/app/perfil'
@@ -209,6 +228,7 @@ export interface FileRouteTypes {
     | '/app/semana'
     | '/api/public/hotmart-webhook'
     | '/api/public/test-welcome-email'
+    | '/admin/'
     | '/app/recetas/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -217,11 +237,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/plan-expirado'
     | '/reset-password'
-    | '/admin'
     | '/app'
     | '/onboarding'
     | '/auth/callback'
     | '/auth/verify'
+    | '/admin/admins'
     | '/app/compras'
     | '/app/favoritos'
     | '/app/perfil'
@@ -229,6 +249,7 @@ export interface FileRouteTypes {
     | '/app/semana'
     | '/api/public/hotmart-webhook'
     | '/api/public/test-welcome-email'
+    | '/admin'
     | '/app/recetas/$slug'
   id:
     | '__root__'
@@ -243,6 +264,7 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding'
     | '/auth/callback'
     | '/auth/verify'
+    | '/_authenticated/admin/admins'
     | '/_authenticated/app/compras'
     | '/_authenticated/app/favoritos'
     | '/_authenticated/app/perfil'
@@ -250,6 +272,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/semana'
     | '/api/public/hotmart-webhook'
     | '/api/public/test-welcome-email'
+    | '/_authenticated/admin/'
     | '/_authenticated/app/recetas/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -345,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/api/public/test-welcome-email': {
       id: '/api/public/test-welcome-email'
       path: '/api/public/test-welcome-email'
@@ -394,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppComprasRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/admin/admins': {
+      id: '/_authenticated/admin/admins'
+      path: '/admins'
+      fullPath: '/admin/admins'
+      preLoaderRoute: typeof AuthenticatedAdminAdminsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/app/recetas/$slug': {
       id: '/_authenticated/app/recetas/$slug'
       path: '/$slug'
@@ -403,6 +440,19 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAdminsRoute: typeof AuthenticatedAdminAdminsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAdminsRoute: AuthenticatedAdminAdminsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedAppRecetasRouteChildren {
   AuthenticatedAppRecetasSlugRoute: typeof AuthenticatedAppRecetasSlugRoute
@@ -438,13 +488,13 @@ const AuthenticatedAppRouteWithChildren =
   AuthenticatedAppRoute._addFileChildren(AuthenticatedAppRouteChildren)
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedAppRoute: typeof AuthenticatedAppRouteWithChildren
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedAppRoute: AuthenticatedAppRouteWithChildren,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
 }
