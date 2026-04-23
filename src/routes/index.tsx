@@ -17,6 +17,7 @@ import {
 import { FeatureCard } from "@/components/landing/FeatureCard";
 import { TestimonialCard } from "@/components/landing/TestimonialCard";
 import { PricingCard } from "@/components/landing/PricingCard";
+import logo from "@/assets/logo.png";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=1400&q=80";
@@ -55,8 +56,9 @@ function LandingPage() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <Link to="/" className="font-display text-2xl font-bold text-secondary">
-            Desayuno Fit
+          <Link to="/" className="flex items-center gap-2" aria-label="Desayuno Fit">
+            <img src={logo} alt="Desayuno Fit" className="h-12 w-12 md:h-14 md:w-14 object-contain" />
+            <span className="sr-only">Desayuno Fit</span>
           </Link>
           <Link to="/login">
             <Button variant="ghost" size="sm">
