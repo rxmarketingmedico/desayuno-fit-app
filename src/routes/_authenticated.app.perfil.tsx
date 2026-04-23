@@ -82,17 +82,17 @@ function PerfilPage() {
       </div>
 
       {planPorVencer && fechaVencimiento && (
-        <div className="rounded-2xl border border-orange-300 bg-orange-50 p-4 space-y-3">
+        <div className="rounded-2xl border border-warning-border bg-warning-soft p-4 space-y-3">
           <div className="flex gap-2 items-start">
-            <AlertTriangle className="h-5 w-5 text-orange-600 shrink-0 mt-0.5" />
-            <p className="text-sm text-orange-900">
-              <span className="font-semibold">Tu plan vence el {fechaVencimiento}.</span>{" "}
+            <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
+            <p className="text-sm text-foreground">
+              <span className="font-semibold">⚠️ Tu plan vence el {fechaVencimiento}.</span>{" "}
               Renueva para seguir disfrutando.
             </p>
           </div>
           <Button
             size="sm"
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+            className="w-full bg-warning hover:bg-warning/90 text-warning-foreground"
             onClick={renovar}
           >
             Renovar ahora
