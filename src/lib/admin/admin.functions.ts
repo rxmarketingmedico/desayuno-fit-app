@@ -3,11 +3,11 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendWelcomeEmail } from "@/lib/email/welcome-email";
 import { listSales, getBuyerSummary } from "@/lib/hotmart/api.server";
 import type { Database } from "@/integrations/supabase/types";
+import { requireServerFnAuth } from "@/lib/auth/require-server-fn-auth";
 import {
   APP_URL,
   PLAN_LABEL,
