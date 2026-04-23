@@ -1,41 +1,98 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
-  Sparkles,
-  Heart,
-  ShoppingBasket,
-  Calendar,
-  Smartphone,
-  ChefHat,
-} from "lucide-react";
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { FeatureCard } from "@/components/landing/FeatureCard";
-import { TestimonialCard } from "@/components/landing/TestimonialCard";
-import { PricingCard } from "@/components/landing/PricingCard";
+import {
+  Smartphone,
+  CalendarDays,
+  ShoppingBasket,
+  Check,
+  X,
+  Sparkles,
+  ShieldCheck,
+  Zap,
+  Lock,
+  Mail,
+  CreditCard,
+  Monitor,
+  RefreshCw,
+  Star,
+} from "lucide-react";
+import { openHotmart, type PlanKey } from "@/config/hotmart";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const HERO_IMG =
-  "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=1400&q=80";
+  "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=80";
+
+const RECIPE_PREVIEW = [
+  { img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Tostada de aguacate y huevo pochado", meta: "10 min · 285 cal" },
+  { img: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80", badge: "Sin harina", badgeColor: "secondary", name: "Panqueques de avena y banana", meta: "12 min · 310 cal" },
+  { img: "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=600&q=80", badge: "Antioxidante", badgeColor: "secondary", name: "Smoothie bowl de frutos rojos", meta: "8 min · 290 cal" },
+  { img: "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Huevos revueltos con espinaca", meta: "7 min · 245 cal" },
+  { img: "https://images.unsplash.com/photo-1542691457-cbe4df041eb2?auto=format&fit=crop&w=600&q=80", badge: "Vegano", badgeColor: "secondary", name: "Chia pudding de vainilla", meta: "5 min · 220 cal" },
+  { img: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=600&q=80", badge: "Sin azúcar", badgeColor: "secondary", name: "Tostada francesa de plátano", meta: "12 min · 300 cal" },
+  { img: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Smoothie proteico de cacao", meta: "5 min · 275 cal" },
+  { img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Bowl de yogur griego con granola", meta: "5 min · 320 cal" },
+  { img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80", badge: "Sin gluten", badgeColor: "secondary", name: "Tacos de claras y frijoles negros", meta: "15 min · 350 cal" },
+];
+
+const PAINS = [
+  "Quieres comer sano pero no sabes qué hacer además de huevo con pan.",
+  "Empiezas la dieta, te aburres a los 3 días y vuelves a lo mismo de siempre.",
+  "Te despiertas sin tiempo, saltas el desayuno y a las 10 estás atacando cualquier cosa.",
+  "Crees que las recetas fit necesitan 20 ingredientes caros que ni están en el súper.",
+  "Ya compraste PDFs de recetas que se quedaron guardados y nunca usaste.",
+  "Quieres bajar de peso sin pasar hambre ni comer lo mismo todos los días.",
+];
+
+const SOLUTION_CHECKS = [
+  ["Recetas de hasta", "350 calorías"],
+  ["Con sabor real,", "no comida aburrida"],
+  ["Con", "proteínas y vitaminas esenciales"],
+  ["Listas en", "15 minutos o menos"],
+  ["Solo ingredientes", "del súper de tu barrio"],
+  ["Solo necesitas", "licuadora y sartén"],
+  ["Paso a paso claro —", "hasta si nunca cocinaste"],
+];
+
+const BONUSES = [
+  { n: "01", title: "200 postres sin azúcar", desc: "Dulces para matar el antojo sin salirte de la línea — postre cada día sin culpa.", old: "USD 9" },
+  { n: "02", title: "60 recetas de lunch fit", desc: "Almuerzo y cena resueltos para toda la semana — para quienes llevan marmita y no quieren repetir.", old: "USD 5" },
+  { n: "03", title: "60 jugos detox", desc: "Desinflamación en la mañana, energía todo el día — recetas rápidas para batir y tomar.", old: "USD 9" },
+  { n: "04", title: "30 recetas antiinflamatorias", desc: "Almuerzo y cena que ayudan a desinflamar, reducir celulitis y acabar con esa sensación de pesadez.", old: "USD 6" },
+  { n: "05", title: "20 panes sin gluten", desc: "Panes caseros, ligeros y sin harina blanca — para quien ama el pan pero no quiere inflamarse.", old: "USD 6" },
+];
+
+const FAQS = [
+  { q: "¿Las recetas tienen sabor de verdad?", a: 'Sí. Ninguna es la típica "ensalada triste". Están hechas para que te guste comerlas todos los días — con sabor real, no comida de dieta aburrida.' },
+  { q: "¿Son recetas realmente saludables?", a: "Sí. Todas fueron creadas y verificadas por nuestra nutricionista. Cada una tiene la información nutricional completa (calorías, proteína, carbohidratos, grasas y fibra) para que sepas exactamente lo que estás comiendo." },
+  { q: "¿Es fácil de hacer? No sé cocinar casi nada.", a: "Perfecto entonces. El paso a paso es tan claro que sirve incluso si nunca prendiste una sartén. Las recetas están escritas para personas reales, no para chefs." },
+  { q: "¿Qué equipos necesito?", a: "Sartén y licuadora. Nada más. Nada de airfryer, procesador industrial o aparatos caros que nadie tiene en casa." },
+  { q: "¿Los ingredientes son difíciles de conseguir?", a: "No. Todas las recetas usan ingredientes que encuentras en cualquier supermercado de tu barrio — sin importar si estás en México, Colombia, Argentina o Chile." },
+  { q: "¿Cómo accedo después que compro?", a: "En menos de 2 minutos recibes un email con tu usuario y contraseña. Entras desde cualquier navegador, o instalas el app en tu celular como si fuera una app normal. Es tuyo para siempre mientras tengas el plan activo." },
+  { q: "¿Puedo cancelar?", a: "Sí, cuando quieras, en 1 clic. Sin preguntas, sin llamadas, sin vueltas. La suscripción se cancela de inmediato y no se renueva." },
+  { q: "¿Y si no me gusta?", a: "Tienes 7 días para probar. Si no te encanta, me mandas un email y te devuelvo cada centavo — sin preguntas. Y te quedas con los bonos de todas formas." },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Desayuno Fit — Recetas saludables para bajar de peso sin pasar hambre" },
+      { title: "Desayuno Fit — +200 Recetas de Desayuno Saludable | App para Bajar de Peso" },
       {
         name: "description",
         content:
-          "Más de 200 recetas de desayuno ricas y saludables, plan semanal personalizado y lista de compras automática. Pensado para mujeres reales.",
+          "Más de 200 recetas de desayuno fit creadas por nutricionista. Listas en 10 minutos, con ingredientes del súper. Planificador semanal y lista de compras automática.",
       },
-      { property: "og:title", content: "Desayuno Fit — Empieza tu día cuidándote" },
+      { property: "og:title", content: "Desayuno Fit — +200 Recetas de Desayuno Saludable" },
       {
         property: "og:description",
         content:
-          "Recetas de desayuno saludables, plan semanal y lista de compras. Bajar de peso sin pasar hambre, con sabor.",
+          "El app que arma tu desayuno fit todos los días. +200 recetas, planificador semanal y lista de compras automática.",
       },
       { property: "og:image", content: HERO_IMG },
       { property: "og:type", content: "website" },
@@ -50,263 +107,540 @@ function scrollToPlanes() {
   document.getElementById("planes")?.scrollIntoView({ behavior: "smooth" });
 }
 
+function buyPlan(plan: PlanKey) {
+  openHotmart(plan, () =>
+    toast.info("Próximamente disponible", {
+      description: "Estamos terminando de configurar el checkout.",
+    }),
+  );
+}
+
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Promo bar */}
+      <div className="bg-secondary text-secondary-foreground text-center text-xs sm:text-sm py-2.5 px-4 font-medium">
+        <Sparkles className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5 text-accent" />
+        <strong className="text-accent">OFERTA LIMITADA</strong>
+        <span className="opacity-90"> — Acceso al app por menos de un café al mes</span>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
+      <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border">
+        <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2" aria-label="Desayuno Fit">
             <img src={logo} alt="Desayuno Fit" className="h-12 w-12 md:h-14 md:w-14 object-contain" />
-            <span className="sr-only">Desayuno Fit</span>
           </Link>
           <Link to="/login">
-            <Button variant="ghost" size="sm">
-              Ya compré, acceder
-            </Button>
+            <Button variant="ghost" size="sm">Ya compré, acceder</Button>
           </Link>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="container mx-auto px-4 pt-12 pb-16 md:pt-20 md:pb-24">
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-accent/30 px-4 py-1.5 text-sm font-medium text-secondary">
-              <Sparkles className="h-4 w-4" />
-              Recetas pensadas para mujeres reales
+      {/* HERO */}
+      <section className="px-4 pt-12 pb-16 md:pt-16">
+        <div className="max-w-3xl mx-auto text-center">
+          <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full">
+            <Sparkles className="h-3 w-3" /> App creado por nutricionista
+          </span>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mt-5 leading-tight">
+            Desayuna rico, baja de peso y deja de improvisar en la mañana.
+          </h1>
+          <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Más de 200 recetas de desayuno saludable, listas en 10 minutos, con ingredientes del súper de tu barrio. Planificador semanal y lista de compras automática.
+          </p>
+
+          <div className="mt-8 rounded-3xl overflow-hidden shadow-xl shadow-primary/10 border border-border max-w-2xl mx-auto">
+            <img src={HERO_IMG} alt="Desayuno saludable con fruta y yogur" className="w-full aspect-[16/10] object-cover" loading="eager" />
+          </div>
+
+          <Button size="lg" onClick={scrollToPlanes} className="mt-8 text-base px-8 py-6 rounded-full shadow-lg shadow-primary/30">
+            🍳 Quiero empezar hoy →
+          </Button>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span className="text-accent flex">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</span>
+              +37.000 mujeres
             </span>
-            <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold text-secondary leading-[1.1]">
-              Empieza tu día con un desayuno que{" "}
-              <span className="text-primary">te cuide</span>
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Recetas saludables, ricas y fáciles para bajar de peso sin pasar hambre.
-              Plan personalizado, lista de compras automática y nuevas recetas cada mes.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Button size="lg" className="text-base px-8" onClick={scrollToPlanes}>
-                Empieza hoy
-              </Button>
-              <Link to="/login">
-                <Button size="lg" variant="outline" className="text-base px-8 w-full sm:w-auto">
-                  Ya compré, acceder
-                </Button>
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              ✓ Acceso inmediato &nbsp; ✓ Garantía 7 días &nbsp; ✓ Desde el celular
-            </p>
-          </div>
-          <div className="relative">
-            <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-xl">
-              <img
-                src={HERO_IMG}
-                alt="Desayuno saludable con frutas, avena y café"
-                className="w-full h-full object-cover"
-                loading="eager"
-              />
-            </div>
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" /> Garantía de 7 días</span>
+            <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-secondary" /> Acceso inmediato</span>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary">
-            Todo lo que necesitas para arrancar
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Sin complicarte. Sin recetas raras. Sin pasar hambre.
+      {/* DOR */}
+      <section className="bg-card py-16 md:py-20 px-4">
+        <div className="max-w-2xl mx-auto">
+          <SectionTitle>Si te identificas con al menos 3 de estos, este app es para ti:</SectionTitle>
+          <ul className="mt-10 space-y-3">
+            {PAINS.map((p, i) => (
+              <li key={i} className="flex items-start gap-3 bg-background rounded-xl px-4 py-3.5 border border-border">
+                <span className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/15 text-primary flex-shrink-0 mt-0.5">
+                  <X className="h-3.5 w-3.5" />
+                </span>
+                <span className="text-[15px] text-foreground/90">{p}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* SOLUÇÃO */}
+      <section className="bg-background py-16 md:py-20 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <SectionTitle>La solución no es otra dieta. Es tener el menú listo.</SectionTitle>
+          <p className="mt-6 text-muted-foreground text-[17px] leading-relaxed">
+            Más de <strong className="text-foreground">200 recetas de desayuno</strong> creadas por nutricionista. Todas listas en{" "}
+            <strong className="text-foreground">máximo 15 minutos</strong>, con ingredientes que encuentras en cualquier súper de tu barrio.
           </p>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <FeatureCard
-            icon={ChefHat}
-            title="+200 recetas reales"
-            desc="Dulces y saladas, todas pensadas para ayudarte a bajar de peso disfrutando."
-          />
-          <FeatureCard
-            icon={Calendar}
-            title="Tu semana planificada"
-            desc="Te armamos un plan de 7 días según tus gustos y lo que tienes en casa."
-          />
-          <FeatureCard
-            icon={ShoppingBasket}
-            title="Lista de compras lista"
-            desc="Generada automáticamente. Vas al mercado sin pensar y sin desperdiciar."
-          />
-          <FeatureCard
-            icon={Smartphone}
-            title="Desde tu celular"
-            desc="Cocina con la receta abierta en el teléfono. Funciona en cualquier dispositivo."
-          />
+          <p className="mt-3 text-muted-foreground text-[17px] leading-relaxed">
+            Abres el app en tu celular, eliges qué desayunar, y en 10 minutos tienes algo delicioso y saludable en la mesa.{" "}
+            <strong className="text-foreground">Un menú rotativo de 6 meses sin repetir nada.</strong>
+          </p>
+
+          <ul className="mt-10 grid sm:grid-cols-2 gap-3 text-left">
+            {SOLUTION_CHECKS.map(([a, b], i) => (
+              <li key={i} className="flex items-start gap-3 bg-card border border-border rounded-xl px-4 py-3">
+                <span className="flex items-center justify-center h-6 w-6 rounded-full bg-secondary text-secondary-foreground flex-shrink-0 mt-0.5">
+                  <Check className="h-3.5 w-3.5" />
+                </span>
+                <span className="text-[15px]">
+                  {a} <strong>{b}</strong>
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="planes" className="bg-accent/20 py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      {/* DIFERENCIAL */}
+      <section className="bg-card py-16 md:py-20 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <SectionTitle>No es un PDF. Es un app de verdad.</SectionTitle>
+          <p className="mt-5 text-muted-foreground text-[17px]">
+            Mientras otros te venden un PDF que se pierde en tu celular, nosotras te damos algo que usas{" "}
+            <strong className="text-foreground">todas las semanas</strong>:
+          </p>
+
+          <div className="mt-10 grid md:grid-cols-3 gap-5 text-left">
+            <DiffCard
+              icon={<Smartphone className="h-6 w-6" />}
+              title="Recetario siempre contigo"
+              desc="Abre el app desde cualquier lugar. Filtra por tiempo, calorías o ingrediente. Guarda tus favoritas. Marca las que ya hiciste."
+            />
+            <DiffCard
+              icon={<CalendarDays className="h-6 w-6" />}
+              title="Planificador semanal"
+              desc="El app arma tu semana de desayunos en 1 clic. 7 recetas variadas, sin repetir, pensadas para que no te aburras."
+            />
+            <DiffCard
+              icon={<ShoppingBasket className="h-6 w-6" />}
+              title="Lista de compras automática"
+              desc="Genera tu lista del súper con los ingredientes de toda la semana — ya sumados y organizados. Compártela por WhatsApp."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* PRÉVIA RECEITAS */}
+      <section className="bg-background py-16 md:py-20 px-4">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary">
-              Elige tu plan
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Mismo contenido en todos los planes. Mientras más tiempo, mayor el ahorro.
+            <SectionTitle>✦ Prévia del app de recetas</SectionTitle>
+            <p className="mt-5 text-muted-foreground text-[17px]">
+              Algunas de las +200 recetas que vas a tener. Todo con gramaje, tiempo de preparación y calorías calculadas.
             </p>
           </div>
-          <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-5xl mx-auto md:items-stretch">
-            <PricingCard
-              plan="mensual"
-              title="Mensual"
-              price="USD 9"
-              period="mes"
-              description="Ideal para probar"
-              features={[
-                "Acceso a todas las recetas",
-                "Plan semanal personalizado",
-                "Lista de compras automática",
-                "Nuevas recetas cada mes",
-              ]}
-            />
-            <PricingCard
-              plan="semestral"
-              title="Semestral"
-              price="USD 29"
-              period="6 meses"
-              description="Ahorras casi un 50%"
-              badge="Más popular"
-              highlighted
-              features={[
-                "Todo lo del plan Mensual",
-                "6 meses de acceso completo",
-                "Soporte prioritario",
-                "Sale a USD 4,80 al mes",
-              ]}
-            />
-            <PricingCard
-              plan="anual"
-              title="Anual"
-              price="USD 47"
-              period="año"
-              description="Mejor valor"
-              badge="Mejor valor"
-              features={[
-                "Todo lo del plan Semestral",
-                "12 meses de acceso completo",
-                "Bonus: e-book de meriendas fit",
-                "Sale a USD 3,90 al mes",
-              ]}
-            />
+
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+            {RECIPE_PREVIEW.map((r, i) => (
+              <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-md transition-shadow">
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img src={r.img} alt={r.name} loading="lazy" className="w-full h-full object-cover" />
+                </div>
+                <div className="p-3.5 md:p-4">
+                  <span className={`inline-block text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                    r.badgeColor === "primary" ? "bg-primary/15 text-primary" : "bg-secondary/15 text-secondary"
+                  }`}>
+                    {r.badge}
+                  </span>
+                  <h3 className="font-display text-sm md:text-base text-secondary mt-2 leading-tight">{r.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-1">{r.meta}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <p className="text-center mt-8 text-sm text-muted-foreground">
-            Pago único por el período elegido. Sin renovación automática.
-          </p>
+
+          <div className="mt-10 text-center">
+            <Button size="lg" onClick={scrollToPlanes} className="rounded-full px-8">
+              🔓 Desbloquear todas las recetas →
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* Testimonios */}
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary">
-            Mujeres como tú ya empezaron
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Más de 1.200 desayunos preparados este mes.
-          </p>
+      {/* AUTORIDADE */}
+      <section className="bg-card py-16 md:py-20 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center">
+            <SectionTitle>✦ Creado por nutricionista</SectionTitle>
+          </div>
+          <div className="mt-10 bg-background rounded-3xl p-6 md:p-10 border border-border shadow-sm flex flex-col md:flex-row gap-6 md:gap-8 items-center md:items-start">
+            <div className="h-24 w-24 md:h-28 md:w-28 rounded-full overflow-hidden bg-muted flex-shrink-0 ring-4 ring-primary/15">
+              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=300&q=80" alt="Nutricionista Camila Moura" className="w-full h-full object-cover" />
+            </div>
+            <div className="text-center md:text-left">
+              <h3 className="font-display text-2xl text-secondary">Camila Moura</h3>
+              <p className="text-sm font-semibold text-primary mt-1">
+                Nutricionista — Especialista en Alimentación Funcional
+              </p>
+              <p className="mt-4 text-[15px] text-muted-foreground">
+                Camila creó este app después de escuchar la misma pregunta mil veces en el consultorio:
+              </p>
+              <blockquote className="mt-3 italic text-[17px] text-foreground/80 border-l-2 border-primary pl-4 text-left">
+                "¿Pero nutri, qué desayuno que no sea huevo con pan?"
+              </blockquote>
+              <p className="mt-4 text-[15px] text-muted-foreground">
+                Son más de 200 recetas que ella probó una por una. Todas con sabor real, ingredientes simples y el equilibrio nutricional que tu cuerpo necesita para empezar el día sin pico de azúcar y sin hambre a las 10.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-6 justify-center md:justify-start">
+                <Stat n="200+" label="Recetas probadas" />
+                <Stat n="15'" label="Tiempo máx." />
+                <Stat n="350" label="Cal. máximas" />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-          <TestimonialCard
-            name="Carolina M."
-            city="Bogotá, Colombia"
-            text="Bajé 4 kilos en dos meses sin sentir que estaba a dieta. Las recetas son riquísimas y rápidas, perfectas para los días de oficina."
-          />
-          <TestimonialCard
-            name="Valentina R."
-            city="Ciudad de México"
-            text="Lo que más me gusta es la lista de compras. Antes desperdiciaba mucha comida, ahora compro justo lo necesario."
-          />
-          <TestimonialCard
-            name="Andrea P."
-            city="Lima, Perú"
-            text="Me encantan los smoothies y las tostadas saladas. Mi esposo también las come y ni se da cuenta de que son saludables."
-          />
+      </section>
+
+      {/* PLANOS */}
+      <section id="planes" className="bg-background py-16 md:py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto">
+            <SectionTitle>Elige tu plan</SectionTitle>
+            <p className="mt-5 text-muted-foreground text-[17px]">
+              Todos los planes incluyen acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y garantía de 7 días.
+            </p>
+          </div>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+            <PlanCard
+              name="Plan Mensual"
+              price="9"
+              period="por mes · cancelas cuando quieras"
+              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
+              ctaLabel="Empezar ahora →"
+              onClick={() => buyPlan("mensual")}
+            />
+            <PlanCard
+              popular
+              name="Plan Semestral"
+              priceOld="USD 54"
+              price="29"
+              period="por 6 meses · equivale a USD 4.83/mes"
+              savings="Ahorras USD 25"
+              badge="⭐ MÁS POPULAR"
+              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
+              ctaLabel="Empezar ahora →"
+              onClick={() => buyPlan("semestral")}
+            />
+            <PlanCard
+              name="Plan Anual"
+              priceOld="USD 108"
+              price="47"
+              period="por 12 meses · equivale a USD 3.91/mes"
+              savings="Ahorras USD 61 + 5 bonos gratis"
+              badge="🔥 MEJOR VALOR"
+              badgeAccent
+              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo", "+ 5 bonos exclusivos"]}
+              ctaLabel="Empezar ahora →"
+              onClick={() => buyPlan("anual")}
+            />
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5"><Lock className="h-4 w-4" /> Pago 100% seguro</span>
+            <span className="flex items-center gap-1.5"><Zap className="h-4 w-4" /> Acceso inmediato</span>
+            <span className="flex items-center gap-1.5"><Check className="h-4 w-4" /> Garantía 7 días</span>
+          </div>
+        </div>
+      </section>
+
+      {/* BÔNUS */}
+      <section className="bg-card py-16 md:py-20 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center">
+            <SectionTitle>✦ Solo por tiempo limitado</SectionTitle>
+            <p className="mt-5 text-muted-foreground text-[17px]">
+              Más 5 bonos de regalo — valor total <strong className="text-foreground">USD 47</strong>. Hoy, junto con el plan anual, los llevas gratis:
+            </p>
+          </div>
+
+          <div className="mt-10 space-y-3">
+            {BONUSES.map((b) => (
+              <div key={b.n} className="flex items-center gap-4 bg-background rounded-xl px-4 py-4 border border-border">
+                <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  {b.n}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-display text-[17px] text-secondary">{b.title}</h4>
+                  <p className="text-[13px] text-muted-foreground">{b.desc}</p>
+                </div>
+                <div className="hidden sm:block text-right flex-shrink-0">
+                  <span className="block text-xs line-through text-muted-foreground/60">{b.old}</span>
+                  <span className="block text-sm font-bold text-secondary">Gratis</span>
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center gap-4 bg-primary/10 border border-primary/40 rounded-xl px-4 py-4">
+              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center flex-shrink-0">
+                <ShoppingBasket className="h-4 w-4" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-display text-[17px] text-primary">Bonus extra — Lista de compras inteligente</h4>
+                <p className="text-[13px] text-muted-foreground">Menú de 7 días con lista del súper lista — llega a casa y empieza a cocinar.</p>
+              </div>
+              <span className="hidden sm:block text-sm font-bold text-primary">Exclusivo</span>
+            </div>
+          </div>
+
+          <div className="mt-5 bg-background border border-border rounded-xl px-5 py-4 flex items-center justify-between text-[15px]">
+            <span>Valor total de los bonos:</span>
+            <span>
+              <s className="text-muted-foreground/60">USD 47</s>{" "}
+              <strong className="text-secondary">→ Gratis en el Plan Anual</strong>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* RESUMO OFERTA */}
+      <section className="bg-background py-16 md:py-20 px-4">
+        <div className="max-w-xl mx-auto text-center">
+          <SectionTitle>Oferta de la semana</SectionTitle>
+          <p className="mt-5 text-muted-foreground text-[17px]">
+            +200 Recetas de Desayuno Fit — Todo esto por menos de un café al mes.
+          </p>
+
+          <div className="mt-10 bg-card rounded-3xl p-6 md:p-8 text-left border border-border shadow-sm">
+            <Row label="📱 App +200 Recetas Desayuno Fit" right={<s className="text-muted-foreground/60">USD 108/año</s>} bold />
+            <Row label="🎁 Bono 01 — 200 Postres sin azúcar" right={<span className="text-secondary font-semibold">Gratis</span>} small />
+            <Row label="🎁 Bono 02 — 60 Recetas Lunch Fit" right={<span className="text-secondary font-semibold">Gratis</span>} small />
+            <Row label="🎁 Bono 03 — 60 Jugos Detox" right={<span className="text-secondary font-semibold">Gratis</span>} small />
+            <Row label="🎁 Bono 04 — 30 Antiinflamatorias" right={<span className="text-secondary font-semibold">Gratis</span>} small />
+            <Row label="🎁 Bono 05 — 20 Panes sin gluten" right={<span className="text-secondary font-semibold">Gratis</span>} small />
+            <div className="border-t-2 border-border mt-4 pt-4 flex justify-between items-end">
+              <span className="font-display text-lg text-secondary">Plan Anual</span>
+              <div className="text-right">
+                <div className="text-xs line-through text-muted-foreground/60">USD 155</div>
+                <div className="font-display text-3xl font-bold text-primary leading-none">USD 47</div>
+                <div className="text-xs text-muted-foreground mt-1">USD 3.91/mes</div>
+              </div>
+            </div>
+          </div>
+
+          <Button size="lg" className="w-full mt-8 text-base py-6 rounded-full shadow-lg shadow-primary/25" onClick={() => buyPlan("anual")}>
+            🍳 Quiero las recetas ahora →
+          </Button>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1"><Lock className="h-3.5 w-3.5" /> Pago seguro</span>
+            <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5" /> Acceso inmediato</span>
+            <span className="flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Garantía 7 días</span>
+          </div>
+        </div>
+      </section>
+
+      {/* GARANTIA */}
+      <section className="bg-card py-16 md:py-20 px-4">
+        <div className="max-w-xl mx-auto bg-background border-2 border-border rounded-3xl p-8 md:p-10 text-center shadow-lg">
+          <div className="h-20 w-20 rounded-full bg-secondary text-secondary-foreground flex flex-col items-center justify-center mx-auto">
+            <span className="font-display text-3xl font-bold leading-none">7</span>
+            <span className="text-[10px] uppercase tracking-widest opacity-80">días</span>
+          </div>
+          <h2 className="font-display text-2xl md:text-3xl text-secondary mt-6">
+            7 días de garantía. Riesgo cero.
+          </h2>
+          <p className="mt-4 text-muted-foreground text-[16px] leading-relaxed">
+            Usa el app por 7 días completos. Prueba las recetas, arma tu semana, explora los bonos.
+          </p>
+          <p className="mt-3 text-muted-foreground text-[16px] leading-relaxed">
+            Si al cabo de una semana no te encanta, me mandas un email y te devuelvo cada centavo.{" "}
+            <strong className="text-secondary">Y te quedas con acceso a todo lo que descargaste.</strong>
+          </p>
+          <p className="mt-4 text-primary font-semibold">El riesgo es 100% mío.</p>
+        </div>
+      </section>
+
+      {/* COMO RECEBER */}
+      <section className="bg-background py-16 md:py-20 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center">
+            <SectionTitle>✦ Así recibes tu acceso</SectionTitle>
+            <p className="mt-5 text-muted-foreground text-[17px]">
+              En la hora de la compra, todo queda en tu mano.
+            </p>
+          </div>
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-5 gap-4">
+            <DeliveryCard icon={<CreditCard className="h-6 w-6" />} title="Pagas seguro" desc="Tarjeta, Mercado Pago o PayPal" />
+            <DeliveryCard icon={<Mail className="h-6 w-6" />} title="Email inmediato" desc="Acceso en menos de 2 minutos" />
+            <DeliveryCard icon={<Smartphone className="h-6 w-6" />} title="Celular" desc="Abre las recetas mientras cocinas" />
+            <DeliveryCard icon={<Monitor className="h-6 w-6" />} title="Computadora" desc="Míralo en pantalla grande también" />
+            <DeliveryCard icon={<RefreshCw className="h-6 w-6" />} title="¿Lo perdiste?" desc="Manda mensaje y te enviamos todo de nuevo" />
+          </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="bg-accent/20 py-16 md:py-24">
-        <div className="container mx-auto px-4 max-w-3xl">
+      <section className="bg-card py-16 md:py-20 px-4">
+        <div className="max-w-2xl mx-auto">
           <div className="text-center">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary">
-              Preguntas frecuentes
-            </h2>
+            <SectionTitle>Preguntas honestas, respuestas directas.</SectionTitle>
           </div>
-          <Accordion type="single" collapsible className="mt-10">
-            <AccordionItem value="1">
-              <AccordionTrigger className="text-base font-semibold text-secondary">
-                ¿Cómo accedo después de comprar?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Al completar tu pago en Hotmart, te llegará un correo con tu acceso.
-                Solo entras a la página, inicias sesión y ya estás dentro.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="2">
-              <AccordionTrigger className="text-base font-semibold text-secondary">
-                ¿Las recetas son difíciles de preparar?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Para nada. La mayoría se hace en menos de 15 minutos con ingredientes
-                que consigues en cualquier supermercado de Latinoamérica.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="3">
-              <AccordionTrigger className="text-base font-semibold text-secondary">
-                ¿Sirve si soy vegetariana o tengo alguna restricción?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Sí. En el onboarding nos cuentas tus preferencias (vegetariana, sin
-                lactosa, sin gluten, etc.) y filtramos las recetas para ti.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="4">
-              <AccordionTrigger className="text-base font-semibold text-secondary">
-                ¿Qué pasa si no me convence?
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                Tienes 7 días de garantía. Si en una semana no es lo que esperabas,
-                te devolvemos tu dinero sin preguntas.
-              </AccordionContent>
-            </AccordionItem>
+          <Accordion type="single" collapsible className="mt-10 space-y-3">
+            {FAQS.map((f, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="bg-background border border-border rounded-xl px-5 data-[state=open]:shadow-sm">
+                <AccordionTrigger className="font-display text-secondary text-left text-[16px] hover:no-underline py-4">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-[15px] text-muted-foreground leading-relaxed pb-4">
+                  {f.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="container mx-auto px-4 py-16 md:py-20 text-center">
-        <Heart className="h-10 w-10 text-primary mx-auto" />
-        <h2 className="mt-4 font-display text-3xl md:text-4xl font-bold text-secondary">
-          Tu próximo desayuno puede cambiar todo
-        </h2>
-        <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-          Empieza hoy y siente la diferencia desde la primera semana.
-        </p>
-        <Button size="lg" className="mt-8 text-base px-8" onClick={scrollToPlanes}>
-          Ver planes
-        </Button>
+      {/* CTA FINAL */}
+      <section className="bg-secondary text-secondary-foreground py-16 md:py-20 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="font-display text-2xl md:text-4xl leading-tight">
+            Puedes seguir improvisando huevo con pan. O tener +200 recetas en tu celular hoy.
+          </h2>
+          <p className="mt-5 text-secondary-foreground/75 text-[17px]">
+            Por menos de lo que te cuesta un café de Starbucks al mes, resuelves tu desayuno de los próximos 12 meses — sin sufrir, sin aburrirte, sin complicarte.
+          </p>
+          <Button size="lg" onClick={() => buyPlan("anual")} className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground text-base px-10 py-6 rounded-full shadow-xl shadow-primary/30">
+            🍳 Quiero mi acceso ahora →
+          </Button>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-sm text-secondary-foreground/60">
+            <span className="flex items-center gap-1.5"><Lock className="h-4 w-4" /> Pago 100% seguro</span>
+            <span className="flex items-center gap-1.5"><Zap className="h-4 w-4" /> Acceso inmediato</span>
+            <span className="flex items-center gap-1.5"><Check className="h-4 w-4" /> Garantía de 7 días</span>
+          </div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-10">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Desayuno Fit. Hecho con cariño en Latinoamérica.</p>
+      {/* FOOTER */}
+      <footer className="bg-foreground text-background/60 text-center py-8 px-4 text-xs leading-loose">
+        <p>© {new Date().getFullYear()} Desayuno Fit. Todos los derechos reservados.</p>
+        <p>Esta página no es afiliada a Facebook, Instagram, Meta o cualquier plataforma de anuncios.</p>
+        <p>Los resultados pueden variar de persona a persona.</p>
+        <p className="mt-3">
           <Link to="/login" className="text-primary hover:underline font-medium">
             Ya compré, acceder →
           </Link>
-        </div>
+        </p>
       </footer>
+    </div>
+  );
+}
+
+/* ----------------- Subcomponents ----------------- */
+
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-display text-2xl md:text-3xl lg:text-4xl text-secondary leading-tight">
+      {children}
+    </h2>
+  );
+}
+
+function DiffCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+  return (
+    <div className="bg-background rounded-2xl p-6 border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+      <div className="h-12 w-12 rounded-xl bg-primary/15 text-primary flex items-center justify-center">{icon}</div>
+      <h3 className="font-display text-lg text-secondary mt-4">{title}</h3>
+      <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">{desc}</p>
+    </div>
+  );
+}
+
+function Stat({ n, label }: { n: string; label: string }) {
+  return (
+    <div className="text-center">
+      <span className="block font-display text-2xl font-bold text-primary leading-none">{n}</span>
+      <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mt-1">{label}</span>
+    </div>
+  );
+}
+
+function PlanCard({
+  name, price, priceOld, period, savings, badge, badgeAccent, popular, features, ctaLabel, onClick,
+}: {
+  name: string; price: string; priceOld?: string; period: string; savings?: string;
+  badge?: string; badgeAccent?: boolean; popular?: boolean;
+  features: string[]; ctaLabel: string; onClick: () => void;
+}) {
+  return (
+    <div className={`relative bg-card rounded-2xl p-7 border-2 transition-all hover:shadow-lg ${
+      popular ? "border-primary shadow-lg shadow-primary/15" : "border-border hover:border-primary/40"
+    }`}>
+      {badge && (
+        <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap ${
+          badgeAccent ? "bg-accent text-accent-foreground" : "bg-primary text-primary-foreground"
+        }`}>
+          {badge}
+        </span>
+      )}
+      <h3 className="font-display text-lg text-secondary text-center">{name}</h3>
+      {priceOld && <p className="mt-3 text-center text-sm text-muted-foreground/60 line-through">{priceOld}</p>}
+      <div className={`text-center font-display font-bold text-primary leading-none ${priceOld ? "mt-1" : "mt-3"}`}>
+        <span className="text-base align-top mr-0.5">USD</span>
+        <span className="text-4xl">{price}</span>
+      </div>
+      <p className="mt-2 text-xs text-center text-muted-foreground">{period}</p>
+      {savings && (
+        <p className="mt-3 text-center">
+          <span className="inline-block text-[11px] font-semibold text-secondary bg-secondary/10 px-3 py-1 rounded-full">
+            {savings}
+          </span>
+        </p>
+      )}
+      <ul className="mt-5 space-y-2 text-sm text-foreground/85">
+        {features.map((f, i) => (
+          <li key={i} className="flex items-start gap-2">
+            <Check className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5" />
+            <span dangerouslySetInnerHTML={{ __html: f.replace(/\+ (.+)/, "+ <strong>$1</strong>") }} />
+          </li>
+        ))}
+      </ul>
+      <Button
+        onClick={onClick}
+        className={`w-full mt-6 rounded-xl py-5 ${popular ? "" : "bg-secondary hover:bg-secondary/90 text-secondary-foreground"}`}
+      >
+        {ctaLabel}
+      </Button>
+    </div>
+  );
+}
+
+function DeliveryCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+  return (
+    <div className="bg-card rounded-2xl p-5 border border-border text-center shadow-sm">
+      <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center mx-auto">{icon}</div>
+      <h4 className="font-display text-[15px] text-secondary mt-3">{title}</h4>
+      <p className="text-xs text-muted-foreground mt-1">{desc}</p>
+    </div>
+  );
+}
+
+function Row({ label, right, bold, small }: { label: string; right: React.ReactNode; bold?: boolean; small?: boolean }) {
+  return (
+    <div className={`flex justify-between items-center ${small ? "text-sm text-muted-foreground" : ""} ${bold ? "pb-3 mb-2 border-b border-border" : "py-1"}`}>
+      <span>{label}</span>
+      <span>{right}</span>
     </div>
   );
 }
