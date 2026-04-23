@@ -268,7 +268,7 @@ function AdminBuyersPage() {
           value={stats?.total ?? "—"}
         />
         <StatCard
-          icon={<CheckCircle2 className="h-4 w-4 text-emerald-600" />}
+          icon={<CheckCircle2 className="h-4 w-4 text-primary" />}
           label="Activos"
           value={stats?.activos ?? "—"}
         />
@@ -278,7 +278,7 @@ function AdminBuyersPage() {
           value={stats?.inactivos ?? "—"}
         />
         <StatCard
-          icon={<AlertTriangle className="h-4 w-4 text-amber-600" />}
+          icon={<AlertTriangle className="h-4 w-4 text-warning" />}
           label="Vencen ≤30d"
           value={stats?.vencenEn30Dias ?? "—"}
         />
@@ -523,7 +523,7 @@ function BuyerRow({
           {buyer.plan_type}
         </Badge>
         {!buyer.onboarding_completado && (
-          <div className="text-[10px] text-amber-600 mt-1">
+          <div className="text-[10px] text-warning mt-1">
             Onboarding pendiente
           </div>
         )}
@@ -615,7 +615,7 @@ function BuyerRow({
           ) : (
             <Select onValueChange={(v) => onActivate(v as "mensual")}>
               <SelectTrigger className="h-8 w-auto px-2 gap-1">
-                <Power className="h-3.5 w-3.5 text-emerald-600" />
+                <Power className="h-3.5 w-3.5 text-primary" />
                 <span className="text-xs">Activar</span>
               </SelectTrigger>
               <SelectContent>
@@ -634,11 +634,7 @@ function BuyerRow({
 function StatusBadge({ status }: { status?: string }) {
   const s = (status ?? "").toUpperCase();
   if (s === "APPROVED" || s === "COMPLETE") {
-    return (
-      <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
-        {s}
-      </Badge>
-    );
+    return <Badge className="bg-primary/15 text-primary hover:bg-primary/15">{s}</Badge>;
   }
   if (s === "REFUNDED" || s === "CHARGEBACK") {
     return <Badge variant="destructive">{s}</Badge>;
