@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { openHotmart } from "@/config/hotmart";
+import logo from "@/assets/logo.png";
 
 const SIDE_IMG =
   "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=1000&q=80";
@@ -63,10 +64,10 @@ function LoginPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-secondary/30 to-transparent" />
         <div className="absolute bottom-10 left-10 right-10 text-primary-foreground">
-          <Link to="/" className="font-display text-3xl font-bold drop-shadow">
-            Desayuno Fit
+          <Link to="/" className="inline-flex items-center gap-3 drop-shadow" aria-label="Desayuno Fit">
+            <img src={logo} alt="Desayuno Fit" className="h-16 w-16 object-contain bg-white/90 rounded-2xl p-1.5" />
           </Link>
-          <p className="mt-3 text-lg text-white/90 max-w-sm drop-shadow">
+          <p className="mt-4 text-lg text-white/90 max-w-sm drop-shadow">
             Tus recetas, tu plan semanal y tu lista de compras. Todo en un solo lugar.
           </p>
         </div>
@@ -78,9 +79,10 @@ function LoginPage() {
           {/* Header mobile */}
           <Link
             to="/"
-            className="md:hidden block text-center font-display text-3xl font-bold text-secondary mb-8"
+            className="md:hidden flex items-center justify-center mb-6"
+            aria-label="Desayuno Fit"
           >
-            Desayuno Fit
+            <img src={logo} alt="Desayuno Fit" className="h-20 w-20 object-contain" />
           </Link>
 
           <div className="bg-card rounded-2xl shadow-sm border border-border p-8">

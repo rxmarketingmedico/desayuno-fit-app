@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Heart, CalendarDays, ShoppingBasket, User } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/_authenticated/app")({
   component: AppLayout,
@@ -97,8 +98,9 @@ function AppLayout() {
       {/* Top header */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
-          <Link to="/app/recetas" className="font-display text-xl font-bold text-secondary">
-            Desayuno Fit
+          <Link to="/app/recetas" className="flex items-center gap-2" aria-label="Desayuno Fit">
+            <img src={logo} alt="Desayuno Fit" className="h-10 w-10 object-contain" />
+            <span className="sr-only">Desayuno Fit</span>
           </Link>
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
