@@ -17,6 +17,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated.onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
+import { Route as ApiPublicHotmartWebhookRouteImport } from './routes/api.public.hotmart-webhook'
 import { Route as AuthenticatedAppSemanaRouteImport } from './routes/_authenticated.app.semana'
 import { Route as AuthenticatedAppRecetasRouteImport } from './routes/_authenticated.app.recetas'
 import { Route as AuthenticatedAppPerfilRouteImport } from './routes/_authenticated.app.perfil'
@@ -62,6 +63,11 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiPublicHotmartWebhookRoute = ApiPublicHotmartWebhookRouteImport.update({
+  id: '/api/public/hotmart-webhook',
+  path: '/api/public/hotmart-webhook',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAppSemanaRoute = AuthenticatedAppSemanaRouteImport.update({
   id: '/semana',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/app/perfil': typeof AuthenticatedAppPerfilRoute
   '/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
   '/app/semana': typeof AuthenticatedAppSemanaRoute
+  '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
   '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesByTo {
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/app/perfil': typeof AuthenticatedAppPerfilRoute
   '/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
   '/app/semana': typeof AuthenticatedAppSemanaRoute
+  '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
   '/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRoutesById {
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/_authenticated/app/perfil': typeof AuthenticatedAppPerfilRoute
   '/_authenticated/app/recetas': typeof AuthenticatedAppRecetasRouteWithChildren
   '/_authenticated/app/semana': typeof AuthenticatedAppSemanaRoute
+  '/api/public/hotmart-webhook': typeof ApiPublicHotmartWebhookRoute
   '/_authenticated/app/recetas/$slug': typeof AuthenticatedAppRecetasSlugRoute
 }
 export interface FileRouteTypes {
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/recetas'
     | '/app/semana'
+    | '/api/public/hotmart-webhook'
     | '/app/recetas/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/recetas'
     | '/app/semana'
+    | '/api/public/hotmart-webhook'
     | '/app/recetas/$slug'
   id:
     | '__root__'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/perfil'
     | '/_authenticated/app/recetas'
     | '/_authenticated/app/semana'
+    | '/api/public/hotmart-webhook'
     | '/_authenticated/app/recetas/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PlanExpiradoRoute: typeof PlanExpiradoRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicHotmartWebhookRoute: typeof ApiPublicHotmartWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app'
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/hotmart-webhook': {
+      id: '/api/public/hotmart-webhook'
+      path: '/api/public/hotmart-webhook'
+      fullPath: '/api/public/hotmart-webhook'
+      preLoaderRoute: typeof ApiPublicHotmartWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/app/semana': {
       id: '/_authenticated/app/semana'
@@ -358,6 +378,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PlanExpiradoRoute: PlanExpiradoRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicHotmartWebhookRoute: ApiPublicHotmartWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
