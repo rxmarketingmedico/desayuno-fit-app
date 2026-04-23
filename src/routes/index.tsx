@@ -25,6 +25,7 @@ import {
 import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
+import sofiaImg from "@/assets/sofia-herrera.png";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=80";
@@ -281,30 +282,48 @@ function LandingPage() {
       </section>
 
       {/* AUTORIDADE */}
-      <section className="bg-card py-16 md:py-20 px-4">
-        <div className="max-w-3xl mx-auto">
+      <section className="bg-card py-16 md:py-24 px-4">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center">
             <SectionTitle>✦ Creado por nutricionista</SectionTitle>
           </div>
-          <div className="mt-10 bg-background rounded-3xl p-6 md:p-10 border border-border shadow-sm flex flex-col md:flex-row gap-6 md:gap-8 items-center md:items-start">
-            <div className="h-24 w-24 md:h-28 md:w-28 rounded-full overflow-hidden bg-muted flex-shrink-0 ring-4 ring-primary/15">
-              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=300&q=80" alt="Nutricionista Camila Moura" className="w-full h-full object-cover" />
+          <div className="mt-12 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+            {/* Foto */}
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/10 rounded-[2rem] blur-2xl" aria-hidden />
+              <div className="relative aspect-square rounded-[2rem] overflow-hidden ring-1 ring-border shadow-xl">
+                <img
+                  src={sofiaImg}
+                  alt="Sofía Herrera, nutricionista creadora de Desayuno Fit"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
-            <div className="text-center md:text-left">
-              <h3 className="font-display text-2xl text-secondary">Camila Moura</h3>
-              <p className="text-sm font-semibold text-primary mt-1">
+
+            {/* Texto */}
+            <div className="text-left">
+              <h3 className="font-display text-3xl md:text-4xl text-secondary leading-tight">
+                Sofía Herrera,<br />
+                <span className="text-primary">la nutri que simplifica el desayuno.</span>
+              </h3>
+              <p className="text-sm font-semibold text-muted-foreground mt-3 uppercase tracking-wide">
                 Nutricionista — Especialista en Alimentación Funcional
               </p>
-              <p className="mt-4 text-[15px] text-muted-foreground">
-                Camila creó este app después de escuchar la misma pregunta mil veces en el consultorio:
+
+              <p className="mt-6 text-[16px] text-foreground/80 leading-relaxed">
+                Especialista en alimentación funcional, Sofía creó esta app de recetas después de escuchar la misma pregunta una y otra vez en consulta:
               </p>
-              <blockquote className="mt-3 italic text-[17px] text-foreground/80 border-l-2 border-primary pl-4 text-left">
-                "¿Pero nutri, qué desayuno que no sea huevo con pan?"
+
+              <blockquote className="mt-4 italic text-[18px] text-secondary border-l-4 border-primary pl-5">
+                "pero nutri, ¿qué desayuno que no sea pan con huevo?"
               </blockquote>
-              <p className="mt-4 text-[15px] text-muted-foreground">
-                Son más de 200 recetas que ella probó una por una. Todas con sabor real, ingredientes simples y el equilibrio nutricional que tu cuerpo necesita para empezar el día sin pico de azúcar y sin hambre a las 10.
+
+              <p className="mt-5 text-[16px] text-foreground/80 leading-relaxed">
+                Son más de <strong className="text-secondary">200 recetas</strong> que probó una por una — todas con sabor real, ingredientes simples y el equilibrio nutricional que tu cuerpo necesita para empezar el día <strong className="text-secondary">sin picos de glucosa</strong> y <strong className="text-secondary">sin hambre a media mañana</strong>.
               </p>
-              <div className="mt-6 flex flex-wrap gap-6 justify-center md:justify-start">
+
+              <div className="mt-8 flex flex-wrap gap-8">
                 <Stat n="200+" label="Recetas probadas" />
                 <Stat n="15'" label="Tiempo máx." />
                 <Stat n="350" label="Cal. máximas" />
