@@ -1,15 +1,37 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Search, X, SlidersHorizontal } from "lucide-react";
+import { useQuery, queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RecetaCard, RecetaCardSkeleton, type RecetaCardData } from "@/components/recetas/RecetaCard";
 import { useFavoritos } from "@/hooks/useFavoritos";
+import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
 
+// Query options compartilhada — permite prefetch/invalidate em outros lugares
+// e reuso do mesmo cache key em qualquer componente.
+export const recetasQueryOptions = () =>
+  queryOptions({
+    queryKey: ["recetas", "list"],
+    queryFn: async (): Promise<RecetaCardData[]> => {
+      const { data, error } = await supabase
+        .from("recetas")
+        .select("id, slug, titulo, imagen_url, tiempo_minutos, calorias, badges, categoria")
+        .order("titulo", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as RecetaCardData[];
+    },
+  });
+
 export const Route = createFileRoute("/_authenticated/app/recetas")({
+  // Prefetch via loader: na primeira navegação dispara a query, nas próximas
+  // o cache de React Query devolve instantâneo (staleTime 5 min).
+  loader: ({ context }) => {
+    context.queryClient.prefetchQuery(recetasQueryOptions());
+  },
   component: RecetasPage,
 });
 
@@ -36,41 +58,30 @@ const PAGE_SIZE = 24;
 
 function RecetasPage() {
   const location = useLocation();
-  const [recetas, setRecetas] = useState<RecetaCardData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const isListRoute = location.pathname === "/app/recetas";
+
+  // Cache compartilhado — voltar à página é instantâneo.
+  const { data: recetas = [], isLoading, isError } = useQuery({
+    ...recetasQueryOptions(),
+    enabled: isListRoute,
+  });
+
+  useEffect(() => {
+    if (isError) toast.error("No pudimos cargar las recetas");
+  }, [isError]);
+
   const [categoria, setCategoria] = useState<string>("todos");
   const [activeBadges, setActiveBadges] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 200); // evita filtrar a cada tecla
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { favoriteIds, toggle } = useFavoritos();
-  const isListRoute = location.pathname === "/app/recetas";
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!isListRoute) return;
-
-    let active = true;
-    setLoading(true);
-    supabase
-      .from("recetas")
-      .select("id, slug, titulo, imagen_url, tiempo_minutos, calorias, badges, categoria")
-      .order("titulo", { ascending: true })
-      .then(({ data, error }) => {
-        if (!active) return;
-        if (error) {
-          toast.error("No pudimos cargar las recetas");
-        } else {
-          setRecetas((data ?? []) as RecetaCardData[]);
-        }
-        setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [isListRoute]);
+  // Guard contra múltiplas ativações simultâneas do IO durante scroll rápido.
+  const loadingMoreRef = useRef(false);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     return recetas.filter((r) => {
       if (categoria !== "todos" && r.categoria !== categoria) return false;
       if (activeBadges.size > 0) {
@@ -80,28 +91,42 @@ function RecetasPage() {
       if (q && !r.titulo.toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [recetas, categoria, activeBadges, query]);
+  }, [recetas, categoria, activeBadges, debouncedQuery]);
 
   // Reset paginação ao mudar filtros
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [categoria, activeBadges, query]);
+  }, [categoria, activeBadges, debouncedQuery]);
 
-  // Infinite scroll com IntersectionObserver
+  const loadMore = useCallback(() => {
+    if (loadingMoreRef.current) return;
+    loadingMoreRef.current = true;
+    // Defer 1 frame para evitar travadinha ao revelar muitos cards de uma vez
+    requestAnimationFrame(() => {
+      setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
+      // Solta o lock só após o paint, evita rajadas
+      setTimeout(() => {
+        loadingMoreRef.current = false;
+      }, 80);
+    });
+  }, [filtered.length]);
+
+  // Infinite scroll com IntersectionObserver — só ativa se realmente há mais.
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
+    if (visibleCount >= filtered.length) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
-        }
+        if (entries[0]?.isIntersecting) loadMore();
       },
-      { rootMargin: "600px 0px" },
+      // rootMargin alto = começa a carregar antes; threshold 0 = qualquer pixel basta
+      { rootMargin: "800px 0px", threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [filtered.length]);
+  }, [loadMore, visibleCount, filtered.length]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -137,7 +162,7 @@ function RecetasPage() {
             Recetas
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {loading ? "Cargando…" : `${filtered.length} recetas listas para ti`}
+            {isLoading ? "Cargando…" : `${filtered.length} recetas listas para ti`}
           </p>
         </div>
         {hasFilters && (
@@ -196,7 +221,7 @@ function RecetasPage() {
       </FilterRow>
 
       {/* Grid */}
-      {loading ? (
+      {isLoading ? (
         <div className="grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <RecetaCardSkeleton key={i} />
