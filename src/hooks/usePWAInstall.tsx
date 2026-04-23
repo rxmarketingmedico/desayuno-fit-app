@@ -8,6 +8,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
+const INSTALLED_KEY = "pwa-installed";
 const DISMISS_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const SHOW_DELAY_MS = 3000;
 
@@ -42,6 +43,37 @@ function detectIOS(): boolean {
   return isIOS || isIPadOS;
 }
 
+function readFlag(key: string): boolean {
+  try {
+    return localStorage.getItem(key) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function writeFlag(key: string, value: boolean) {
+  try {
+    if (value) localStorage.setItem(key, "1");
+    else localStorage.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+}
+
+function wasInstalledBefore(): boolean {
+  return readFlag(INSTALLED_KEY);
+}
+
+function markInstalled() {
+  writeFlag(INSTALLED_KEY, true);
+  // Limpa qualquer flag de "dismissed" antigo: se está instalado, não importa.
+  try {
+    localStorage.removeItem(DISMISS_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 function wasRecentlyDismissed(): boolean {
   try {
     const raw = localStorage.getItem(DISMISS_KEY);
@@ -63,10 +95,21 @@ export function usePWAInstall() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (isInIframe() || isPreviewHost()) return;
+
+    // Se está aberto em modo standalone, é porque a usuária instalou:
+    // grava persistente para que mesmo abrindo no navegador depois, o banner não volte.
     if (isStandalone()) {
+      markInstalled();
       setInstalled(true);
       return;
     }
+
+    // Já marcou como instalado em sessão anterior — nunca mais mostra.
+    if (wasInstalledBefore()) {
+      setInstalled(true);
+      return;
+    }
+
     if (wasRecentlyDismissed()) return;
 
     const ios = detectIOS();
@@ -80,13 +123,22 @@ export function usePWAInstall() {
     };
 
     const handleInstalled = () => {
+      markInstalled();
       setInstalled(true);
       setVisible(false);
       setDeferredPrompt(null);
     };
 
+    // Detecta instalação tardia em iOS: usuária adiciona à tela de início e
+    // reabre o app — `display-mode: standalone` passa a true.
+    const standaloneMql = window.matchMedia?.("(display-mode: standalone)");
+    const handleDisplayModeChange = (e: MediaQueryListEvent) => {
+      if (e.matches) handleInstalled();
+    };
+
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
     window.addEventListener("appinstalled", handleInstalled);
+    standaloneMql?.addEventListener?.("change", handleDisplayModeChange);
 
     if (ios) {
       setPlatform("ios");
@@ -96,6 +148,7 @@ export function usePWAInstall() {
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
       window.removeEventListener("appinstalled", handleInstalled);
+      standaloneMql?.removeEventListener?.("change", handleDisplayModeChange);
       if (timeoutId) window.clearTimeout(timeoutId);
     };
   }, []);
@@ -105,6 +158,7 @@ export function usePWAInstall() {
     await deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
     if (choice.outcome === "accepted") {
+      markInstalled();
       setInstalled(true);
     }
     setDeferredPrompt(null);
