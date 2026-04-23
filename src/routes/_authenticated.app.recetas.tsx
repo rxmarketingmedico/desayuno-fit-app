@@ -40,12 +40,11 @@ function RecetasPage() {
   const [activeBadges, setActiveBadges] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
   const { favoriteIds, toggle } = useFavoritos();
-
-  if (location.pathname !== "/app/recetas") {
-    return <Outlet />;
-  }
+  const isListRoute = location.pathname === "/app/recetas";
 
   useEffect(() => {
+    if (!isListRoute) return;
+
     let active = true;
     setLoading(true);
     supabase
@@ -64,7 +63,7 @@ function RecetasPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [isListRoute]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -95,6 +94,10 @@ function RecetasPage() {
   };
 
   const hasFilters = categoria !== "todos" || activeBadges.size > 0 || query.length > 0;
+
+  if (!isListRoute) {
+    return <Outlet />;
+  }
 
   return (
     <div className="space-y-6">
