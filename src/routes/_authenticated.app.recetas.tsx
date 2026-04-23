@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,12 +33,17 @@ const BADGES_DESTAQUE = [
 ];
 
 function RecetasPage() {
+  const location = useLocation();
   const [recetas, setRecetas] = useState<RecetaCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoria, setCategoria] = useState<string>("todos");
   const [activeBadges, setActiveBadges] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
   const { favoriteIds, toggle } = useFavoritos();
+
+  if (location.pathname !== "/app/recetas") {
+    return <Outlet />;
+  }
 
   useEffect(() => {
     let active = true;
