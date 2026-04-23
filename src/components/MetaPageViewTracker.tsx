@@ -5,7 +5,6 @@ import { trackMetaPageView } from "@/lib/meta-capi.functions";
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
-    requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
   }
 }
 
