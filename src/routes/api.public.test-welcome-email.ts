@@ -48,7 +48,7 @@ export const Route = createFileRoute("/api/public/test-welcome-email")({
               type: "magiclink",
               email,
               options: {
-                redirectTo: `${APP_URL}/app/onboarding`,
+                redirectTo: `${APP_URL}/auth/callback`,
               },
             });
 
