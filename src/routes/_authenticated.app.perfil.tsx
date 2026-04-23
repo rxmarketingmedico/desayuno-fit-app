@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { User as UserIcon, LogOut } from "lucide-react";
+import { User as UserIcon, LogOut, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { openHotmart } from "@/config/hotmart";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/app/perfil")({
   component: PerfilPage,
@@ -30,6 +32,33 @@ function PerfilPage() {
       .then(({ data }) => setProfile(data as Profile));
   }, [user]);
 
+  const diasRestantes = profile?.plan_end_date
+    ? Math.ceil(
+        (new Date(profile.plan_end_date).getTime() - Date.now()) /
+          (1000 * 60 * 60 * 24),
+      )
+    : null;
+  const planPorVencer =
+    diasRestantes !== null && diasRestantes >= 0 && diasRestantes < 14;
+
+  const fechaVencimiento = profile?.plan_end_date
+    ? new Date(profile.plan_end_date).toLocaleDateString("es-419", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
+  const renovar = () => {
+    const plan =
+      profile?.plan_type === "anual" || profile?.plan_type === "semestral"
+        ? profile.plan_type
+        : "mensual";
+    openHotmart(plan as "mensual" | "semestral" | "anual", () =>
+      toast.info("Próximamente disponible"),
+    );
+  };
+
   return (
     <div className="space-y-6 max-w-md mx-auto">
       <div className="text-center">
@@ -47,16 +76,29 @@ function PerfilPage() {
         <p className="font-display text-lg font-semibold text-secondary capitalize">
           {profile?.plan_type ?? "—"}
         </p>
-        {profile?.plan_end_date && (
-          <p className="text-xs text-muted-foreground">
-            Vigente hasta {new Date(profile.plan_end_date).toLocaleDateString("es-419", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            })}
-          </p>
+        {fechaVencimiento && (
+          <p className="text-xs text-muted-foreground">Vigente hasta {fechaVencimiento}</p>
         )}
       </div>
+
+      {planPorVencer && fechaVencimiento && (
+        <div className="rounded-2xl border border-warning-border bg-warning-soft p-4 space-y-3">
+          <div className="flex gap-2 items-start">
+            <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
+            <p className="text-sm text-foreground">
+              <span className="font-semibold">⚠️ Tu plan vence el {fechaVencimiento}.</span>{" "}
+              Renueva para seguir disfrutando.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            className="w-full bg-warning hover:bg-warning/90 text-warning-foreground"
+            onClick={renovar}
+          >
+            Renovar ahora
+          </Button>
+        </div>
+      )}
 
       <Button variant="outline" className="w-full" onClick={signOut}>
         <LogOut className="h-4 w-4" /> Cerrar sesión
