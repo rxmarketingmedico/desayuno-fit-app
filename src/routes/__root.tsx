@@ -56,12 +56,6 @@ export const Route = createRootRoute({
       { rel: "dns-prefetch", href: "https://www.facebook.com" },
       { rel: "dns-prefetch", href: "https://graph.facebook.com" },
       {
-        rel: "preload",
-        as: "image",
-        href: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=70&fm=webp",
-        fetchPriority: "high",
-      },
-      {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap",
       },
