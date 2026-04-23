@@ -26,6 +26,7 @@ import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
+import heroAppMockup from "@/assets/hero-app-mockup.jpg";
 import testimonioCamila from "@/assets/testimonio-camila.jpg";
 import testimonioValentina from "@/assets/testimonio-valentina.jpg";
 import testimonioMariana from "@/assets/testimonio-mariana.jpg";
@@ -78,8 +79,7 @@ const TESTIMONIOS = [
   },
 ];
 
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=70&fm=webp";
+const HERO_IMG = heroAppMockup;
 
 const RECIPE_PREVIEW = [
   { img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Tostada de aguacate y huevo pochado", meta: "10 min · 285 cal" },
@@ -202,13 +202,13 @@ function LandingPage() {
             Con ingredientes del súper de tu barrio, planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana, sin pensar dos veces.
           </p>
 
-          <div className="mt-8 rounded-3xl overflow-hidden shadow-xl shadow-primary/10 border border-border max-w-2xl mx-auto">
+          <div className="mt-8 max-w-md mx-auto">
             <img
               src={HERO_IMG}
-              alt="Desayuno saludable con fruta y yogur"
-              width="1200"
-              height="750"
-              className="w-full aspect-[16/10] object-cover"
+              alt="App Desayuno Fit abierto en un celular mostrando recetas de desayuno saludable"
+              width="1024"
+              height="1024"
+              className="w-full h-auto drop-shadow-2xl"
               loading="eager"
               fetchPriority="high"
               decoding="async"
