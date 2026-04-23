@@ -304,6 +304,74 @@ function LandingPage() {
         </div>
       </section>
 
+      {/* PROVA SOCIAL — DEPOIMENTOS */}
+      <section className="bg-background py-16 md:py-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full">
+              <Star className="h-3 w-3 fill-current" /> +37.000 mujeres ya probaron
+            </span>
+            <SectionTitle>
+              <span className="block mt-4">Lo que dicen las que ya bajaron de peso con Desayuno Fit</span>
+            </SectionTitle>
+            <p className="mt-5 text-muted-foreground text-[17px]">
+              Mujeres reales, resultados reales. Sin filtros, sin promesas mágicas — solo desayunos que funcionan.
+            </p>
+          </div>
+
+          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {TESTIMONIOS.map((t, i) => (
+              <article
+                key={i}
+                className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-lg transition-shadow flex flex-col"
+              >
+                <div className="aspect-[4/5] overflow-hidden bg-muted relative">
+                  <img
+                    src={t.img}
+                    alt={`${t.name}, ${t.city}`}
+                    width={768}
+                    height={960}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                    {t.loss}
+                  </div>
+                </div>
+                <div className="p-5 flex flex-col flex-1">
+                  <div className="flex gap-0.5 text-accent">
+                    {Array.from({ length: 5 }).map((_, k) => (
+                      <Star key={k} className="h-4 w-4 fill-current" />
+                    ))}
+                  </div>
+                  <p className="mt-3 text-[14px] text-foreground/85 leading-relaxed flex-1">
+                    "{t.text}"
+                  </p>
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="font-display text-secondary text-[15px] font-semibold">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.city}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-sm text-muted-foreground mb-4">
+              ¿Lista para sumarte a las +37.000 mujeres que ya transformaron su mañana?
+            </p>
+            <Button
+              size="lg"
+              onClick={scrollToPlanes}
+              className="rounded-full px-8 shadow-lg shadow-primary/25"
+            >
+              🍳 Quiero mis resultados también →
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* PRÉVIA RECEITAS */}
       <section className="bg-background py-16 md:py-20 px-4">
         <div className="max-w-5xl mx-auto">
