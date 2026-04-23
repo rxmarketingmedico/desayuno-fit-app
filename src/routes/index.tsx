@@ -122,7 +122,7 @@ function LandingPage() {
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <FeatureCard
             icon={ChefHat}
-            title="+20 recetas reales"
+            title="+200 recetas reales"
             desc="Dulces y saladas, todas pensadas para ayudarte a bajar de peso disfrutando."
           />
           <FeatureCard
