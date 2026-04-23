@@ -373,7 +373,7 @@ function LandingPage() {
       </section>
 
       {/* PRÉVIA RECEITAS */}
-      <section className="bg-background py-16 md:py-20 px-4">
+      <section className="bg-card py-16 md:py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto">
             <SectionTitle>✦ Prévia del app de recetas</SectionTitle>
