@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import type { Json } from "@/integrations/supabase/types";
+import { transformImage } from "@/lib/image";
 
 export const Route = createFileRoute("/_authenticated/app/recetas/$slug")({
   component: RecetaDetallePage,
@@ -181,7 +182,15 @@ function RecetaDetallePage() {
 
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden aspect-[16/9] bg-muted">
-        <img src={receta.imagen_url} alt={receta.titulo} className="w-full h-full object-cover" />
+        <img
+          src={transformImage(receta.imagen_url, { width: 1280, quality: 75 })}
+          srcSet={`${transformImage(receta.imagen_url, { width: 640, quality: 70 })} 640w, ${transformImage(receta.imagen_url, { width: 960, quality: 72 })} 960w, ${transformImage(receta.imagen_url, { width: 1280, quality: 75 })} 1280w`}
+          sizes="(min-width: 1024px) 900px, 100vw"
+          alt={receta.titulo}
+          fetchPriority="high"
+          decoding="async"
+          className="w-full h-full object-cover"
+        />
         <button
           type="button"
           onClick={() => toggle(receta.id)}

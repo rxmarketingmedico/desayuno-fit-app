@@ -96,12 +96,12 @@ function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0">
+    <div className="min-h-screen bg-background pb-24 md:pb-0">
       {/* Top header */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-md">
-        <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
+        <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-2.5 md:py-3">
           <Link to="/app/recetas" className="flex items-center gap-2" aria-label="Desayuno Fit">
-            <img src={logo} alt="Desayuno Fit" className="h-10 w-10 object-contain" />
+            <img src={logo} alt="Desayuno Fit" className="h-9 w-9 md:h-10 md:w-10 object-contain" />
             <span className="sr-only">Desayuno Fit</span>
           </Link>
           {/* Desktop nav */}
@@ -115,25 +115,25 @@ function AppLayout() {
           <div className="hidden md:block">
             <Button variant="ghost" size="sm" onClick={signOut}>Salir</Button>
           </div>
-          <span className="md:hidden text-sm text-muted-foreground truncate max-w-[140px]">
+          <span className="md:hidden text-sm text-muted-foreground truncate max-w-[160px]">
             Hola {profile?.nombre ?? ""} 🌸
           </span>
         </div>
       </header>
 
       {/* Page content */}
-      <main className="container mx-auto px-4 py-6 md:py-10">
+      <main className="container mx-auto px-4 py-5 md:py-10">
         <Outlet />
       </main>
 
       {/* Mobile tab bar */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur-md">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur-md pb-safe">
         <ul className="grid grid-cols-5">
           {TABS.map((t) => (
             <li key={t.to}>
               <Link
                 to={t.to}
-                className="flex flex-col items-center justify-center gap-1 py-2 text-[11px]"
+                className="flex flex-col items-center justify-center gap-0.5 py-2 text-[10.5px] active:scale-95 transition-transform"
                 activeProps={{ className: "text-primary" }}
                 inactiveProps={{ className: "text-muted-foreground" }}
               >

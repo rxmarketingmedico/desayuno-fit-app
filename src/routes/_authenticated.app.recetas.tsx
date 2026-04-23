@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { Search, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Search, X, SlidersHorizontal } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,8 @@ const BADGES_DESTAQUE = [
   "meal prep",
 ];
 
+const PAGE_SIZE = 24;
+
 function RecetasPage() {
   const location = useLocation();
   const [recetas, setRecetas] = useState<RecetaCardData[]>([]);
@@ -39,8 +41,10 @@ function RecetasPage() {
   const [categoria, setCategoria] = useState<string>("todos");
   const [activeBadges, setActiveBadges] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { favoriteIds, toggle } = useFavoritos();
   const isListRoute = location.pathname === "/app/recetas";
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isListRoute) return;
@@ -78,6 +82,30 @@ function RecetasPage() {
     });
   }, [recetas, categoria, activeBadges, query]);
 
+  // Reset paginação ao mudar filtros
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [categoria, activeBadges, query]);
+
+  // Infinite scroll com IntersectionObserver
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [filtered.length]);
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
   const toggleBadge = (b: string) => {
     setActiveBadges((prev) => {
       const next = new Set(prev);
@@ -94,71 +122,82 @@ function RecetasPage() {
   };
 
   const hasFilters = categoria !== "todos" || activeBadges.size > 0 || query.length > 0;
+  const activeFilterCount =
+    (categoria !== "todos" ? 1 : 0) + activeBadges.size + (query.length > 0 ? 1 : 0);
 
   if (!isListRoute) {
     return <Outlet />;
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl md:text-3xl font-bold text-secondary">
-          Recetas
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {loading ? "Cargando…" : `${filtered.length} recetas listas para ti`}
-        </p>
+    <div className="space-y-5 md:space-y-6">
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <h1 className="font-display text-2xl md:text-3xl font-bold text-secondary">
+            Recetas
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {loading ? "Cargando…" : `${filtered.length} recetas listas para ti`}
+          </p>
+        </div>
+        {hasFilters && (
+          <button
+            onClick={clearFilters}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium active:scale-95 transition-transform"
+          >
+            <X className="h-3.5 w-3.5" />
+            Limpiar ({activeFilterCount})
+          </button>
+        )}
       </div>
 
       {/* Buscador */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Busca por nombre…"
-          className="pl-9"
+          className="pl-9 pr-9 h-11 rounded-xl"
+          enterKeyHint="search"
         />
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            aria-label="Limpiar búsqueda"
+            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {/* Categorías */}
-      <div className="-mx-4 px-4 overflow-x-auto scrollbar-none">
-        <div className="flex gap-2 min-w-max">
-          {CATEGORIAS.map((c) => (
-            <Chip
-              key={c.value}
-              active={categoria === c.value}
-              onClick={() => setCategoria(c.value)}
-            >
-              {c.label}
-            </Chip>
-          ))}
-        </div>
-      </div>
+      <FilterRow label="Categorías" icon={<SlidersHorizontal className="h-3.5 w-3.5" />}>
+        {CATEGORIAS.map((c) => (
+          <Chip
+            key={c.value}
+            active={categoria === c.value}
+            onClick={() => setCategoria(c.value)}
+          >
+            {c.label}
+          </Chip>
+        ))}
+      </FilterRow>
 
       {/* Badges */}
-      <div className="-mx-4 px-4 overflow-x-auto scrollbar-none">
-        <div className="flex gap-2 min-w-max">
-          {BADGES_DESTAQUE.map((b) => (
-            <Chip key={b} active={activeBadges.has(b)} onClick={() => toggleBadge(b)} variant="badge">
-              {b}
-            </Chip>
-          ))}
-        </div>
-      </div>
-
-      {hasFilters && (
-        <button
-          onClick={clearFilters}
-          className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-        >
-          <X className="h-3 w-3" /> Limpiar filtros
-        </button>
-      )}
+      <FilterRow label="Etiquetas">
+        {BADGES_DESTAQUE.map((b) => (
+          <Chip key={b} active={activeBadges.has(b)} onClick={() => toggleBadge(b)} variant="badge">
+            {b}
+          </Chip>
+        ))}
+      </FilterRow>
 
       {/* Grid */}
       {loading ? (
-        <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <RecetaCardSkeleton key={i} />
           ))}
@@ -166,17 +205,49 @@ function RecetasPage() {
       ) : filtered.length === 0 ? (
         <EmptyState onClear={clearFilters} hasFilters={hasFilters} />
       ) : (
-        <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {filtered.map((r) => (
-            <RecetaCard
-              key={r.id}
-              receta={r}
-              isFavorite={favoriteIds.has(r.id)}
-              onToggleFavorite={toggle}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {visible.map((r, i) => (
+              <RecetaCard
+                key={r.id}
+                receta={r}
+                isFavorite={favoriteIds.has(r.id)}
+                onToggleFavorite={toggle}
+                priority={i < 4}
+              />
+            ))}
+          </div>
+          {hasMore && (
+            <div ref={sentinelRef} className="flex justify-center py-6">
+              <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+            </div>
+          )}
+        </>
       )}
+    </div>
+  );
+}
+
+function FilterRow({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="-mx-4">
+      <div className="px-4 mb-2 hidden md:flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+        {icon}
+        {label}
+      </div>
+      <div className="overflow-x-auto scrollbar-none snap-x-mandatory fade-edges-x">
+        <div className="flex gap-2 px-4 min-w-max pb-1">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }
@@ -197,9 +268,9 @@ function Chip({
       type="button"
       onClick={onClick}
       className={cn(
-        "whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium border transition-colors capitalize",
+        "snap-start-always whitespace-nowrap rounded-full px-4 h-9 inline-flex items-center text-sm font-medium border transition-colors capitalize active:scale-95",
         active
-          ? "bg-primary text-primary-foreground border-primary"
+          ? "bg-primary text-primary-foreground border-primary shadow-sm"
           : variant === "category"
             ? "bg-card text-foreground border-border hover:bg-muted"
             : "bg-accent/20 text-secondary border-transparent hover:bg-accent/40",

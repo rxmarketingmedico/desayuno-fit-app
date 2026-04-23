@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { Json } from "@/integrations/supabase/types";
+import { transformImage } from "@/lib/image";
 
 export const Route = createFileRoute("/_authenticated/app/semana")({
   component: SemanaPage,
@@ -337,9 +338,13 @@ function SemanaPage() {
                 >
                   <div className="w-24 h-24 sm:w-32 sm:h-32 shrink-0 bg-muted">
                     <img
-                      src={d.imagen_url}
+                      src={transformImage(d.imagen_url, { width: 200, quality: 65 })}
+                      srcSet={`${transformImage(d.imagen_url, { width: 200, quality: 65 })} 1x, ${transformImage(d.imagen_url, { width: 400, quality: 65 })} 2x`}
                       alt={d.titulo}
+                      width={128}
+                      height={128}
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                   </div>
