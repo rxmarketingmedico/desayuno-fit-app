@@ -83,7 +83,7 @@ function renderHtml(greeting: string, magicLink: string, planLabel: string): str
 
                 <p style="margin:0 0 8px;font-size:15px;color:#3F4A3A;font-weight:600;">¿Qué puedes hacer ahora?</p>
                 <ul style="margin:0 0 0 20px;padding:0;font-size:14px;color:#6B6B6B;line-height:1.7;">
-                  <li>Explorar más de 75 recetas saludables 🥣</li>
+                  <li>Explorar más de 200 recetas saludables 🥣</li>
                   <li>Generar tu plan semanal automático 📅</li>
                   <li>Descargar tu lista de compras lista para el súper 🛒</li>
                 </ul>

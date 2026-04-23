@@ -5,9 +5,9 @@ import type { Database } from "@/integrations/supabase/types";
 
 type PlanType = Database["public"]["Enums"]["plan_type"];
 
-// URL pública do app — usar published URL até DNS de desayunofitapp.com propagar.
-// Quando o domínio estiver ativo, troque para "https://desayunofitapp.com".
-const APP_URL = "https://desayuno-vital-fit.lovable.app";
+// URL pública do app — pode ser sobrescrita pelo secret APP_URL.
+// Default usa o domínio próprio (já apontando para o projeto Lovable).
+const APP_URL = process.env.APP_URL ?? "https://desayunofitapp.com";
 
 // Mapeia o offer code da URL Hotmart para o tipo de plano.
 const OFFER_TO_PLAN: Record<string, PlanType> = {
