@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { User as UserIcon, LogOut, AlertTriangle, Loader2, Shield } from "lucide-react";
+import { User as UserIcon, LogOut, AlertTriangle, Loader2, Shield, Download, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ const PREFS: { key: keyof Preferencias; label: string }[] = [
 function PerfilPage() {
   const { user, signOut } = useAuth();
   const { isAdmin } = useIsAdmin();
+  const { isInstalled, forceOpen: openInstallBanner } = usePWAInstall();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [prefs, setPrefs] = useState<Preferencias>({});
   const [saving, setSaving] = useState(false);
