@@ -196,10 +196,10 @@ function LandingPage() {
             <Sparkles className="h-3 w-3" /> App creado por nutricionista
           </span>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mt-5 leading-tight">
-            Desayuna rico, baja de peso y deja de improvisar en la mañana.
+            200 recetas de desayuno fit en un app — listas en 10 minutos para bajar de peso sin pasar hambre ni repetir lo mismo.
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Más de 200 recetas de desayuno saludable, listas en 10 minutos, con ingredientes del súper de tu barrio. Planificador semanal y lista de compras automática.
+            Con ingredientes del súper de tu barrio, planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana, sin pensar dos veces.
           </p>
 
           <div className="mt-8 rounded-3xl overflow-hidden shadow-xl shadow-primary/10 border border-border max-w-2xl mx-auto">
