@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShoppingBasket, Trash2 } from "lucide-react";
+import { ShoppingBasket, Trash2, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -77,6 +77,12 @@ function ComprasPage() {
     toast.success("Listo, limpiamos lo comprado ✨");
   };
 
+  const shareWhatsApp = () => {
+    const lines = items.map((it) => `- ${it.cantidad} ${it.item}`).join("\n");
+    const text = `Mi lista de compras 🛒\n\n${lines}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
       <div>
@@ -122,11 +128,16 @@ function ComprasPage() {
               </li>
             ))}
           </ul>
-          {items.some((i) => i.checked) && (
-            <Button variant="outline" size="sm" onClick={clearChecked}>
-              <Trash2 className="h-4 w-4" /> Quitar lo comprado
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Button onClick={shareWhatsApp} className="bg-[#25D366] text-white hover:bg-[#1ebe5a]">
+              <Share2 className="h-4 w-4" /> Compartir por WhatsApp
             </Button>
-          )}
+            {items.some((i) => i.checked) && (
+              <Button variant="outline" size="sm" onClick={clearChecked}>
+                <Trash2 className="h-4 w-4" /> Quitar lo comprado
+              </Button>
+            )}
+          </div>
         </>
       )}
     </div>
