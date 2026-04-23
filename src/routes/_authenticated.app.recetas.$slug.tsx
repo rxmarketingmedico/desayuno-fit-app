@@ -58,7 +58,13 @@ function RecetaDetallePage() {
       .maybeSingle()
       .then(({ data, error }) => {
         if (!active) return;
-        if (error || !data) {
+        if (error) {
+          console.error("Error cargando receta:", error);
+          toast.error("No pudimos cargar la receta");
+          setLoading(false);
+          return;
+        }
+        if (!data) {
           toast.error("Receta no encontrada");
           navigate({ to: "/app/recetas" });
           return;
