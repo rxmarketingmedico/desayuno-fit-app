@@ -58,7 +58,7 @@ function AuthCallbackPage() {
           if (profile?.onboarding_completado) {
             navigate({ to: "/app", replace: true });
           } else {
-            navigate({ to: "/app/onboarding", replace: true });
+            navigate({ to: "/onboarding", replace: true });
           }
         } else {
           // Sem sessão → manda pro login
