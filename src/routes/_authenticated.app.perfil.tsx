@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { User as UserIcon, LogOut, AlertTriangle } from "lucide-react";
+import { User as UserIcon, LogOut, AlertTriangle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { openHotmart } from "@/config/hotmart";
 import { toast } from "sonner";
 
@@ -11,25 +13,46 @@ export const Route = createFileRoute("/_authenticated/app/perfil")({
   component: PerfilPage,
 });
 
+interface Preferencias {
+  sin_gluten?: boolean;
+  alta_proteina?: boolean;
+  sin_azucar?: boolean;
+  vegetariano?: boolean;
+}
+
 interface Profile {
   nombre: string | null;
   email: string;
   plan_type: string;
   plan_end_date: string | null;
+  preferencias: Preferencias;
 }
+
+const PREFS: { key: keyof Preferencias; label: string }[] = [
+  { key: "sin_gluten", label: "Sin gluten" },
+  { key: "alta_proteina", label: "Alta proteína" },
+  { key: "sin_azucar", label: "Sin azúcar" },
+  { key: "vegetariano", label: "Vegetariano" },
+];
 
 function PerfilPage() {
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [prefs, setPrefs] = useState<Preferencias>({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!user) return;
     supabase
       .from("profiles")
-      .select("nombre, email, plan_type, plan_end_date")
+      .select("nombre, email, plan_type, plan_end_date, preferencias")
       .eq("id", user.id)
       .maybeSingle()
-      .then(({ data }) => setProfile(data as Profile));
+      .then(({ data }) => {
+        if (!data) return;
+        setProfile(data as Profile);
+        setPrefs((data.preferencias as Preferencias) ?? {});
+      });
   }, [user]);
 
   const diasRestantes = profile?.plan_end_date
@@ -57,6 +80,24 @@ function PerfilPage() {
     openHotmart(plan as "mensual" | "semestral" | "anual", () =>
       toast.info("Próximamente disponible"),
     );
+  };
+
+  const togglePref = (key: keyof Preferencias) =>
+    setPrefs((p) => ({ ...p, [key]: !p[key] }));
+
+  const guardarPrefs = async () => {
+    if (!user) return;
+    setSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ preferencias: prefs })
+      .eq("id", user.id);
+    setSaving(false);
+    if (error) {
+      toast.error("No se pudieron guardar tus preferencias");
+      return;
+    }
+    toast.success("Preferencias actualizadas");
   };
 
   return (
@@ -100,13 +141,46 @@ function PerfilPage() {
         </div>
       )}
 
+      <div className="rounded-2xl bg-card border border-border p-5 space-y-4">
+        <div>
+          <h2 className="font-display text-lg font-semibold text-secondary">
+            Preferencias dietéticas
+          </h2>
+          <p className="text-xs text-muted-foreground mt-1">
+            Personaliza tus recetas según tus necesidades.
+          </p>
+        </div>
+        <div className="space-y-3">
+          {PREFS.map(({ key, label }) => (
+            <label
+              key={key}
+              htmlFor={`pref-${key}`}
+              className="flex items-center gap-3 cursor-pointer rounded-lg p-2 -mx-2 hover:bg-muted/50 transition-colors"
+            >
+              <Checkbox
+                id={`pref-${key}`}
+                checked={!!prefs[key]}
+                onCheckedChange={() => togglePref(key)}
+              />
+              <Label htmlFor={`pref-${key}`} className="text-sm cursor-pointer flex-1">
+                {label}
+              </Label>
+            </label>
+          ))}
+        </div>
+        <Button
+          className="w-full"
+          onClick={guardarPrefs}
+          disabled={saving}
+        >
+          {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+          Guardar preferencias
+        </Button>
+      </div>
+
       <Button variant="outline" className="w-full" onClick={signOut}>
         <LogOut className="h-4 w-4" /> Cerrar sesión
       </Button>
-
-      <p className="text-center text-xs text-muted-foreground">
-        Más opciones (preferencias, restricciones) llegan en la próxima etapa.
-      </p>
     </div>
   );
 }
