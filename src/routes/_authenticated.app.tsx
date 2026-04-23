@@ -1,17 +1,31 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { BookOpen, Heart, CalendarDays, ShoppingBasket, User } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app")({
-  component: AppHome,
+  component: AppLayout,
 });
 
-function AppHome() {
+interface ProfileLite {
+  nombre: string | null;
+}
+
+const TABS = [
+  { to: "/app/recetas", label: "Recetas", icon: BookOpen },
+  { to: "/app/favoritos", label: "Favoritos", icon: Heart },
+  { to: "/app/semana", label: "Mi semana", icon: CalendarDays },
+  { to: "/app/compras", label: "Compras", icon: ShoppingBasket },
+  { to: "/app/perfil", label: "Perfil", icon: User },
+] as const;
+
+function AppLayout() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const [nombre, setNombre] = useState<string | null>(null);
+  const location = useLocation();
+  const [profile, setProfile] = useState<ProfileLite | null>(null);
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
@@ -38,10 +52,17 @@ function AppHome() {
           navigate({ to: "/plan-expirado" });
           return;
         }
-        setNombre(data.nombre);
+        setProfile({ nombre: data.nombre });
         setChecking(false);
       });
   }, [user, navigate]);
+
+  // Redirect /app -> /app/recetas
+  useEffect(() => {
+    if (!checking && location.pathname === "/app") {
+      navigate({ to: "/app/recetas", replace: true });
+    }
+  }, [checking, location.pathname, navigate]);
 
   if (checking) {
     return (
@@ -52,21 +73,73 @@ function AppHome() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="font-display text-xl font-bold text-secondary">Desayuno Fit</h1>
-          <Button variant="ghost" size="sm" onClick={signOut}>Salir</Button>
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
+      {/* Top header */}
+      <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-md">
+        <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
+          <Link to="/app/recetas" className="font-display text-xl font-bold text-secondary">
+            Desayuno Fit
+          </Link>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {TABS.map((t) => (
+              <DesktopNavLink key={t.to} to={t.to} icon={<t.icon className="h-4 w-4" />}>
+                {t.label}
+              </DesktopNavLink>
+            ))}
+          </nav>
+          <div className="hidden md:block">
+            <Button variant="ghost" size="sm" onClick={signOut}>Salir</Button>
+          </div>
+          <span className="md:hidden text-sm text-muted-foreground truncate max-w-[140px]">
+            Hola {profile?.nombre ?? ""} 🌸
+          </span>
         </div>
       </header>
-      <main className="container mx-auto px-4 py-12 text-center">
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-secondary">
-          Bienvenida{nombre ? `, ${nombre}` : ""} 🌸
-        </h2>
-        <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
-          El catálogo completo de recetas llega en la próxima etapa. Por ahora, ¡listo el acceso!
-        </p>
+
+      {/* Page content */}
+      <main className="container mx-auto px-4 py-6 md:py-10">
+        <Outlet />
       </main>
+
+      {/* Mobile tab bar */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur-md">
+        <ul className="grid grid-cols-5">
+          {TABS.map((t) => (
+            <li key={t.to}>
+              <Link
+                to={t.to}
+                className="flex flex-col items-center justify-center gap-1 py-2 text-[11px] text-muted-foreground data-[status=active]:text-primary"
+                activeProps={{ className: "text-primary" }}
+              >
+                <t.icon className="h-5 w-5" />
+                <span className="font-medium">{t.label}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
+  );
+}
+
+function DesktopNavLink({
+  to,
+  icon,
+  children,
+}: {
+  to: (typeof TABS)[number]["to"];
+  icon: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+      activeProps={{ className: "bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary" }}
+    >
+      {icon}
+      {children}
+    </Link>
   );
 }
