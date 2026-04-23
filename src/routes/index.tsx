@@ -26,7 +26,7 @@ import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
-import heroAppMockup from "@/assets/hero-app-mockup.jpg";
+import heroAppMockup from "@/assets/hero-app-mockup.png";
 import testimonioCamila from "@/assets/testimonio-camila.jpg";
 import testimonioValentina from "@/assets/testimonio-valentina.jpg";
 import testimonioMariana from "@/assets/testimonio-mariana.jpg";
@@ -198,8 +198,8 @@ function LandingPage() {
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mt-5 leading-tight">
             App con 200 recetas de desayuno. Para hacer en menos de 10 minutos y bajar de peso sin aburrirte.
           </h1>
-          <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Con ingredientes del súper de tu barrio, planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana, sin pensar dos veces.
+          <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
+            Planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana.
           </p>
 
           <div className="mt-8 max-w-md mx-auto">
