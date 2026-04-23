@@ -1,53 +1,55 @@
 
-# Etapa 2: Landing pública + Login estilizado
 
-## Arquivos a criar/editar
+# Completar el catálogo a 200 recetas
 
-### 1. `src/routes/index.tsx` (REESCREVER) — Landing pública
-Remover placeholder atual e criar landing completa com:
-- **Header sticky** com logo "Desayuno Fit" + botão "Ya compré, acceder" → `/login`
-- **Hero**: título grande, subtítulo, CTA principal "Empieza hoy" (scroll pra planos), foto Unsplash de café da manhã
-- **Sección "¿Qué incluye?"**: 4 cards com ícones (Lucide) — recetas, plan semanal, lista de compras, app mobile
-- **3 cards de planos** (Mensual $9, Semestral $29 com badge "Más popular", Anual $47 com badge "Mejor valor") — cada um abre URL Hotmart em nova aba
-- **3 testimonios** (cards com nome + cidade + texto)
-- **FAQ** (4 perguntas em accordion shadcn)
-- **Footer** com link login + texto institucional
-- `head()` com title/description/og em espanhol LATAM
-- Tom caloroso, mulheres 28-55, espanhol neutro
+## Estado actual
+Tienes **75 recetas**. Faltan **125** para llegar a 200.
 
-### 2. `src/routes/login.tsx` (REESCREVER) — Login estilizado
-- Layout split em 2 colunas no desktop: foto à esquerda + formulário à direita
-- Mobile: só formulário, com header colorido em cima
-- **Remover botão "Crear cuenta"** (signup público não faz sentido — só Hotmart cria contas) — substituir por link "¿Aún no tienes cuenta? Empieza aquí" que abre URL Hotmart Mensual
-- Manter campos email/senha + esqueci a senha + login funcional
-- Aplicar paleta coral/oliva/creme
+Distribución actual:
+- Salado: 29 · Dulce: 27 · Bebida: 14 · Snack: 5
 
-### 3. Configuração de URLs Hotmart
-Como você ainda não passou os links Hotmart reais, vou:
-- Criar arquivo `src/config/hotmart.ts` com 3 constantes lendo de `import.meta.env`
-- Usar placeholders `#` quando env vars não estiverem definidas + mostrar toast "Próximamente disponible" no clique
-- Adicionar 3 env vars no `.env`:
-  - `VITE_HOTMART_CHECKOUT_URL_MENSUAL`
-  - `VITE_HOTMART_CHECKOUT_URL_SEMESTRAL`
-  - `VITE_HOTMART_CHECKOUT_URL_ANUAL`
+## Distribución objetivo (200 recetas)
+Equilibrio pensado para variedad diaria sin saturar una sola categoría:
 
-### 4. Componentes auxiliares
-- `src/components/landing/PricingCard.tsx` — card de plano reutilizável
-- `src/components/landing/FeatureCard.tsx` — card de benefício
-- `src/components/landing/TestimonialCard.tsx` — card de depoimento
+| Categoría | Actual | Meta | A crear |
+|---|---|---|---|
+| Salado | 29 | 70 | **+41** |
+| Dulce | 27 | 60 | **+33** |
+| Bebida | 14 | 35 | **+21** |
+| Snack | 5 | 35 | **+30** |
+| **Total** | **75** | **200** | **+125** |
 
-### 5. Imagens
-Usar URLs Unsplash diretas (sem upload) pra:
-- Hero da landing (mesa de café da manhã saudável)
-- Coluna lateral do login (smoothie bowl ou similar)
+Dentro de cada categoría diversificamos por ingrediente principal (huevo, avena, pan, pollo, salmón, atún, tortilla, lentejas, fruta, yogur, café, queso, tofu, aguacate, etc.) para que el filtro de la app tenga densidad real.
 
-## O que NÃO faz parte desta etapa
-- Catálogo real de receitas → Etapa 3
-- Configuração de domínio de email → Etapa 6
-- Webhook Hotmart → Etapa 6
-- Página `/plan-expirado` → Etapa 5
+## Cómo lo voy a ejecutar (3 pasos)
 
-## Entregável
-Preview navegável: `/` (landing completa) → clicar "Ya compré, acceder" → `/login` estilizado → login funciona → `/app` (placeholder).
+### 1. Generar las 125 recetas con IA (Lovable AI Gateway)
+Script Python (`/tmp/generate_recetas.py`) que llama a `google/gemini-2.5-pro` en lotes:
+- Prompt con: categoría, ingrediente principal, badges deseados, restricciones (≤350 cal, ≤15 min cuando aplique, español LATAM, tono Sofía).
+- Salida JSON estructurada validando los campos de la tabla `recetas`: `slug, titulo, descripcion, tiempo_minutos, calorias, porciones, dificultad, categoria, badges, ingredientes, pasos, tip_nutricionista, info_nutricional, categoria_ingrediente_principal`.
+- Deduplicación contra `slug` ya existentes en BD.
 
-Após validação, sigo pra Etapa 3 (catálogo + filtros + detalhe + favoritos).
+### 2. Generar las 125 imágenes
+Mismo script, segunda fase, con `google/gemini-3.1-flash-image-preview` (rápido + alta calidad):
+- Prompt visual consistente: plato cenital, fondo claro madera, luz natural, estética minimal igual a las recetas existentes.
+- Subida al bucket `recetas-imagenes` (público) → guarda la URL en `imagen_url`.
+
+### 3. Insertar en la base de datos
+Migración SQL con los 125 `INSERT` (en lotes de 25 para no exceder timeout). Validación post-insert: `SELECT COUNT(*) FROM recetas` debe dar 200.
+
+## Tiempo estimado
+- Generación de texto: ~8–12 min
+- Generación de imágenes: ~20–30 min (es la parte más lenta)
+- Inserción + verificación: ~2 min
+
+Puedes seguir usando la app mientras corre; al terminar, las 200 recetas aparecen en `/app/recetas` con sus filtros funcionando.
+
+## Detalles técnicos
+- Modelos: `google/gemini-2.5-pro` (texto JSON), `google/gemini-3.1-flash-image-preview` (imágenes).
+- Bucket: `recetas-imagenes` (ya existe, público).
+- Slugs: kebab-case, validados únicos antes de insertar.
+- Badges: usados los mismos del filtro actual (`alto en proteina, vegano, vegetariano, sin gluten, sin azucar, keto, rapido, meal prep`) + variantes contextuales.
+- Coste IA: cubierto por créditos de Lovable AI (sin API keys extra).
+
+¿Apruebo y arranco?
+
