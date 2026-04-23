@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Recetas imagenes son públicas" ON storage.objects;
