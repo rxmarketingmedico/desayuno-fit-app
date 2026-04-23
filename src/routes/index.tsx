@@ -179,12 +179,9 @@ function LandingPage() {
 
       {/* Header */}
       <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border">
-        <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
+        <div className="max-w-5xl mx-auto flex items-center justify-center px-4 py-3">
           <Link to="/" className="flex items-center gap-2" aria-label="Desayuno Fit">
-            <img src={logo} alt="Desayuno Fit" width="56" height="56" className="h-12 w-12 md:h-14 md:w-14 object-contain" />
-          </Link>
-          <Link to="/login">
-            <Button variant="ghost" size="sm">Ya compré, acceder</Button>
+            <img src={logo} alt="Desayuno Fit" width="80" height="80" className="h-16 w-16 md:h-20 md:w-20 object-contain" />
           </Link>
         </div>
       </header>
