@@ -21,7 +21,7 @@ type PlanType = Database["public"]["Enums"]["plan_type"];
 // =====================================================
 
 export const listBuyers = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator((input: { search?: string; plan?: string }) => input)
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -53,7 +53,7 @@ export const listBuyers = createServerFn({ method: "POST" })
 // =====================================================
 
 export const getAdminStats = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .handler(async ({ context }) => {
     await ensureAdmin(context.userId);
 
@@ -98,7 +98,7 @@ export const getAdminStats = createServerFn({ method: "POST" })
 // =====================================================
 
 export const getBuyerHotmartSummary = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator(z.object({ email: z.string().email() }))
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -119,7 +119,7 @@ export const getBuyerHotmartSummary = createServerFn({ method: "POST" })
 // =====================================================
 
 export const getBuyerTransactions = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator(z.object({ email: z.string().email() }))
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -143,7 +143,7 @@ export const getBuyerTransactions = createServerFn({ method: "POST" })
 // =====================================================
 
 export const resendWelcomeEmail = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator(
     z.object({
       userId: z.string().uuid(),
@@ -207,7 +207,7 @@ const updatePlanSchema = z.object({
 });
 
 export const updateUserPlan = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator(updatePlanSchema)
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -294,7 +294,7 @@ export const updateUserPlan = createServerFn({ method: "POST" })
 // =====================================================
 
 export const listAdmins = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .handler(async ({ context }) => {
     await ensureAdmin(context.userId);
 
@@ -331,7 +331,7 @@ export const listAdmins = createServerFn({ method: "POST" })
 // =====================================================
 
 export const promoteAdmin = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator(z.object({ email: z.string().email() }))
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -369,7 +369,7 @@ export const promoteAdmin = createServerFn({ method: "POST" })
 // =====================================================
 
 export const demoteAdmin = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .inputValidator(z.object({ userId: z.string().uuid() }))
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -393,7 +393,7 @@ export const demoteAdmin = createServerFn({ method: "POST" })
 // =====================================================
 
 export const checkIsAdmin = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireServerFnAuth])
   .handler(async ({ context }) => {
     const { data, error } = await supabaseAdmin
       .from("user_roles")
