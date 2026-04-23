@@ -25,6 +25,7 @@ import {
 import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
+import sofiaImg from "@/assets/sofia-herrera.png";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=80";
