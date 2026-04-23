@@ -189,7 +189,7 @@ export const Route = createFileRoute("/api/public/hotmart-webhook")({
                 type: "magiclink",
                 email,
                 options: {
-                  redirectTo: `${APP_URL}/app/onboarding`,
+                  redirectTo: `${APP_URL}/auth/callback`,
                 },
               });
 
