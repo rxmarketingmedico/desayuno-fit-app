@@ -188,19 +188,23 @@ export const Route = createFileRoute("/api/public/hotmart-webhook")({
               await supabaseAdmin.auth.admin.generateLink({
                 type: "magiclink",
                 email,
-                options: {
-                  redirectTo: `${APP_URL}/auth/callback`,
-                },
               });
 
-            if (linkErr || !linkData?.properties?.action_link) {
+            const tokenHash = linkData?.properties?.hashed_token;
+            if (linkErr || !tokenHash) {
               throw linkErr ?? new Error("Magic link vazio");
             }
+
+            // URL própria de verificação — não depende da config de
+            // Redirect URLs do Supabase.
+            const magicLink = `${APP_URL}/auth/verify?token_hash=${encodeURIComponent(
+              tokenHash,
+            )}&type=magiclink`;
 
             await sendWelcomeEmail({
               to: email,
               nombre: buyer?.name ?? null,
-              magicLink: linkData.properties.action_link,
+              magicLink,
               planLabel: PLAN_LABEL[planType],
             });
           } catch (err) {

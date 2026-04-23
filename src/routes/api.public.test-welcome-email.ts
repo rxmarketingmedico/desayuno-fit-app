@@ -47,12 +47,10 @@ export const Route = createFileRoute("/api/public/test-welcome-email")({
             await supabaseAdmin.auth.admin.generateLink({
               type: "magiclink",
               email,
-              options: {
-                redirectTo: `${APP_URL}/auth/callback`,
-              },
             });
 
-          if (linkErr || !linkData?.properties?.action_link) {
+          const tokenHash = linkData?.properties?.hashed_token;
+          if (linkErr || !tokenHash) {
             console.error("Test email: erro gerando magic link", linkErr);
             return Response.json(
               { ok: false, step: "magic_link", error: linkErr?.message },
@@ -60,10 +58,16 @@ export const Route = createFileRoute("/api/public/test-welcome-email")({
             );
           }
 
+          // Constrói nossa própria URL de verificação — não depende da
+          // config de Redirect URLs do Supabase.
+          const magicLink = `${APP_URL}/auth/verify?token_hash=${encodeURIComponent(
+            tokenHash,
+          )}&type=magiclink`;
+
           await sendWelcomeEmail({
             to: email,
             nombre: nombre ?? null,
-            magicLink: linkData.properties.action_link,
+            magicLink,
             planLabel,
           });
 
