@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { User as UserIcon, LogOut, AlertTriangle, Loader2, Shield } from "lucide-react";
+import { User as UserIcon, LogOut, AlertTriangle, Loader2, Shield, Download, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ const PREFS: { key: keyof Preferencias; label: string }[] = [
 function PerfilPage() {
   const { user, signOut } = useAuth();
   const { isAdmin } = useIsAdmin();
+  const { isInstalled, forceOpen: openInstallBanner } = usePWAInstall();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [prefs, setPrefs] = useState<Preferencias>({});
   const [saving, setSaving] = useState(false);
@@ -178,6 +180,34 @@ function PerfilPage() {
           {saving && <Loader2 className="h-4 w-4 animate-spin" />}
           Guardar preferencias
         </Button>
+      </div>
+
+      {/* Instalar app — só mostra no mobile e quando ainda não está instalado */}
+      <div className="md:hidden rounded-2xl border border-primary/30 bg-primary/5 p-4 flex items-center gap-3">
+        {isInstalled ? (
+          <>
+            <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground">App instalada</p>
+              <p className="text-xs text-muted-foreground">
+                Abre desde tu pantalla de inicio.
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <Download className="h-5 w-5 text-primary shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground">Instala la app</p>
+              <p className="text-xs text-muted-foreground">
+                Acceso rápido desde tu pantalla de inicio.
+              </p>
+            </div>
+            <Button size="sm" onClick={openInstallBanner}>
+              Instalar
+            </Button>
+          </>
+        )}
       </div>
 
       {isAdmin && (
