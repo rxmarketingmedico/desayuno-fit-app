@@ -30,31 +30,51 @@ function AppLayout() {
 
   useEffect(() => {
     if (!user) return;
+
+    let active = true;
+    setChecking(true);
+
     supabase
       .from("profiles")
       .select("nombre, onboarding_completado, plan_type, plan_end_date")
       .eq("id", user.id)
       .maybeSingle()
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (!active) return;
+
+        if (error) {
+          console.error("Error cargando profile:", error);
+          navigate({ to: "/login" });
+          return;
+        }
+
         if (!data) {
           navigate({ to: "/login" });
           return;
         }
+
         if (!data.onboarding_completado) {
           navigate({ to: "/onboarding" });
           return;
         }
+
         const planActivo =
           data.plan_type !== "inactivo" &&
           data.plan_end_date !== null &&
           new Date(data.plan_end_date) > new Date();
+
         if (!planActivo) {
           navigate({ to: "/plan-expirado" });
           return;
         }
+
         setProfile({ nombre: data.nombre });
         setChecking(false);
       });
+
+    return () => {
+      active = false;
+    };
   }, [user, navigate]);
 
   // Redirect /app -> /app/recetas
