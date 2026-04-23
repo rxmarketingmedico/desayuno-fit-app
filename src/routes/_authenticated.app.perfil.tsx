@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { User as UserIcon, LogOut, AlertTriangle, Loader2 } from "lucide-react";
+import { User as UserIcon, LogOut, AlertTriangle, Loader2, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -37,6 +38,7 @@ const PREFS: { key: keyof Preferencias; label: string }[] = [
 
 function PerfilPage() {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [prefs, setPrefs] = useState<Preferencias>({});
   const [saving, setSaving] = useState(false);
@@ -177,6 +179,14 @@ function PerfilPage() {
           Guardar preferencias
         </Button>
       </div>
+
+      {isAdmin && (
+        <Link to="/admin">
+          <Button variant="outline" className="w-full">
+            <Shield className="h-4 w-4" /> Panel de admin
+          </Button>
+        </Link>
+      )}
 
       <Button variant="outline" className="w-full" onClick={signOut}>
         <LogOut className="h-4 w-4" /> Cerrar sesión
