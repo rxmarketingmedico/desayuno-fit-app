@@ -16,8 +16,29 @@ export const Route = createFileRoute("/_authenticated/app/recetas/$slug")({
 });
 
 interface Ingrediente {
-  item: string;
+  // O banco usa `nombre`, mas mantemos `item` como fallback para
+  // compatibilidade com possíveis registros antigos.
+  nombre: string;
   cantidad: string;
+}
+
+// Lê o nome de um ingrediente aceitando as duas chaves possíveis
+// que apareceram no banco em momentos diferentes.
+function getIngredienteNombre(ing: unknown): string {
+  if (!ing || typeof ing !== "object") return "";
+  const o = ing as Record<string, unknown>;
+  return (
+    (typeof o.nombre === "string" && o.nombre) ||
+    (typeof o.item === "string" && o.item) ||
+    (typeof o.name === "string" && o.name) ||
+    ""
+  );
+}
+
+function getIngredienteCantidad(ing: unknown): string {
+  if (!ing || typeof ing !== "object") return "";
+  const o = ing as Record<string, unknown>;
+  return (typeof o.cantidad === "string" && o.cantidad) || "";
 }
 
 interface RecetaDetalle {
@@ -131,8 +152,8 @@ function RecetaDetallePage() {
       .maybeSingle();
 
     const nuevosItems = ingredientes.map((ing) => ({
-      item: ing.item,
-      cantidad: ing.cantidad,
+      item: getIngredienteNombre(ing),
+      cantidad: getIngredienteCantidad(ing),
       receta: receta.titulo,
       checked: false,
     }));
@@ -246,6 +267,8 @@ function RecetaDetallePage() {
         <ul className="mt-4 space-y-3">
           {ingredientes.map((ing, i) => {
             const checked = checkedIngredients.has(i);
+            const nombre = getIngredienteNombre(ing);
+            const cantidad = getIngredienteCantidad(ing);
             return (
               <li key={i} className="flex items-start gap-3">
                 <Checkbox
@@ -261,7 +284,9 @@ function RecetaDetallePage() {
                     checked && "line-through text-muted-foreground",
                   )}
                 >
-                  <span className="font-medium">{ing.cantidad}</span> {ing.item}
+                  {cantidad && <span className="font-medium">{cantidad}</span>}
+                  {cantidad && nombre ? " " : ""}
+                  {nombre}
                 </label>
               </li>
             );
