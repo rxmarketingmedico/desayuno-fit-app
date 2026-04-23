@@ -196,7 +196,7 @@ function LandingPage() {
             <Sparkles className="h-3 w-3" /> App creado por nutricionista
           </span>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mt-5 leading-tight">
-            200 recetas de desayuno fit en un app — listas en 10 minutos para bajar de peso sin pasar hambre ni repetir lo mismo.
+            200 recetas fit en tu celular. Desayunos listos en 10 minutos para bajar de peso sin aburrirte.
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Con ingredientes del súper de tu barrio, planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana, sin pensar dos veces.
