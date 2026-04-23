@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Heart, CalendarDays, ShoppingBasket, User } from "lucide-react";
 import logo from "@/assets/logo.webp";
+import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 export const Route = createFileRoute("/_authenticated/app")({
   component: AppLayout,
@@ -143,6 +144,8 @@ function AppLayout() {
           ))}
         </ul>
       </nav>
+
+      <PWAInstallBanner />
     </div>
   );
 }
