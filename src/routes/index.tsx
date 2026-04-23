@@ -26,6 +26,57 @@ import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
+import testimonioCamila from "@/assets/testimonio-camila.jpg";
+import testimonioValentina from "@/assets/testimonio-valentina.jpg";
+import testimonioMariana from "@/assets/testimonio-mariana.jpg";
+import testimonioSofia from "@/assets/testimonio-sofia.jpg";
+import testimonioPaula from "@/assets/testimonio-paula.jpg";
+import testimonioAndrea from "@/assets/testimonio-andrea.jpg";
+
+const TESTIMONIOS = [
+  {
+    img: testimonioCamila,
+    name: "Camila R.",
+    city: "Ciudad de México, MX",
+    loss: "−9 kg en 4 meses",
+    text: "Antes desayunaba pan con café y a las 10 ya tenía hambre. Con las recetas del app aprendí a armar desayunos con proteína que me dejan llena hasta el almuerzo. Bajé 9 kilos sin pasar hambre, sin contar calorías obsesivamente. Lo mejor: mi marido también come y le encanta.",
+  },
+  {
+    img: testimonioValentina,
+    name: "Valentina M.",
+    city: "Guadalajara, MX",
+    loss: "−14 kg en 6 meses",
+    text: "Probé mil dietas y siempre las dejaba porque me aburría. Esto es distinto — son recetas ricas que de verdad quieres comer. El planificador semanal me cambió la vida: domingo armo la lista de compras, voy al súper, y toda la semana ya está resuelta. Bajé 14 kilos y no los he recuperado.",
+  },
+  {
+    img: testimonioMariana,
+    name: "Mariana S.",
+    city: "Bogotá, CO",
+    loss: "−7 kg en 3 meses",
+    text: "Tengo 45 años y pensé que ya no podía bajar de peso. Las recetas son tan fáciles que las hago hasta cuando llego cansada del trabajo. Me siento con más energía, dormí mejor, y la celulitis bajó mucho. Mis hijas también empezaron a desayunar bien por imitarme.",
+  },
+  {
+    img: testimonioSofia,
+    name: "Sofía L.",
+    city: "Buenos Aires, AR",
+    loss: "−6 kg en 2 meses",
+    text: "Trabajo desde casa y comía cualquier cosa. Ahora abro el app, elijo un desayuno de 10 minutos y listo. Bajé 6 kilos en 2 meses y los smoothies me salvan cuando no tengo tiempo. La lista de compras automática es genial — ya no llego al súper a improvisar.",
+  },
+  {
+    img: testimonioPaula,
+    name: "Paula G.",
+    city: "Santiago, CL",
+    loss: "−11 kg en 5 meses",
+    text: "A los 42 sentía que mi cuerpo ya no respondía. Las recetas antiinflamatorias me desinflamaron muchísimo — la panza se redujo en semanas. Bajé 11 kilos comiendo rico, sin sufrir. Mi nutri me preguntó qué estaba haciendo porque mis exámenes mejoraron todos.",
+  },
+  {
+    img: testimonioAndrea,
+    name: "Andrea T.",
+    city: "Lima, PE",
+    loss: "−8 kg en 3 meses",
+    text: "Soy mamá de 2 niños y nunca tenía tiempo de pensar qué desayunar. Ahora con el menú semanal ya está todo planeado. Bajé 8 kilos en 3 meses, recuperé mi cintura después del segundo embarazo, y lo mejor es que mis hijos también prueban las recetas conmigo.",
+  },
+];
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1200&q=70&fm=webp";
