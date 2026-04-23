@@ -1,4 +1,5 @@
 import { createRouter, useRouter } from "@tanstack/react-router";
+import { QueryClient } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
 
 function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
@@ -54,10 +55,46 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
   );
 }
 
+// Singleton só no cliente (browser). No server, criamos um novo por request
+// dentro de getRouter() para evitar vazamento de cache entre requisições SSR.
+let browserQueryClient: QueryClient | undefined;
+
+function getQueryClient() {
+  if (typeof window === "undefined") {
+    // SSR: client novo por request
+    return new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 60_000,
+          gcTime: 5 * 60_000,
+          refetchOnWindowFocus: false,
+        },
+      },
+    });
+  }
+  // Browser: reutiliza o mesmo client entre navegações para manter o cache
+  // — é por isso que voltar pra lista de recetas fica instantâneo.
+  if (!browserQueryClient) {
+    browserQueryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 5 * 60_000, // 5 min — recetas mudam pouco
+          gcTime: 30 * 60_000, // 30 min em memória
+          refetchOnWindowFocus: false,
+          refetchOnReconnect: "always",
+          retry: 1,
+        },
+      },
+    });
+  }
+  return browserQueryClient;
+}
+
 export const getRouter = () => {
+  const queryClient = getQueryClient();
   const router = createRouter({
     routeTree,
-    context: {},
+    context: { queryClient },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
     defaultErrorComponent: DefaultErrorComponent,

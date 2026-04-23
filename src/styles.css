@@ -165,4 +165,30 @@
       transparent 100%
     );
   }
+
+  /* Shimmer mais agradável que o `animate-pulse` padrão — usado nos
+     skeletons das imagens de receta para reduzir a sensação de espera. */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--muted);
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0,
+      color-mix(in oklab, var(--background) 55%, transparent) 50%,
+      transparent 100%
+    );
+    animation: shimmer-slide 1.4s ease-in-out infinite;
+  }
+  @keyframes shimmer-slide {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
