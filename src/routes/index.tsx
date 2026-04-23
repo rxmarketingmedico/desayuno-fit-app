@@ -471,7 +471,7 @@ function LandingPage() {
             </div>
           </div>
 
-          <Button size="lg" className="w-full mt-8 text-base py-6 rounded-full shadow-lg shadow-primary/25" onClick={() => buyPlan("anual")}>
+          <Button size="lg" className="w-full mt-8 text-base py-6 rounded-full shadow-lg shadow-primary/25" onClick={scrollToPlanes}>
             🍳 Quiero las recetas ahora →
           </Button>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
@@ -552,7 +552,7 @@ function LandingPage() {
           <p className="mt-5 text-secondary-foreground/75 text-[17px]">
             Por menos de lo que te cuesta un café de Starbucks al mes, resuelves tu desayuno de los próximos 12 meses — sin sufrir, sin aburrirte, sin complicarte.
           </p>
-          <Button size="lg" onClick={() => buyPlan("anual")} className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground text-base px-10 py-6 rounded-full shadow-xl shadow-primary/30">
+          <Button size="lg" onClick={scrollToPlanes} className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground text-base px-10 py-6 rounded-full shadow-xl shadow-primary/30">
             🍳 Quiero mi acceso ahora →
           </Button>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-sm text-secondary-foreground/60">
