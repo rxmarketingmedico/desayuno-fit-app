@@ -346,7 +346,7 @@ function LandingPage() {
           <div className="mt-12 grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             <PlanCard
               name="Plan Mensual"
-              price="9"
+              price="4,90"
               period="por mes · cancelas cuando quieras"
               features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
               ctaLabel="Empezar ahora →"
@@ -355,10 +355,10 @@ function LandingPage() {
             <PlanCard
               popular
               name="Plan Semestral"
-              priceOld="USD 54"
-              price="29"
-              period="por 6 meses · equivale a USD 4.83/mes"
-              savings="Ahorras USD 25"
+              priceOld="USD 29,40"
+              price="9,90"
+              period="por 6 meses · equivale a USD 1,65/mes"
+              savings="Ahorras USD 19,50"
               badge="⭐ MÁS POPULAR"
               features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
               ctaLabel="Empezar ahora →"
@@ -366,10 +366,10 @@ function LandingPage() {
             />
             <PlanCard
               name="Plan Anual"
-              priceOld="USD 108"
-              price="47"
-              period="por 12 meses · equivale a USD 3.91/mes"
-              savings="Ahorras USD 61 + 5 bonos gratis"
+              priceOld="USD 58,80"
+              price="14,90"
+              period="por 12 meses · equivale a USD 1,24/mes"
+              savings="Ahorras USD 43,90 + 5 bonos gratis"
               badge="🔥 MEJOR VALOR"
               badgeAccent
               features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo", "+ 5 bonos exclusivos"]}
