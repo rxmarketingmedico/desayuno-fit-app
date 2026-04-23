@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { openHotmart } from "@/config/hotmart";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 
 const SIDE_IMG =
   "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=1000&q=80";

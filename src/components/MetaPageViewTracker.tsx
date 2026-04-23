@@ -15,10 +15,20 @@ function generateEventId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
+function runWhenIdle(cb: () => void) {
+  if (typeof window === "undefined") return;
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(cb, { timeout: 2000 });
+  } else {
+    setTimeout(cb, 1);
+  }
+}
+
 /**
  * Sends a deduplicated PageView event to both the Meta Pixel (browser)
  * and the Meta Conversions API (server) on every route change.
  * Deduplication is handled by Meta using the shared event_id.
+ * Both calls are deferred to idle time so they never block navigation.
  */
 export function MetaPageViewTracker() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -32,14 +42,15 @@ export function MetaPageViewTracker() {
     const eventId = generateEventId();
     const eventSourceUrl = window.location.href;
 
-    // Browser pixel
-    if (typeof window.fbq === "function") {
-      window.fbq("track", "PageView", {}, { eventID: eventId });
-    }
-
-    // Server-side CAPI (deduplicated via event_id)
-    trackMetaPageView({ data: { eventId, eventSourceUrl } }).catch((err) => {
-      console.warn("[meta-capi] tracker failed", err);
+    runWhenIdle(() => {
+      // Browser pixel
+      if (typeof window.fbq === "function") {
+        window.fbq("track", "PageView", {}, { eventID: eventId });
+      }
+      // Server-side CAPI (deduplicated via event_id)
+      trackMetaPageView({ data: { eventId, eventSourceUrl } }).catch((err) => {
+        console.warn("[meta-capi] tracker failed", err);
+      });
     });
   }, [pathname]);
 
