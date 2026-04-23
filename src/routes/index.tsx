@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Más de 20 recetas de desayuno ricas y saludables, plan semanal personalizado y lista de compras automática. Pensado para mujeres reales.",
+          "Más de 200 recetas de desayuno ricas y saludables, plan semanal personalizado y lista de compras automática. Pensado para mujeres reales.",
       },
       { property: "og:title", content: "Desayuno Fit — Empieza tu día cuidándote" },
       {

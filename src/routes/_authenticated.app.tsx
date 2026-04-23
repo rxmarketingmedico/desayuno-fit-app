@@ -109,8 +109,9 @@ function AppLayout() {
             <li key={t.to}>
               <Link
                 to={t.to}
-                className="flex flex-col items-center justify-center gap-1 py-2 text-[11px] text-muted-foreground data-[status=active]:text-primary"
+                className="flex flex-col items-center justify-center gap-1 py-2 text-[11px]"
                 activeProps={{ className: "text-primary" }}
+                inactiveProps={{ className: "text-muted-foreground" }}
               >
                 <t.icon className="h-5 w-5" />
                 <span className="font-medium">{t.label}</span>
