@@ -29,16 +29,17 @@ function AppLayout() {
   const [profile, setProfile] = useState<ProfileLite | null>(null);
   const [checking, setChecking] = useState(true);
 
+  const userId = user?.id;
+
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
     let active = true;
-    setChecking(true);
 
     supabase
       .from("profiles")
       .select("nombre, onboarding_completado, plan_type, plan_end_date")
-      .eq("id", user.id)
+      .eq("id", userId)
       .maybeSingle()
       .then(({ data, error }) => {
         if (!active) return;
@@ -76,7 +77,7 @@ function AppLayout() {
     return () => {
       active = false;
     };
-  }, [user, navigate]);
+  }, [userId, navigate]);
 
   // Redirect /app -> /app/recetas
   useEffect(() => {
