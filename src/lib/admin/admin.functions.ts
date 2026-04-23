@@ -8,29 +8,13 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendWelcomeEmail } from "@/lib/email/welcome-email";
 import { listSales, getBuyerSummary } from "@/lib/hotmart/api.server";
 import type { Database } from "@/integrations/supabase/types";
+import {
+  APP_URL,
+  PLAN_LABEL,
+  ensureAdmin,
+} from "@/lib/admin/admin.helpers.server";
 
 type PlanType = Database["public"]["Enums"]["plan_type"];
-
-const APP_URL = process.env.APP_URL ?? "https://desayunofitapp.com";
-
-const PLAN_LABEL: Record<Exclude<PlanType, "inactivo">, string> = {
-  mensual: "Mensual",
-  semestral: "Semestral",
-  anual: "Anual",
-};
-
-// --- Helper: garante que o usuário autenticado é admin ---
-async function ensureAdmin(userId: string): Promise<void> {
-  const { data, error } = await supabaseAdmin
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId)
-    .eq("role", "admin")
-    .maybeSingle();
-
-  if (error) throw new Error(`Error verificando rol: ${error.message}`);
-  if (!data) throw new Error("Acceso denegado: solo admins.");
-}
 
 // =====================================================
 // 1. Listar todos os compradores (com filtros)
