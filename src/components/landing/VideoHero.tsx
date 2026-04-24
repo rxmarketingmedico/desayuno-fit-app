@@ -65,6 +65,7 @@ function pickVideoSrc(src: string, srcLight?: string): string {
  */
 export function VideoHero({
   src,
+  srcLight,
   poster,
   posterAlt,
   aspect = "9/16",
@@ -72,7 +73,13 @@ export function VideoHero({
 }: VideoHeroProps) {
   const [activated, setActivated] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [resolvedSrc, setResolvedSrc] = useState<string>(src);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Escolhe a melhor versão no client (após mount, pra evitar mismatch SSR)
+  useEffect(() => {
+    setResolvedSrc(pickVideoSrc(src, srcLight));
+  }, [src, srcLight]);
 
   useEffect(() => {
     if (!activated || !videoRef.current) return;
