@@ -514,7 +514,7 @@ function LandingPage() {
 
       {/* PLANOS */}
       <section id="planes" className="bg-background py-16 md:py-20 px-4 scroll-mt-20">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           {/* Banner de escassez — lote promocional */}
           <div className="max-w-2xl mx-auto mb-10">
             <div className="relative overflow-hidden rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/10 via-card to-accent/10 p-5 shadow-lg shadow-primary/10 animate-pulse-glow">
@@ -544,51 +544,38 @@ function LandingPage() {
                   />
                 </div>
                 <p className="mt-2 text-[12px] text-muted-foreground">
-                  <strong className="text-foreground">427 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90
+                  <strong className="text-foreground">427 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90/mes
                 </p>
               </div>
             </div>
           </div>
 
           <div className="text-center max-w-2xl mx-auto">
-            <SectionTitle>Elige tu plan</SectionTitle>
+            <SectionTitle>Empieza hoy por solo USD 13/mes</SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
-              Todos los planes incluyen acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y garantía de 7 días.
+              Acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y los 5 bonos — incluidos. Cancelas cuando quieras, sin preguntas.
             </p>
           </div>
 
-          <div className="mt-12 grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
-            <PlanCard
-              name="Plan Mensual"
-              price="4,90"
-              period="por mes · cancelas cuando quieras"
-              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
-              ctaLabel="Empezar ahora →"
-              onClick={() => buyPlan("mensual")}
-            />
+          <div className="mt-12 max-w-md mx-auto">
             <PlanCard
               popular
-              name="Plan Semestral"
-              priceOld="USD 29,40"
-              price="9,90"
-              period="por 6 meses · equivale a USD 1,65/mes"
-              savings="Ahorras USD 19,50"
-              badge="⭐ MÁS POPULAR"
-              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
-              ctaLabel="Empezar ahora →"
-              onClick={() => buyPlan("semestral")}
-            />
-            <PlanCard
-              name="Plan Anual"
-              priceOld="USD 58,80"
-              price="14,90"
-              period="por 12 meses · equivale a USD 1,24/mes"
-              savings="Ahorras USD 43,90 + 5 bonos gratis"
-              badge="🔥 MEJOR VALOR"
-              badgeAccent
-              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo", "+ 5 bonos exclusivos"]}
-              ctaLabel="Empezar ahora →"
-              onClick={() => buyPlan("anual")}
+              name="Plan Mensual"
+              priceOld="USD 24,90"
+              price="13"
+              period="por mes · cancelas cuando quieras"
+              savings="Precio de lanzamiento"
+              badge="🔥 OFERTA LIMITADA"
+              features={[
+                "+200 recetas de desayuno fit",
+                "Planificador semanal automático",
+                "Lista de compras inteligente",
+                "Filtros por preferencia dietética",
+                "Acceso desde cualquier dispositivo",
+                "+ 5 bonos exclusivos incluidos",
+              ]}
+              ctaLabel="🍳 Empezar ahora →"
+              onClick={() => buyPlan("mensual")}
             />
           </div>
 
