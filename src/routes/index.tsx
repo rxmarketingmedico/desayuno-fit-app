@@ -513,8 +513,43 @@ function LandingPage() {
       </section>
 
       {/* PLANOS */}
-      <section id="planes" className="bg-background py-16 md:py-20 px-4">
+      <section id="planes" className="bg-background py-16 md:py-20 px-4 scroll-mt-20">
         <div className="max-w-5xl mx-auto">
+          {/* Banner de escassez — lote promocional */}
+          <div className="max-w-2xl mx-auto mb-10">
+            <div className="relative overflow-hidden rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/10 via-card to-accent/10 p-5 shadow-lg shadow-primary/10 animate-pulse-glow">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 h-11 w-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-md">
+                  <Flame className="h-5 w-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="live-dot" aria-hidden />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                      Lote promocional · Activo ahora
+                    </span>
+                  </div>
+                  <p className="mt-1 font-display text-[16px] sm:text-[17px] text-secondary leading-tight">
+                    Quedan <strong className="text-primary">73 cupos</strong> al precio de lanzamiento
+                  </p>
+                </div>
+              </div>
+              {/* Barra de progresso */}
+              <div className="mt-4">
+                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all"
+                    style={{ width: "85%" }}
+                    aria-label="85% de cupos ya tomados"
+                  />
+                </div>
+                <p className="mt-2 text-[12px] text-muted-foreground">
+                  <strong className="text-foreground">427 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="text-center max-w-2xl mx-auto">
             <SectionTitle>Elige tu plan</SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
