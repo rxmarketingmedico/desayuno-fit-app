@@ -28,19 +28,19 @@ import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
 // og:image servido como WebP estático otimizado de /public (não vai ao bundle JS)
 const OG_IMAGE_URL = "/og-image.webp";
-import vslPoster from "@/assets/vsl-poster.jpg";
+import vslPoster from "@/assets/vsl-poster.webp";
 import { VideoHero } from "@/components/landing/VideoHero";
 
 const VSL_VIDEO_URL =
   "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl.mp4?v=2";
 const VSL_VIDEO_URL_LIGHT =
   "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl-720.mp4";
-import testimonioCamila from "@/assets/testimonio-camila.jpg";
-import testimonioValentina from "@/assets/testimonio-valentina.jpg";
-import testimonioMariana from "@/assets/testimonio-mariana.jpg";
-import testimonioSofia from "@/assets/testimonio-sofia.jpg";
-import testimonioPaula from "@/assets/testimonio-paula.jpg";
-import testimonioAndrea from "@/assets/testimonio-andrea.jpg";
+import testimonioCamila from "@/assets/testimonio-camila.webp";
+import testimonioValentina from "@/assets/testimonio-valentina.webp";
+import testimonioMariana from "@/assets/testimonio-mariana.webp";
+import testimonioSofia from "@/assets/testimonio-sofia.webp";
+import testimonioPaula from "@/assets/testimonio-paula.webp";
+import testimonioAndrea from "@/assets/testimonio-andrea.webp";
 
 const TESTIMONIOS = [
   {
