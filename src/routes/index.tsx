@@ -31,7 +31,7 @@ import vslPoster from "@/assets/vsl-poster.jpg";
 import { VideoHero } from "@/components/landing/VideoHero";
 
 const VSL_VIDEO_URL =
-  "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl.mp4";
+  "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl.mp4?v=2";
 import testimonioCamila from "@/assets/testimonio-camila.jpg";
 import testimonioValentina from "@/assets/testimonio-valentina.jpg";
 import testimonioMariana from "@/assets/testimonio-mariana.jpg";
