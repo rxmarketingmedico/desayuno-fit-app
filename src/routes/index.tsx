@@ -739,7 +739,7 @@ function LandingPage() {
             Puedes seguir improvisando huevo con pan. O tener +200 recetas en tu celular hoy.
           </h2>
           <p className="mt-5 text-secondary-foreground/75 text-[17px]">
-            Por menos de lo que te cuesta un café de Starbucks al mes, resuelves tu desayuno de los próximos 12 meses — sin sufrir, sin aburrirte, sin complicarte.
+            Por solo USD 13 al mes resuelves tu desayuno cada mañana — sin sufrir, sin aburrirte, sin complicarte. Cancelas cuando quieras.
           </p>
           <Button size="lg" onClick={scrollToPlanes} className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground text-base px-10 py-6 rounded-full shadow-xl shadow-primary/30">
             🍳 Quiero mi acceso ahora →
