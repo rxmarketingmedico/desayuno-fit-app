@@ -57,6 +57,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://images.unsplash.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://eixgkuigdqcvxrnczihx.supabase.co", crossOrigin: "anonymous" },
       { rel: "dns-prefetch", href: "https://connect.facebook.net" },
       { rel: "dns-prefetch", href: "https://www.facebook.com" },
       { rel: "dns-prefetch", href: "https://graph.facebook.com" },

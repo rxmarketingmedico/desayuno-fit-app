@@ -26,7 +26,8 @@ import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
-import heroAppMockup from "@/assets/hero-app-mockup.png";
+// og:image servido como JPG estático otimizado de /public (não vai ao bundle JS)
+const OG_IMAGE_URL = "/og-image.jpg";
 import vslPoster from "@/assets/vsl-poster.jpg";
 import { VideoHero } from "@/components/landing/VideoHero";
 
@@ -86,7 +87,7 @@ const TESTIMONIOS = [
   },
 ];
 
-const HERO_IMG = heroAppMockup;
+
 
 const RECIPE_PREVIEW = [
   { img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80", badge: "Alta proteína", badgeColor: "primary", name: "Tostada de aguacate y huevo pochado", meta: "10 min · 285 cal" },
@@ -153,10 +154,10 @@ export const Route = createFileRoute("/")({
         content:
           "El app que arma tu desayuno fit todos los días. +200 recetas, planificador semanal y lista de compras automática.",
       },
-      { property: "og:image", content: HERO_IMG },
+      { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: HERO_IMG },
+      { name: "twitter:image", content: OG_IMAGE_URL },
     ],
   }),
   component: LandingPage,
