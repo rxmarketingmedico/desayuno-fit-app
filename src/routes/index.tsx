@@ -764,17 +764,6 @@ function DiffCard({ icon, title, desc }: { icon: React.ReactNode; title: string;
   );
 }
 
-function FeatureBlock({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
-  return (
-    <div className="bg-card rounded-2xl p-5 border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all h-full">
-      <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/15 text-primary flex items-center justify-center">
-        {icon}
-      </div>
-      <h3 className="font-display text-[17px] text-secondary mt-4 leading-tight">{title}</h3>
-      <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">{desc}</p>
-    </div>
-  );
-}
 
 function Stat({ n, label }: { n: string; label: string }) {
   return (
