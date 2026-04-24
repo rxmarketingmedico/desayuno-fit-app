@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as PlanExpiradoRouteImport } from './routes/plan-expirado'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -34,6 +35,11 @@ import { Route as AuthenticatedAppRecetasSlugRouteImport } from './routes/_authe
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlanExpiradoRoute = PlanExpiradoRouteImport.update({
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/app': typeof AuthenticatedAppRouteWithChildren
@@ -167,6 +174,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/plan-expirado': typeof PlanExpiradoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/plan-expirado'
+    | '/privacidad'
     | '/reset-password'
     | '/admin'
     | '/app'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/plan-expirado'
+    | '/privacidad'
     | '/reset-password'
     | '/app'
     | '/onboarding'
@@ -258,6 +269,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/plan-expirado'
+    | '/privacidad'
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/app'
@@ -282,6 +294,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   PlanExpiradoRoute: typeof PlanExpiradoRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthVerifyRoute: typeof AuthVerifyRoute
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/plan-expirado': {
@@ -509,6 +529,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   PlanExpiradoRoute: PlanExpiradoRoute,
+  PrivacidadRoute: PrivacidadRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthVerifyRoute: AuthVerifyRoute,
