@@ -593,7 +593,7 @@ function LandingPage() {
           <div className="text-center">
             <SectionTitle>✦ Solo por tiempo limitado</SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
-              Más 5 bonos de regalo — valor total <strong className="text-foreground">USD 47</strong>. Hoy, junto con el plan anual, los llevas gratis:
+              Más 5 bonos de regalo — valor total <strong className="text-foreground">USD 47</strong>. Hoy, junto con tu plan, los llevas <strong className="text-foreground">gratis</strong>:
             </p>
           </div>
 
