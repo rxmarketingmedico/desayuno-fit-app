@@ -54,8 +54,8 @@ const BADGES_DESTAQUE = [
   "meal prep",
 ];
 
-// Tamanho menor = paint mais rápido por batch no mobile, IO dispara antes.
-const PAGE_SIZE = 12;
+// Batch menor = menos trabalho por frame no mobile.
+const PAGE_SIZE = 8;
 
 function RecetasPage() {
   const location = useLocation();
@@ -76,6 +76,7 @@ function RecetasPage() {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 200); // evita filtrar a cada tecla
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { favoriteIds, toggle } = useFavoritos();
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   // Guard contra múltiplas ativações simultâneas do IO durante scroll rápido.
@@ -97,39 +98,62 @@ function RecetasPage() {
   // Reset paginação ao mudar filtros
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
+    setIsLoadingMore(false);
+    loadingMoreRef.current = false;
   }, [categoria, activeBadges, debouncedQuery]);
 
   const loadMore = useCallback(() => {
-    if (loadingMoreRef.current) return;
+    if (loadingMoreRef.current || visibleCount >= filtered.length) return;
     loadingMoreRef.current = true;
-    // Atualização imediata; React 18 já agrupa em microtask.
-    // Liberamos o lock no próximo frame — sem setTimeout artificial.
+    setIsLoadingMore(true);
     setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
     requestAnimationFrame(() => {
       loadingMoreRef.current = false;
+      setIsLoadingMore(false);
     });
-  }, [filtered.length]);
+  }, [filtered.length, visibleCount]);
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
 
   // Infinite scroll com IntersectionObserver — só ativa se realmente há mais.
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
-    if (visibleCount >= filtered.length) return;
+    if (!hasMore) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) loadMore();
       },
-      // rootMargin moderado: dispara antes do user chegar ao fim, mas sem
-      // pré-carregar muitos cards de uma vez (que travava o paint no mobile).
-      { rootMargin: "400px 0px", threshold: 0 },
+      { rootMargin: "600px 0px", threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [loadMore, visibleCount, filtered.length]);
+  }, [loadMore, hasMore]);
 
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
+  // Fallback robusto para mobile: alguns browsers/PWAs falham em disparar o
+  // IntersectionObserver de forma consistente perto do fim da lista.
+  useEffect(() => {
+    if (!hasMore) return;
+
+    const checkNearBottom = () => {
+      const el = sentinelRef.current;
+      if (!el || loadingMoreRef.current) return;
+
+      const distanceToViewport = el.getBoundingClientRect().top - window.innerHeight;
+      if (distanceToViewport < 240) loadMore();
+    };
+
+    checkNearBottom();
+    window.addEventListener("scroll", checkNearBottom, { passive: true });
+    window.addEventListener("resize", checkNearBottom);
+
+    return () => {
+      window.removeEventListener("scroll", checkNearBottom);
+      window.removeEventListener("resize", checkNearBottom);
+    };
+  }, [hasMore, loadMore, visible.length]);
 
   const toggleBadge = (b: string) => {
     setActiveBadges((prev) => {
@@ -244,20 +268,21 @@ function RecetasPage() {
           </div>
           {hasMore && (
             <div ref={sentinelRef} className="flex flex-col items-center gap-3 py-6">
-              <div
-                className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin"
-                aria-hidden="true"
-              />
-              {/* Fallback manual: garante que sempre dá pra carregar mais
-                  mesmo se o IntersectionObserver não disparar (scroll muito
-                  rápido em mobile, aba em background, etc.). */}
-              <button
+              <p className="text-xs text-muted-foreground" aria-live="polite">
+                {visible.length} de {filtered.length} recetas
+              </p>
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={loadMore}
-                className="text-xs font-medium text-primary underline-offset-4 hover:underline active:scale-95 transition-transform"
+                disabled={isLoadingMore}
+                className="min-w-40"
               >
-                Cargar más recetas
-              </button>
+                {isLoadingMore
+                  ? "Cargando..."
+                  : `Cargar ${Math.min(PAGE_SIZE, filtered.length - visible.length)} más`}
+              </Button>
             </div>
           )}
         </>
