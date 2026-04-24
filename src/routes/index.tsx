@@ -684,7 +684,11 @@ function LandingPage() {
         <p>© {new Date().getFullYear()} Desayuno Fit. Todos los derechos reservados.</p>
         <p>Esta página no es afiliada a Facebook, Instagram, Meta o cualquier plataforma de anuncios.</p>
         <p>Los resultados pueden variar de persona a persona.</p>
-        <p className="mt-3">
+        <p className="mt-3 flex items-center justify-center gap-3 flex-wrap">
+          <Link to="/privacidad" className="text-background/80 hover:text-primary hover:underline">
+            Política de privacidad
+          </Link>
+          <span className="text-background/30">·</span>
           <Link to="/login" className="text-primary hover:underline font-medium">
             Ya compré, acceder →
           </Link>
