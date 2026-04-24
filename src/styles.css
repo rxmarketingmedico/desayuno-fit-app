@@ -191,4 +191,40 @@
       transform: translateX(100%);
     }
   }
+
+  /* Glow pulse para alertas de urgencia */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 45%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 10px color-mix(in oklab, var(--primary) 0%, transparent);
+    }
+  }
+
+  /* Ponto pulsante (live dot) */
+  .live-dot {
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--primary);
+  }
+  .live-dot::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    background: var(--primary);
+    opacity: 0.5;
+    animation: live-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  @keyframes live-ping {
+    0% { transform: scale(0.6); opacity: 0.6; }
+    80%, 100% { transform: scale(1.8); opacity: 0; }
+  }
 }
