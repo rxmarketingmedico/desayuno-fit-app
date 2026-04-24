@@ -168,7 +168,7 @@ export function VideoHero({
         <>
           <video
             ref={videoRef}
-            src={src}
+            src={resolvedSrc}
             poster={poster}
             controls
             playsInline
@@ -180,7 +180,7 @@ export function VideoHero({
               console.error("[VideoHero] erro de carregamento:", e.currentTarget.error);
             }}
           >
-            <source src={src} type="video/mp4" />
+            <source src={resolvedSrc} type="video/mp4" />
             Tu navegador no soporta video HTML5.
           </video>
 
