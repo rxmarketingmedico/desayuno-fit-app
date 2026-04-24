@@ -207,7 +207,7 @@ function LandingPage() {
             App con 200 recetas de desayuno. Para hacer en menos de 10 minutos y bajar de peso sin aburrirte.
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            Planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana.
+            Recetas de <strong className="text-foreground">máximo 350 calorías</strong>, con <strong className="text-foreground">planificador semanal</strong> y <strong className="text-foreground">lista de compras automática</strong>. Tu desayuno resuelto cada mañana.
           </p>
 
           <div className="mt-8 max-w-[280px] sm:max-w-xs mx-auto">
