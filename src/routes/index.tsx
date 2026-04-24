@@ -209,6 +209,7 @@ function LandingPage() {
           <div className="mt-8 max-w-[280px] sm:max-w-xs mx-auto">
             <VideoHero
               src={VSL_VIDEO_URL}
+              srcLight={VSL_VIDEO_URL_LIGHT}
               poster={vslPoster}
               posterAlt="App Desayuno Fit abierto en un celular mostrando recetas de desayuno saludable"
               aspect="9/16"
