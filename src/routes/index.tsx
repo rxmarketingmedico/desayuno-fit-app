@@ -629,7 +629,7 @@ function LandingPage() {
             <span>Valor total de los bonos:</span>
             <span>
               <s className="text-muted-foreground/60">USD 47</s>{" "}
-              <strong className="text-secondary">→ Gratis en el Plan Anual</strong>
+              <strong className="text-secondary">→ Gratis con tu plan</strong>
             </span>
           </div>
         </div>
@@ -640,22 +640,22 @@ function LandingPage() {
         <div className="max-w-xl mx-auto text-center">
           <SectionTitle>Oferta de la semana</SectionTitle>
           <p className="mt-5 text-muted-foreground text-[17px]">
-            +200 Recetas de Desayuno Fit — Todo esto por menos de un café al mes.
+            +200 Recetas de Desayuno Fit — Todo por menos de lo que gastas en un solo desayuno fuera.
           </p>
 
           <div className="mt-10 bg-card rounded-3xl p-6 md:p-8 text-left border border-border shadow-sm">
-            <Row label="📱 App +200 Recetas Desayuno Fit" right={<s className="text-muted-foreground/60">USD 58,80/año</s>} bold />
+            <Row label="📱 App +200 Recetas Desayuno Fit" right={<s className="text-muted-foreground/60">USD 24,90/mes</s>} bold />
             <Row label="🎁 Bono 01 — 200 Postres sin azúcar" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 02 — 60 Recetas Lunch Fit" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 03 — 60 Jugos Detox" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 04 — 30 Antiinflamatorias" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 05 — 20 Panes sin gluten" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <div className="border-t-2 border-border mt-4 pt-4 flex justify-between items-end">
-              <span className="font-display text-lg text-secondary">Plan Anual</span>
+              <span className="font-display text-lg text-secondary">Plan Mensual</span>
               <div className="text-right">
-                <div className="text-xs line-through text-muted-foreground/60">USD 105,80</div>
-                <div className="font-display text-3xl font-bold text-primary leading-none">USD 14,90</div>
-                <div className="text-xs text-muted-foreground mt-1">USD 1,24/mes</div>
+                <div className="text-xs line-through text-muted-foreground/60">USD 24,90</div>
+                <div className="font-display text-3xl font-bold text-primary leading-none">USD 13</div>
+                <div className="text-xs text-muted-foreground mt-1">por mes · cancelas cuando quieras</div>
               </div>
             </div>
           </div>
