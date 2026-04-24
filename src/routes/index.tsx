@@ -26,8 +26,8 @@ import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
-// og:image servido como JPG estático otimizado de /public (não vai ao bundle JS)
-const OG_IMAGE_URL = "/og-image.jpg";
+// og:image servido como WebP estático otimizado de /public (não vai ao bundle JS)
+const OG_IMAGE_URL = "/og-image.webp";
 import vslPoster from "@/assets/vsl-poster.jpg";
 import { VideoHero } from "@/components/landing/VideoHero";
 
