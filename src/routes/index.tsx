@@ -24,6 +24,7 @@ import {
   Heart,
   Filter,
   BookOpen,
+  Flame,
 } from "lucide-react";
 import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
