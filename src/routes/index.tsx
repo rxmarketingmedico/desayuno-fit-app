@@ -186,7 +186,7 @@ function LandingPage() {
       <div className="bg-secondary text-secondary-foreground text-center text-xs sm:text-sm py-2.5 px-4 font-medium">
         <Sparkles className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5 text-accent" />
         <strong className="text-accent">OFERTA LIMITADA</strong>
-        <span className="opacity-90"> — Acceso al app por menos de un café al mes</span>
+        <span className="opacity-90"> — Acceso al app por solo USD 13/mes</span>
       </div>
 
       {/* Header */}
@@ -514,7 +514,7 @@ function LandingPage() {
 
       {/* PLANOS */}
       <section id="planes" className="bg-background py-16 md:py-20 px-4 scroll-mt-20">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           {/* Banner de escassez — lote promocional */}
           <div className="max-w-2xl mx-auto mb-10">
             <div className="relative overflow-hidden rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/10 via-card to-accent/10 p-5 shadow-lg shadow-primary/10 animate-pulse-glow">
@@ -544,51 +544,38 @@ function LandingPage() {
                   />
                 </div>
                 <p className="mt-2 text-[12px] text-muted-foreground">
-                  <strong className="text-foreground">427 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90
+                  <strong className="text-foreground">427 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90/mes
                 </p>
               </div>
             </div>
           </div>
 
           <div className="text-center max-w-2xl mx-auto">
-            <SectionTitle>Elige tu plan</SectionTitle>
+            <SectionTitle>Empieza hoy por solo USD 13/mes</SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
-              Todos los planes incluyen acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y garantía de 7 días.
+              Acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y los 5 bonos — incluidos. Cancelas cuando quieras, sin preguntas.
             </p>
           </div>
 
-          <div className="mt-12 grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
-            <PlanCard
-              name="Plan Mensual"
-              price="4,90"
-              period="por mes · cancelas cuando quieras"
-              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
-              ctaLabel="Empezar ahora →"
-              onClick={() => buyPlan("mensual")}
-            />
+          <div className="mt-12 max-w-md mx-auto">
             <PlanCard
               popular
-              name="Plan Semestral"
-              priceOld="USD 29,40"
-              price="9,90"
-              period="por 6 meses · equivale a USD 1,65/mes"
-              savings="Ahorras USD 19,50"
-              badge="⭐ MÁS POPULAR"
-              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo"]}
-              ctaLabel="Empezar ahora →"
-              onClick={() => buyPlan("semestral")}
-            />
-            <PlanCard
-              name="Plan Anual"
-              priceOld="USD 58,80"
-              price="14,90"
-              period="por 12 meses · equivale a USD 1,24/mes"
-              savings="Ahorras USD 43,90 + 5 bonos gratis"
-              badge="🔥 MEJOR VALOR"
-              badgeAccent
-              features={["+200 recetas de desayuno fit", "Planificador semanal", "Lista de compras automática", "Filtros por preferencia dietética", "Acceso desde cualquier dispositivo", "+ 5 bonos exclusivos"]}
-              ctaLabel="Empezar ahora →"
-              onClick={() => buyPlan("anual")}
+              name="Plan Mensual"
+              priceOld="USD 24,90"
+              price="13"
+              period="por mes · cancelas cuando quieras"
+              savings="Precio de lanzamiento"
+              badge="🔥 OFERTA LIMITADA"
+              features={[
+                "+200 recetas de desayuno fit",
+                "Planificador semanal automático",
+                "Lista de compras inteligente",
+                "Filtros por preferencia dietética",
+                "Acceso desde cualquier dispositivo",
+                "+ 5 bonos exclusivos incluidos",
+              ]}
+              ctaLabel="🍳 Empezar ahora →"
+              onClick={() => buyPlan("mensual")}
             />
           </div>
 
@@ -606,7 +593,7 @@ function LandingPage() {
           <div className="text-center">
             <SectionTitle>✦ Solo por tiempo limitado</SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
-              Más 5 bonos de regalo — valor total <strong className="text-foreground">USD 47</strong>. Hoy, junto con el plan anual, los llevas gratis:
+              Más 5 bonos de regalo — valor total <strong className="text-foreground">USD 47</strong>. Hoy, junto con tu plan, los llevas <strong className="text-foreground">gratis</strong>:
             </p>
           </div>
 
@@ -642,7 +629,7 @@ function LandingPage() {
             <span>Valor total de los bonos:</span>
             <span>
               <s className="text-muted-foreground/60">USD 47</s>{" "}
-              <strong className="text-secondary">→ Gratis en el Plan Anual</strong>
+              <strong className="text-secondary">→ Gratis con tu plan</strong>
             </span>
           </div>
         </div>
@@ -653,22 +640,22 @@ function LandingPage() {
         <div className="max-w-xl mx-auto text-center">
           <SectionTitle>Oferta de la semana</SectionTitle>
           <p className="mt-5 text-muted-foreground text-[17px]">
-            +200 Recetas de Desayuno Fit — Todo esto por menos de un café al mes.
+            +200 Recetas de Desayuno Fit — Todo por menos de lo que gastas en un solo desayuno fuera.
           </p>
 
           <div className="mt-10 bg-card rounded-3xl p-6 md:p-8 text-left border border-border shadow-sm">
-            <Row label="📱 App +200 Recetas Desayuno Fit" right={<s className="text-muted-foreground/60">USD 58,80/año</s>} bold />
+            <Row label="📱 App +200 Recetas Desayuno Fit" right={<s className="text-muted-foreground/60">USD 24,90/mes</s>} bold />
             <Row label="🎁 Bono 01 — 200 Postres sin azúcar" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 02 — 60 Recetas Lunch Fit" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 03 — 60 Jugos Detox" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 04 — 30 Antiinflamatorias" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <Row label="🎁 Bono 05 — 20 Panes sin gluten" right={<span className="text-secondary font-semibold">Gratis</span>} small />
             <div className="border-t-2 border-border mt-4 pt-4 flex justify-between items-end">
-              <span className="font-display text-lg text-secondary">Plan Anual</span>
+              <span className="font-display text-lg text-secondary">Plan Mensual</span>
               <div className="text-right">
-                <div className="text-xs line-through text-muted-foreground/60">USD 105,80</div>
-                <div className="font-display text-3xl font-bold text-primary leading-none">USD 14,90</div>
-                <div className="text-xs text-muted-foreground mt-1">USD 1,24/mes</div>
+                <div className="text-xs line-through text-muted-foreground/60">USD 24,90</div>
+                <div className="font-display text-3xl font-bold text-primary leading-none">USD 13</div>
+                <div className="text-xs text-muted-foreground mt-1">por mes · cancelas cuando quieras</div>
               </div>
             </div>
           </div>
@@ -752,7 +739,7 @@ function LandingPage() {
             Puedes seguir improvisando huevo con pan. O tener +200 recetas en tu celular hoy.
           </h2>
           <p className="mt-5 text-secondary-foreground/75 text-[17px]">
-            Por menos de lo que te cuesta un café de Starbucks al mes, resuelves tu desayuno de los próximos 12 meses — sin sufrir, sin aburrirte, sin complicarte.
+            Por solo USD 13 al mes resuelves tu desayuno cada mañana — sin sufrir, sin aburrirte, sin complicarte. Cancelas cuando quieras.
           </p>
           <Button size="lg" onClick={scrollToPlanes} className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground text-base px-10 py-6 rounded-full shadow-xl shadow-primary/30">
             🍳 Quiero mi acceso ahora →

@@ -12,6 +12,7 @@ const APP_URL = process.env.APP_URL ?? "https://desayunofitapp.com";
 // Mapeia o offer code da URL Hotmart para o tipo de plano.
 const OFFER_TO_PLAN: Record<string, PlanType> = {
   "1957oc32": "mensual",
+  "33vkrsza": "mensual",
   usxp93xx: "semestral",
   ikzhxj2i: "anual",
 };

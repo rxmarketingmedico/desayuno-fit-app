@@ -3,7 +3,7 @@
 export const HOTMART_URLS = {
   mensual:
     import.meta.env.VITE_HOTMART_CHECKOUT_URL_MENSUAL ||
-    "https://pay.hotmart.com/P105518866K?off=1957oc32&checkoutMode=10",
+    "https://pay.hotmart.com/P105518866K?off=33vkrsza&checkoutMode=10",
   semestral:
     import.meta.env.VITE_HOTMART_CHECKOUT_URL_SEMESTRAL ||
     "https://pay.hotmart.com/P105518866K?off=usxp93xx&checkoutMode=10",
