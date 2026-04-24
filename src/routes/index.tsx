@@ -27,6 +27,11 @@ import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import sofiaImg from "@/assets/sofia-herrera.webp";
 import heroAppMockup from "@/assets/hero-app-mockup.png";
+import vslPoster from "@/assets/vsl-poster.jpg";
+import { VideoHero } from "@/components/landing/VideoHero";
+
+const VSL_VIDEO_URL =
+  "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl.mp4";
 import testimonioCamila from "@/assets/testimonio-camila.jpg";
 import testimonioValentina from "@/assets/testimonio-valentina.jpg";
 import testimonioMariana from "@/assets/testimonio-mariana.jpg";
@@ -199,16 +204,12 @@ function LandingPage() {
             Planificador semanal y lista de compras automática. Tu desayuno resuelto cada mañana.
           </p>
 
-          <div className="mt-8 max-w-md mx-auto">
-            <img
-              src={HERO_IMG}
-              alt="App Desayuno Fit abierto en un celular mostrando recetas de desayuno saludable"
-              width="1024"
-              height="1024"
-              className="w-full h-auto drop-shadow-2xl"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
+          <div className="mt-8 max-w-[280px] sm:max-w-xs mx-auto">
+            <VideoHero
+              src={VSL_VIDEO_URL}
+              poster={vslPoster}
+              posterAlt="App Desayuno Fit abierto en un celular mostrando recetas de desayuno saludable"
+              aspect="9/16"
             />
           </div>
 
