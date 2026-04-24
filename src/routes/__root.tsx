@@ -54,12 +54,21 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { rel: "icon", type: "image/webp", href: "/logo.webp" },
       { rel: "icon", type: "image/png", href: "/logo-192.png" },
       { rel: "apple-touch-icon", href: "/logo-192.png" },
+      // ALTA PRIORIDADE: Meta Pixel — preconnect ativo (não dns-prefetch)
+      // pra o handshake TCP+TLS já estar pronto quando o script for executado.
+      { rel: "preconnect", href: "https://connect.facebook.net", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://www.facebook.com", crossOrigin: "anonymous" },
+      // Preload do próprio script do Pixel: começa o download em paralelo com o HTML
+      {
+        rel: "preload",
+        as: "script",
+        href: "https://connect.facebook.net/en_US/fbevents.js",
+        crossOrigin: "anonymous",
+      },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://images.unsplash.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://eixgkuigdqcvxrnczihx.supabase.co", crossOrigin: "anonymous" },
-      { rel: "dns-prefetch", href: "https://connect.facebook.net" },
-      { rel: "dns-prefetch", href: "https://www.facebook.com" },
       { rel: "dns-prefetch", href: "https://graph.facebook.com" },
       {
         rel: "stylesheet",
