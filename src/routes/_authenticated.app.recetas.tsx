@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Search, X, SlidersHorizontal } from "lucide-react";
-import { useQuery, queryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,30 +10,6 @@ import { RecetaCard, RecetaCardSkeleton, type RecetaCardData } from "@/component
 import { useFavoritos } from "@/hooks/useFavoritos";
 import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
-
-// Query options compartilhada — permite prefetch/invalidate em outros lugares
-// e reuso do mesmo cache key em qualquer componente.
-export const recetasQueryOptions = () =>
-  queryOptions({
-    queryKey: ["recetas", "list"],
-    queryFn: async (): Promise<RecetaCardData[]> => {
-      const { data, error } = await supabase
-        .from("recetas")
-        .select("id, slug, titulo, imagen_url, tiempo_minutos, calorias, badges, categoria")
-        .order("titulo", { ascending: true });
-      if (error) throw error;
-      return (data ?? []) as RecetaCardData[];
-    },
-  });
-
-export const Route = createFileRoute("/_authenticated/app/recetas")({
-  // Prefetch via loader: na primeira navegação dispara a query, nas próximas
-  // o cache de React Query devolve instantâneo (staleTime 5 min).
-  loader: ({ context }) => {
-    context.queryClient.prefetchQuery(recetasQueryOptions());
-  },
-  component: RecetasPage,
-});
 
 const CATEGORIAS = [
   { value: "todos", label: "Todo" },
@@ -54,16 +30,104 @@ const BADGES_DESTAQUE = [
   "meal prep",
 ];
 
-// Batch menor = menos trabalho por frame no mobile.
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12;
+
+interface RecetasFilters {
+  categoria: string;
+  badges: string[];
+  query: string;
+}
+
+interface RecetasPage {
+  items: RecetaCardData[];
+  nextOffset?: number;
+}
+
+const DEFAULT_FILTERS: RecetasFilters = {
+  categoria: "todos",
+  badges: [],
+  query: "",
+};
+
+const recetaSelect = "id, slug, titulo, imagen_url, tiempo_minutos, calorias, badges, categoria";
+
+export const recetasInfiniteQueryOptions = (filters: RecetasFilters = DEFAULT_FILTERS) =>
+  infiniteQueryOptions({
+    queryKey: ["recetas", "list", filters.categoria, filters.badges.join("|"), filters.query],
+    initialPageParam: 0,
+    queryFn: async ({ pageParam }): Promise<RecetasPage> => {
+      const from = Number(pageParam) || 0;
+      const to = from + PAGE_SIZE;
+
+      let request = supabase
+        .from("recetas")
+        .select(recetaSelect)
+        .order("titulo", { ascending: true })
+        .range(from, to);
+
+      if (filters.categoria !== "todos") {
+        request = request.eq("categoria", filters.categoria);
+      }
+
+      if (filters.badges.length > 0) {
+        request = request.contains("badges", filters.badges);
+      }
+
+      if (filters.query) {
+        request = request.ilike("titulo", `%${filters.query}%`);
+      }
+
+      const { data, error } = await request;
+      if (error) throw error;
+
+      const rows = (data ?? []) as RecetaCardData[];
+      const hasMore = rows.length > PAGE_SIZE;
+
+      return {
+        items: rows.slice(0, PAGE_SIZE),
+        nextOffset: hasMore ? from + PAGE_SIZE : undefined,
+      };
+    },
+    getNextPageParam: (lastPage) => lastPage.nextOffset,
+  });
+
+export const Route = createFileRoute("/_authenticated/app/recetas")({
+  loader: ({ context }) => {
+    context.queryClient.prefetchInfiniteQuery(recetasInfiniteQueryOptions());
+  },
+  component: RecetasPage,
+});
 
 function RecetasPage() {
   const location = useLocation();
   const isListRoute = location.pathname === "/app/recetas";
 
-  // Cache compartilhado — voltar à página é instantâneo.
-  const { data: recetas = [], isLoading, isError } = useQuery({
-    ...recetasQueryOptions(),
+  const [categoria, setCategoria] = useState<string>("todos");
+  const [activeBadges, setActiveBadges] = useState<Set<string>>(new Set());
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 200);
+  const { favoriteIds, toggle } = useFavoritos();
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  const badgeFilters = useMemo(() => Array.from(activeBadges).sort(), [activeBadges]);
+  const filters = useMemo<RecetasFilters>(
+    () => ({
+      categoria,
+      badges: badgeFilters,
+      query: debouncedQuery.trim(),
+    }),
+    [categoria, badgeFilters, debouncedQuery],
+  );
+
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    ...recetasInfiniteQueryOptions(filters),
     enabled: isListRoute,
   });
 
@@ -71,91 +135,30 @@ function RecetasPage() {
     if (isError) toast.error("No pudimos cargar las recetas");
   }, [isError]);
 
-  const [categoria, setCategoria] = useState<string>("todos");
-  const [activeBadges, setActiveBadges] = useState<Set<string>>(new Set());
-  const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query, 200); // evita filtrar a cada tecla
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const { favoriteIds, toggle } = useFavoritos();
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-  // Guard contra múltiplas ativações simultâneas do IO durante scroll rápido.
-  const loadingMoreRef = useRef(false);
-
-  const filtered = useMemo(() => {
-    const q = debouncedQuery.trim().toLowerCase();
-    return recetas.filter((r) => {
-      if (categoria !== "todos" && r.categoria !== categoria) return false;
-      if (activeBadges.size > 0) {
-        const hasAll = Array.from(activeBadges).every((b) => r.badges.includes(b));
-        if (!hasAll) return false;
-      }
-      if (q && !r.titulo.toLowerCase().includes(q)) return false;
-      return true;
-    });
-  }, [recetas, categoria, activeBadges, debouncedQuery]);
-
-  // Reset paginação ao mudar filtros
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-    setIsLoadingMore(false);
-    loadingMoreRef.current = false;
-  }, [categoria, activeBadges, debouncedQuery]);
-
-  useEffect(() => {
-    if (!isLoadingMore) return;
-    loadingMoreRef.current = false;
-    setIsLoadingMore(false);
-  }, [visibleCount, isLoadingMore]);
+  const recetas = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data],
+  );
 
   const loadMore = useCallback(() => {
-    if (loadingMoreRef.current || visibleCount >= filtered.length) return;
-    loadingMoreRef.current = true;
-    setIsLoadingMore(true);
-    setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
-  }, [filtered.length, visibleCount]);
+    if (!hasNextPage || isFetchingNextPage) return;
+    void fetchNextPage();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
-
-  // Infinite scroll com IntersectionObserver — só ativa se realmente há mais.
   useEffect(() => {
     const el = sentinelRef.current;
-    if (!el) return;
-    if (!hasMore) return;
+    if (!el || !hasNextPage) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) loadMore();
       },
-      { rootMargin: "600px 0px", threshold: 0 },
+      { rootMargin: "200px 0px", threshold: 0 },
     );
+
     observer.observe(el);
     return () => observer.disconnect();
-  }, [loadMore, hasMore]);
-
-  // Fallback robusto para mobile: alguns browsers/PWAs falham em disparar o
-  // IntersectionObserver de forma consistente perto do fim da lista.
-  useEffect(() => {
-    if (!hasMore) return;
-
-    const checkNearBottom = () => {
-      const el = sentinelRef.current;
-      if (!el || loadingMoreRef.current) return;
-
-      const distanceToViewport = el.getBoundingClientRect().top - window.innerHeight;
-      if (distanceToViewport < 240) loadMore();
-    };
-
-    checkNearBottom();
-    window.addEventListener("scroll", checkNearBottom, { passive: true });
-    window.addEventListener("resize", checkNearBottom);
-
-    return () => {
-      window.removeEventListener("scroll", checkNearBottom);
-      window.removeEventListener("resize", checkNearBottom);
-    };
-  }, [hasMore, loadMore, visible.length]);
+  }, [hasNextPage, loadMore]);
 
   const toggleBadge = (b: string) => {
     setActiveBadges((prev) => {
@@ -188,7 +191,11 @@ function RecetasPage() {
             Recetas
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {isLoading ? "Cargando…" : `${filtered.length} recetas listas para ti`}
+            {isLoading
+              ? "Cargando…"
+              : hasNextPage
+                ? `${recetas.length}+ recetas listas para ti`
+                : `${recetas.length} recetas listas para ti`}
           </p>
         </div>
         {hasFilters && (
@@ -202,7 +209,6 @@ function RecetasPage() {
         )}
       </div>
 
-      {/* Buscador */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
@@ -224,7 +230,6 @@ function RecetasPage() {
         )}
       </div>
 
-      {/* Categorías */}
       <FilterRow label="Categorías" icon={<SlidersHorizontal className="h-3.5 w-3.5" />}>
         {CATEGORIAS.map((c) => (
           <Chip
@@ -237,7 +242,6 @@ function RecetasPage() {
         ))}
       </FilterRow>
 
-      {/* Badges */}
       <FilterRow label="Etiquetas">
         {BADGES_DESTAQUE.map((b) => (
           <Chip key={b} active={activeBadges.has(b)} onClick={() => toggleBadge(b)} variant="badge">
@@ -246,19 +250,18 @@ function RecetasPage() {
         ))}
       </FilterRow>
 
-      {/* Grid */}
       {isLoading ? (
         <div className="grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <RecetaCardSkeleton key={i} />
           ))}
         </div>
-      ) : filtered.length === 0 ? (
+      ) : recetas.length === 0 ? (
         <EmptyState onClear={clearFilters} hasFilters={hasFilters} />
       ) : (
         <>
           <div className="grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {visible.map((r, i) => (
+            {recetas.map((r, i) => (
               <RecetaCard
                 key={r.id}
                 receta={r}
@@ -268,22 +271,27 @@ function RecetasPage() {
               />
             ))}
           </div>
-          {hasMore && (
+
+          {hasNextPage && (
             <div ref={sentinelRef} className="flex flex-col items-center gap-3 py-6">
+              {isFetchingNextPage && (
+                <div
+                  className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin"
+                  aria-hidden="true"
+                />
+              )}
               <p className="text-xs text-muted-foreground" aria-live="polite">
-                {visible.length} de {filtered.length} recetas
+                Mostrando {recetas.length} recetas
               </p>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={loadMore}
-                disabled={isLoadingMore}
+                disabled={isFetchingNextPage}
                 className="min-w-40"
               >
-                {isLoadingMore
-                  ? "Cargando..."
-                  : `Cargar ${Math.min(PAGE_SIZE, filtered.length - visible.length)} más`}
+                {isFetchingNextPage ? "Cargando..." : "Cargar más recetas"}
               </Button>
             </div>
           )}
@@ -309,9 +317,7 @@ function FilterRow({
         {label}
       </div>
       <div className="overflow-x-auto scrollbar-none snap-x-mandatory fade-edges-x">
-        <div className="flex gap-2 px-4 min-w-max pb-1">
-          {children}
-        </div>
+        <div className="flex gap-2 px-4 min-w-max pb-1">{children}</div>
       </div>
     </div>
   );
