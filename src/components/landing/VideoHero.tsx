@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Play } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface VideoHeroProps {
@@ -16,8 +16,11 @@ interface VideoHeroProps {
 
 /**
  * Player "lazy": exibe apenas a imagem de capa + botão de play.
- * Só carrega o <video> (e baixa o MP4) quando o usuário clica.
- * Otimizado para LCP — o poster é o único asset baixado no carregamento inicial.
+ * Só carrega o <video> quando o usuário clica.
+ *
+ * Estratégia robusta de autoplay:
+ * 1. Tenta tocar com som (intenção de clique).
+ * 2. Se o navegador bloquear, faz fallback para mudo + botão "Activar sonido".
  */
 export function VideoHero({
   src,
@@ -27,16 +30,40 @@ export function VideoHero({
   className,
 }: VideoHeroProps) {
   const [activated, setActivated] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Quando ativa, dá play automaticamente (com som — é uma intenção de clique).
   useEffect(() => {
-    if (activated && videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // fallback silencioso: se browser bloquear, o usuário usa o controle nativo
-      });
-    }
+    if (!activated || !videoRef.current) return;
+    const video = videoRef.current;
+
+    const tryPlay = async () => {
+      try {
+        video.muted = false;
+        video.volume = 1;
+        await video.play();
+        setIsMuted(false);
+      } catch {
+        // Bloqueado pelo navegador → fallback mudo
+        try {
+          video.muted = true;
+          await video.play();
+          setIsMuted(true);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error("[VideoHero] play falhou:", err);
+        }
+      }
+    };
+    void tryPlay();
   }, [activated]);
+
+  const handleUnmute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = false;
+    videoRef.current.volume = 1;
+    setIsMuted(false);
+  };
 
   const aspectClass =
     aspect === "9/16"
@@ -72,9 +99,7 @@ export function VideoHero({
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          {/* Vinheta sutil para destacar o botão */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-          {/* Play */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span
               className={cn(
@@ -87,23 +112,57 @@ export function VideoHero({
               <Play className="h-9 w-9 md:h-11 md:w-11 fill-current ml-1" />
             </span>
           </div>
-          {/* Label inferior */}
           <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs md:text-sm font-medium text-white/95 bg-black/40 backdrop-blur px-3 py-1.5 rounded-full">
             ▶ Mira el video (1 min)
           </span>
         </button>
       ) : (
-        <video
-          ref={videoRef}
-          src={src}
-          poster={poster}
-          controls
-          playsInline
-          preload="auto"
-          className="absolute inset-0 h-full w-full object-cover bg-black"
-        >
-          Tu navegador no soporta video HTML5.
-        </video>
+        <>
+          <video
+            ref={videoRef}
+            src={src}
+            poster={poster}
+            controls
+            playsInline
+            preload="auto"
+            autoPlay
+            className="absolute inset-0 h-full w-full object-contain bg-black"
+            onError={(e) => {
+              // eslint-disable-next-line no-console
+              console.error("[VideoHero] erro de carregamento:", e.currentTarget.error);
+            }}
+          >
+            <source src={src} type="video/mp4" />
+            Tu navegador no soporta video HTML5.
+          </video>
+
+          {/* Fallback "Activar sonido" quando o navegador bloqueia autoplay com áudio */}
+          {isMuted && (
+            <button
+              type="button"
+              onClick={handleUnmute}
+              className={cn(
+                "absolute top-3 right-3 z-10 inline-flex items-center gap-1.5",
+                "rounded-full bg-primary text-primary-foreground",
+                "px-3 py-2 text-xs font-semibold shadow-lg",
+                "hover:scale-105 active:scale-95 transition-transform",
+              )}
+              aria-label="Activar sonido"
+            >
+              <VolumeX className="h-4 w-4" />
+              Activar sonido
+            </button>
+          )}
+          {!isMuted && (
+            <span
+              aria-hidden
+              className="absolute top-3 right-3 z-10 hidden md:inline-flex items-center gap-1 rounded-full bg-black/50 backdrop-blur px-2.5 py-1 text-[10px] text-white/90"
+            >
+              <Volume2 className="h-3 w-3" />
+              Sonido activo
+            </span>
+          )}
+        </>
       )}
     </div>
   );
