@@ -54,7 +54,8 @@ const BADGES_DESTAQUE = [
   "meal prep",
 ];
 
-const PAGE_SIZE = 24;
+// Tamanho menor = paint mais rápido por batch no mobile, IO dispara antes.
+const PAGE_SIZE = 12;
 
 function RecetasPage() {
   const location = useLocation();
@@ -101,13 +102,11 @@ function RecetasPage() {
   const loadMore = useCallback(() => {
     if (loadingMoreRef.current) return;
     loadingMoreRef.current = true;
-    // Defer 1 frame para evitar travadinha ao revelar muitos cards de uma vez
+    // Atualização imediata; React 18 já agrupa em microtask.
+    // Liberamos o lock no próximo frame — sem setTimeout artificial.
+    setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
     requestAnimationFrame(() => {
-      setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
-      // Solta o lock só após o paint, evita rajadas
-      setTimeout(() => {
-        loadingMoreRef.current = false;
-      }, 80);
+      loadingMoreRef.current = false;
     });
   }, [filtered.length]);
 
@@ -121,8 +120,9 @@ function RecetasPage() {
       (entries) => {
         if (entries[0]?.isIntersecting) loadMore();
       },
-      // rootMargin alto = começa a carregar antes; threshold 0 = qualquer pixel basta
-      { rootMargin: "800px 0px", threshold: 0 },
+      // rootMargin moderado: dispara antes do user chegar ao fim, mas sem
+      // pré-carregar muitos cards de uma vez (que travava o paint no mobile).
+      { rootMargin: "400px 0px", threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -243,8 +243,21 @@ function RecetasPage() {
             ))}
           </div>
           {hasMore && (
-            <div ref={sentinelRef} className="flex justify-center py-6">
-              <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+            <div ref={sentinelRef} className="flex flex-col items-center gap-3 py-6">
+              <div
+                className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin"
+                aria-hidden="true"
+              />
+              {/* Fallback manual: garante que sempre dá pra carregar mais
+                  mesmo se o IntersectionObserver não disparar (scroll muito
+                  rápido em mobile, aba em background, etc.). */}
+              <button
+                type="button"
+                onClick={loadMore}
+                className="text-xs font-medium text-primary underline-offset-4 hover:underline active:scale-95 transition-transform"
+              >
+                Cargar más recetas
+              </button>
             </div>
           )}
         </>
