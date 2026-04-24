@@ -3,8 +3,10 @@ import { Play, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface VideoHeroProps {
-  /** URL pública do MP4 (ex: bucket Supabase). */
+  /** URL do MP4 em alta qualidade (1080p). */
   src: string;
+  /** URL opcional do MP4 leve (720p) — usado em conexão lenta ou tela pequena. */
+  srcLight?: string;
   /** Imagem de capa mostrada antes do play. */
   poster: string;
   /** Texto alternativo da capa para acessibilidade/SEO. */
@@ -12,6 +14,45 @@ interface VideoHeroProps {
   /** Proporção do vídeo. Padrão 9:16 (vertical). */
   aspect?: "9/16" | "16/9" | "4/5" | "1/1";
   className?: string;
+}
+
+/**
+ * Decide qual versão do vídeo carregar com base em:
+ * - Network Information API (conexão lenta → versão leve)
+ * - Save-Data header
+ * - Largura da tela (mobile pequeno → leve)
+ */
+function pickVideoSrc(src: string, srcLight?: string): string {
+  if (!srcLight) return src;
+  if (typeof navigator === "undefined") return src;
+
+  // 1) Save-Data ativo (usuário pediu economia de dados)
+  const conn = (navigator as Navigator & {
+    connection?: {
+      saveData?: boolean;
+      effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
+      downlink?: number;
+    };
+  }).connection;
+
+  if (conn?.saveData) return srcLight;
+
+  // 2) Conexão lenta (3g, 2g)
+  if (conn?.effectiveType && ["slow-2g", "2g", "3g"].includes(conn.effectiveType)) {
+    return srcLight;
+  }
+
+  // 3) Downlink baixo (<2 Mbps)
+  if (typeof conn?.downlink === "number" && conn.downlink < 2) {
+    return srcLight;
+  }
+
+  // 4) Tela muito pequena (mobile com largura <500px) — não vale 1080p
+  if (typeof window !== "undefined" && window.innerWidth < 500) {
+    return srcLight;
+  }
+
+  return src;
 }
 
 /**
