@@ -186,7 +186,7 @@ function LandingPage() {
       <div className="bg-secondary text-secondary-foreground text-center text-xs sm:text-sm py-2.5 px-4 font-medium">
         <Sparkles className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5 text-accent" />
         <strong className="text-accent">OFERTA LIMITADA</strong>
-        <span className="opacity-90"> — Acceso al app por menos de un café al mes</span>
+        <span className="opacity-90"> — Acceso al app por solo USD 13/mes</span>
       </div>
 
       {/* Header */}
