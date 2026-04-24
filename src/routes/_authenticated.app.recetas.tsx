@@ -243,8 +243,21 @@ function RecetasPage() {
             ))}
           </div>
           {hasMore && (
-            <div ref={sentinelRef} className="flex justify-center py-6">
-              <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+            <div ref={sentinelRef} className="flex flex-col items-center gap-3 py-6">
+              <div
+                className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin"
+                aria-hidden="true"
+              />
+              {/* Fallback manual: garante que sempre dá pra carregar mais
+                  mesmo se o IntersectionObserver não disparar (scroll muito
+                  rápido em mobile, aba em background, etc.). */}
+              <button
+                type="button"
+                onClick={loadMore}
+                className="text-xs font-medium text-primary underline-offset-4 hover:underline active:scale-95 transition-transform"
+              >
+                Cargar más recetas
+              </button>
             </div>
           )}
         </>
