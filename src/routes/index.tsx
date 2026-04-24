@@ -314,93 +314,42 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* QUÉ TIENE EL APP — Funcionalidades detalladas */}
-      <section className="bg-background py-16 md:py-24 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full">
-              <Smartphone className="h-3 w-3" /> Tour por el app
-            </span>
-            <SectionTitle>
-              <span className="block mt-4">Todo lo que vas a tener dentro del app</span>
-            </SectionTitle>
-            <p className="mt-5 text-muted-foreground text-[17px]">
-              No es un PDF. Es una herramienta completa que usas todos los días — desde elegir el desayuno hasta armar la lista del súper.
+      {/* QUÉ TIENE EL APP */}
+      <section className="bg-background py-16 md:py-20 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center">
+            <SectionTitle>Todo lo que tiene el app</SectionTitle>
+            <p className="mt-4 text-muted-foreground text-[16px]">
+              Las funciones que vas a usar todos los días:
             </p>
           </div>
 
-          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <FeatureBlock
-              icon={<BookOpen className="h-6 w-6" />}
-              title="Recetario completo"
-              desc="+200 recetas de desayuno con foto, paso a paso, gramaje exacto, tiempo de preparación e información nutricional completa (calorías, proteína, carbos, grasas y fibra)."
-            />
-            <FeatureBlock
-              icon={<Filter className="h-6 w-6" />}
-              title="Filtros inteligentes"
-              desc="Encuentra la receta ideal en segundos. Filtra por tiempo, calorías, alta proteína, sin gluten, sin lactosa, vegano, antiinflamatorio o ingrediente que tengas en casa."
-            />
-            <FeatureBlock
-              icon={<CalendarDays className="h-6 w-6" />}
-              title="Planificador semanal"
-              desc="Arma tu menú de la semana en 1 clic. El app sugiere 7 desayunos variados sin repetir, equilibrados nutricionalmente. Puedes intercambiar cualquier día con un toque."
-            />
-            <FeatureBlock
-              icon={<ShoppingBasket className="h-6 w-6" />}
-              title="Lista de compras automática"
-              desc="Genera la lista del súper con todos los ingredientes de la semana — ya sumados y organizados por categoría (lácteos, frutas, granos). Marcas lo que ya tienes."
-            />
-            <FeatureBlock
-              icon={<Share2 className="h-6 w-6" />}
-              title="Compartir por WhatsApp"
-              desc="Envía la lista de compras o cualquier receta directo al WhatsApp — para mandar al esposo que va al súper o compartir con una amiga que también quiere empezar."
-            />
-            <FeatureBlock
-              icon={<Heart className="h-6 w-6" />}
-              title="Favoritas y hechas"
-              desc="Guarda tus recetas preferidas en un solo lugar. Marca las que ya hiciste para llevar control y descubrir nuevas combinaciones cada semana."
-            />
-            <FeatureBlock
-              icon={<Flame className="h-6 w-6" />}
-              title="Conteo calórico claro"
-              desc="Cada receta muestra calorías y macros antes de empezar. Tú decides según tu objetivo: bajar de peso, mantener o ganar masa magra — sin calculadora ni adivinanzas."
-            />
-            <FeatureBlock
-              icon={<Utensils className="h-6 w-6" />}
-              title="Categorías por objetivo"
-              desc="Recetas agrupadas por meta: bajar de peso, antiinflamatorias, alta proteína, energía, detox, sin azúcar, postres fit y más. Encuentra justo lo que tu cuerpo necesita hoy."
-            />
-            <FeatureBlock
-              icon={<Smartphone className="h-6 w-6" />}
-              title="Funciona como app nativa"
-              desc="Instala el ícono en tu celular como una app normal (Android y iPhone). Abre rápido, funciona sin instalar nada de la tienda y se actualiza solo con recetas nuevas."
-            />
-            <FeatureBlock
-              icon={<Download className="h-6 w-6" />}
-              title="Acceso offline"
-              desc="Una vez abiertas, las recetas quedan disponibles sin internet. Cocina tranquila aunque no tengas señal o estés en casa de la abuela sin Wi-Fi."
-            />
-            <FeatureBlock
-              icon={<RefreshCw className="h-6 w-6" />}
-              title="Actualizaciones constantes"
-              desc="Cada mes sumamos recetas nuevas, mejoramos funciones y agregamos contenido — sin pagar nada extra. Tu plan siempre crece contigo."
-            />
-            <FeatureBlock
-              icon={<Monitor className="h-6 w-6" />}
-              title="Multi-dispositivo"
-              desc="Úsalo desde el celular, tablet o computadora con el mismo usuario. Empezaste a ver una receta en el bus y la terminas de leer en la cocina — todo sincronizado."
-            />
-          </div>
+          <ul className="mt-10 grid sm:grid-cols-2 gap-3">
+            {[
+              { icon: BookOpen, title: "+200 recetas", desc: "Foto, paso a paso, calorías y macros." },
+              { icon: CalendarDays, title: "Planificador semanal", desc: "Tu menú de 7 días en 1 clic." },
+              { icon: ShoppingBasket, title: "Lista de compras", desc: "Auto-generada y lista para el súper." },
+              { icon: Filter, title: "Filtros inteligentes", desc: "Por tiempo, calorías o restricción." },
+              { icon: Heart, title: "Favoritas", desc: "Guarda y reencuentra tus preferidas." },
+              { icon: Smartphone, title: "App en tu celular", desc: "Funciona offline, sin tienda de apps." },
+            ].map(({ icon: Icon, title, desc }) => (
+              <li
+                key={title}
+                className="flex items-start gap-3 bg-card border border-border rounded-xl px-4 py-3.5"
+              >
+                <span className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary/15 text-primary flex-shrink-0">
+                  <Icon className="h-4.5 w-4.5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="font-display text-[15px] text-secondary leading-tight">{title}</p>
+                  <p className="text-[13px] text-muted-foreground mt-0.5">{desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-          <div className="mt-12 text-center">
-            <p className="text-sm text-muted-foreground mb-4">
-              Todo esto por menos de lo que cuesta un café al mes.
-            </p>
-            <Button
-              size="lg"
-              onClick={scrollToPlanes}
-              className="rounded-full px-8 shadow-lg shadow-primary/25"
-            >
+          <div className="mt-10 text-center">
+            <Button size="lg" onClick={scrollToPlanes} className="rounded-full px-8 shadow-lg shadow-primary/25">
               🍳 Quiero acceder al app →
             </Button>
           </div>
