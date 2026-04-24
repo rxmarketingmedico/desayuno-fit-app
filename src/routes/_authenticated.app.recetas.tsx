@@ -54,7 +54,8 @@ const BADGES_DESTAQUE = [
   "meal prep",
 ];
 
-const PAGE_SIZE = 24;
+// Tamanho menor = paint mais rápido por batch no mobile, IO dispara antes.
+const PAGE_SIZE = 12;
 
 function RecetasPage() {
   const location = useLocation();
