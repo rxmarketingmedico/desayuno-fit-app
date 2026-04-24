@@ -102,15 +102,17 @@ function RecetasPage() {
     loadingMoreRef.current = false;
   }, [categoria, activeBadges, debouncedQuery]);
 
+  useEffect(() => {
+    if (!isLoadingMore) return;
+    loadingMoreRef.current = false;
+    setIsLoadingMore(false);
+  }, [visibleCount, isLoadingMore]);
+
   const loadMore = useCallback(() => {
     if (loadingMoreRef.current || visibleCount >= filtered.length) return;
     loadingMoreRef.current = true;
     setIsLoadingMore(true);
     setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
-    requestAnimationFrame(() => {
-      loadingMoreRef.current = false;
-      setIsLoadingMore(false);
-    });
   }, [filtered.length, visibleCount]);
 
   const visible = filtered.slice(0, visibleCount);
