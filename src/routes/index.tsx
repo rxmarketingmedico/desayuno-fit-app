@@ -23,12 +23,7 @@ import {
   Star,
   Heart,
   Filter,
-  Flame,
   BookOpen,
-  Share2,
-  Bell,
-  Download,
-  Utensils,
 } from "lucide-react";
 import { openHotmart, type PlanKey } from "@/config/hotmart";
 import { toast } from "sonner";
