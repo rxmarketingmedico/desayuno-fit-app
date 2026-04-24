@@ -102,13 +102,11 @@ function RecetasPage() {
   const loadMore = useCallback(() => {
     if (loadingMoreRef.current) return;
     loadingMoreRef.current = true;
-    // Defer 1 frame para evitar travadinha ao revelar muitos cards de uma vez
+    // Atualização imediata; React 18 já agrupa em microtask.
+    // Liberamos o lock no próximo frame — sem setTimeout artificial.
+    setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
     requestAnimationFrame(() => {
-      setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
-      // Solta o lock só após o paint, evita rajadas
-      setTimeout(() => {
-        loadingMoreRef.current = false;
-      }, 80);
+      loadingMoreRef.current = false;
     });
   }, [filtered.length]);
 
@@ -122,8 +120,9 @@ function RecetasPage() {
       (entries) => {
         if (entries[0]?.isIntersecting) loadMore();
       },
-      // rootMargin alto = começa a carregar antes; threshold 0 = qualquer pixel basta
-      { rootMargin: "800px 0px", threshold: 0 },
+      // rootMargin moderado: dispara antes do user chegar ao fim, mas sem
+      // pré-carregar muitos cards de uma vez (que travava o paint no mobile).
+      { rootMargin: "400px 0px", threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
