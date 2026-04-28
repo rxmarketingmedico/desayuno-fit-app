@@ -575,6 +575,42 @@ function LandingPage() {
             </p>
           </div>
 
+          {/* Comparativo de valor */}
+          <div className="mt-12 max-w-md mx-auto">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <p className="text-center text-[13px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Esto es lo que normalmente gastarías:
+              </p>
+              <ul className="mt-5 space-y-3">
+                <li className="flex items-center justify-between gap-3 border-b border-border pb-3">
+                  <span className="text-[15px] text-foreground/90">👩‍⚕️ Nutricionista <span className="text-muted-foreground text-[13px]">(por consulta)</span></span>
+                  <s className="text-muted-foreground/70 font-semibold">USD 50+</s>
+                </li>
+                <li className="flex items-center justify-between gap-3 border-b border-border pb-3">
+                  <span className="text-[15px] text-foreground/90">📋 Plan personalizado</span>
+                  <s className="text-muted-foreground/70 font-semibold">USD 30+</s>
+                </li>
+                <li className="flex items-center justify-between gap-3">
+                  <span className="text-[15px] text-foreground/90">📱 Apps que no usas <span className="text-muted-foreground text-[13px]">(al mes)</span></span>
+                  <s className="text-muted-foreground/70 font-semibold">USD 20</s>
+                </li>
+              </ul>
+
+              <div className="mt-5 flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3 text-[14px]">
+                <span className="text-muted-foreground">Total que gastarías:</span>
+                <s className="font-bold text-secondary">USD 100+</s>
+              </div>
+
+              <div className="mt-5 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 border-2 border-primary/40 px-5 py-5 text-center">
+                <p className="text-[13px] font-semibold uppercase tracking-wider text-primary">Aquí tienes todo por:</p>
+                <p className="mt-2 font-display text-3xl md:text-4xl font-bold text-secondary leading-none">
+                  👉 USD <span className="text-primary">13</span><span className="text-lg text-muted-foreground font-normal">/mes</span>
+                </p>
+                <p className="mt-2 text-[13px] text-muted-foreground">Menos de lo que cuesta un café por semana</p>
+              </div>
+            </div>
+          </div>
+
           <div className="mt-12 max-w-md mx-auto">
             <PlanCard
               popular
