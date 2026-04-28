@@ -228,6 +228,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .cta-attention { animation: none; }
+  }
 
   /* ===== Phone mockup — sequência cinemática (loop ~14s) ===== */
   .phone-float {
@@ -373,5 +374,4 @@
     0% { transform: scale(0.6); opacity: 0.6; }
     80%, 100% { transform: scale(1.8); opacity: 0; }
   }
-}
 }
