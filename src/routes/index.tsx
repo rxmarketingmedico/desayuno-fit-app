@@ -198,7 +198,7 @@ function LandingPage() {
             Inflamación, barriga hinchada y peso estancado — soluciona esto hoy cambiando tu desayuno en 10 minutos
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            <strong className="text-foreground">+200 desayunos en 10 minutos</strong> que eliminan el hambre y hacen que bajar de peso sea más fácil.
+            App con <strong className="text-foreground">+200 desayunos en 10 minutos</strong> que eliminan el hambre y hacen que bajar de peso sea más fácil.
           </p>
 
           <Button size="lg" onClick={scrollToPlanes} className="mt-8 text-base px-8 py-6 rounded-full shadow-lg shadow-primary/30">
