@@ -350,7 +350,6 @@
     .phone-scene.scene-1, .phone-scene.scene-2, .phone-scene.scene-4 { opacity: 0; }
     .day-pill, .recipe-row { opacity: 1; transform: none; }
   }
-}
 
   /* Ponto pulsante (live dot) */
   .live-dot {
