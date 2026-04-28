@@ -34,6 +34,7 @@ import sofiaImg from "@/assets/sofia-herrera.webp";
 const OG_IMAGE_URL = "/og-image.webp";
 import vslPoster from "@/assets/vsl-poster.webp";
 import { VideoHero } from "@/components/landing/VideoHero";
+import { WeekPlanMockup } from "@/components/landing/WeekPlanMockup";
 
 const VSL_VIDEO_URL =
   "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl.mp4?v=2";
