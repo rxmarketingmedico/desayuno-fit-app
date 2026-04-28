@@ -106,22 +106,19 @@ const RECIPE_PREVIEW = [
 ];
 
 const PAINS = [
-  "Quieres comer sano pero no sabes qué hacer además de huevo con pan.",
-  "Empiezas la dieta, te aburres a los 3 días y vuelves a lo mismo de siempre.",
-  "Te despiertas sin tiempo, saltas el desayuno y a las 10 estás atacando cualquier cosa.",
-  "Crees que las recetas fit necesitan 20 ingredientes caros que ni están en el súper.",
-  "Ya compraste PDFs de recetas que se quedaron guardados y nunca usaste.",
-  "Quieres bajar de peso sin pasar hambre ni comer lo mismo todos los días.",
+  "Comes cualquier cosa en la mañana y a las 10 ya tienes hambre otra vez.",
+  "Empiezas una dieta con todo… y la dejas en pocos días.",
+  "Repites el mismo desayuno hasta que te aburres y abandonas.",
+  "Terminas picando entre comidas sin darte cuenta.",
 ];
 
 const SOLUTION_CHECKS = [
+  ["Te mantiene", "saciada por horas"],
+  ["Evita los", "picos de azúcar y antojos"],
+  ["Facilita la pérdida de peso", "sin esfuerzo"],
   ["Recetas de hasta", "350 calorías"],
-  ["Con sabor real,", "no comida aburrida"],
-  ["Con", "proteínas y vitaminas esenciales"],
-  ["Listas en", "15 minutos o menos"],
-  ["Solo ingredientes", "del súper de tu barrio"],
-  ["Solo necesitas", "licuadora y sartén"],
-  ["Paso a paso claro —", "hasta si nunca cocinaste"],
+  ["Listas en", "10 minutos"],
+  ["Con ingredientes", "de cualquier súper"],
 ];
 
 const BONUSES = [
