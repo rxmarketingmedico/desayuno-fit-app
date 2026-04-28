@@ -202,7 +202,7 @@ function LandingPage() {
           </p>
 
           <Button size="lg" onClick={scrollToPlanes} className="cta-attention mt-8 text-base px-8 py-6 rounded-full">
-            🍳 Quiero empezar hoy →
+            📱 Quiero descargar la app →
           </Button>
 
           <div className="mt-8 max-w-[280px] sm:max-w-xs mx-auto">
