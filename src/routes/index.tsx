@@ -533,107 +533,104 @@ function LandingPage() {
       {/* PLANOS */}
       <section id="planes" className="bg-background py-16 md:py-20 px-4 scroll-mt-20">
         <div className="max-w-3xl mx-auto">
-          {/* Banner de escassez — lote promocional */}
-          <div className="max-w-2xl mx-auto mb-10">
-            <div className="relative overflow-hidden rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/10 via-card to-accent/10 p-5 shadow-lg shadow-primary/10 animate-pulse-glow">
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 h-11 w-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-md">
-                  <Flame className="h-5 w-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="live-dot" aria-hidden />
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                      Lote promocional · Activo ahora
-                    </span>
-                  </div>
-                  <p className="mt-1 font-display text-[16px] sm:text-[17px] text-secondary leading-tight">
-                    Quedan <strong className="text-primary">13 cupos</strong> al precio de lanzamiento
-                  </p>
-                </div>
-              </div>
-              {/* Barra de progresso */}
-              <div className="mt-4">
-                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all"
-                    style={{ width: "97%" }}
-                    aria-label="97% de cupos ya tomados"
-                  />
-                </div>
-                <p className="mt-2 text-[12px] text-muted-foreground">
-                  <strong className="text-foreground">487 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90/mes
-                </p>
-              </div>
-            </div>
-          </div>
-
+          {/* Cabeçalho */}
           <div className="text-center max-w-2xl mx-auto">
-            <SectionTitle>Toda tu rutina de desayuno resuelta — por menos de un café por semana.</SectionTitle>
+            <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full">
+              <Sparkles className="h-3 w-3" /> Oferta de lanzamiento
+            </span>
+            <SectionTitle>
+              Toda tu rutina de desayuno resuelta — por menos de un café por semana.
+            </SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
-              Acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y los 5 bonos — incluidos. Cancelas cuando quieras, sin preguntas.
+              Acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y los 5 bonos — todo incluido.
             </p>
           </div>
 
-          {/* Comparativo de valor */}
-          <div className="mt-12 max-w-md mx-auto">
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <p className="text-center text-[13px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Esto es lo que normalmente gastarías:
-              </p>
-              <ul className="mt-5 space-y-3">
-                <li className="flex items-center justify-between gap-3 border-b border-border pb-3">
-                  <span className="text-[15px] text-foreground/90">👩‍⚕️ Nutricionista <span className="text-muted-foreground text-[13px]">(por consulta)</span></span>
-                  <s className="text-muted-foreground/70 font-semibold">USD 50+</s>
-                </li>
-                <li className="flex items-center justify-between gap-3 border-b border-border pb-3">
-                  <span className="text-[15px] text-foreground/90">📋 Plan personalizado</span>
-                  <s className="text-muted-foreground/70 font-semibold">USD 30+</s>
-                </li>
-                <li className="flex items-center justify-between gap-3">
-                  <span className="text-[15px] text-foreground/90">📱 Apps que no usas <span className="text-muted-foreground text-[13px]">(al mes)</span></span>
-                  <s className="text-muted-foreground/70 font-semibold">USD 20</s>
-                </li>
-              </ul>
-
-              <div className="mt-5 flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3 text-[14px]">
-                <span className="text-muted-foreground">Total estimado:</span>
-                <s className="font-bold text-secondary">USD 100+</s>
+          {/* Comparativo de valor — compacto */}
+          <div className="mt-10 max-w-2xl mx-auto">
+            <p className="text-center text-[13px] font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+              Esto es lo que normalmente gastarías por separado:
+            </p>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="rounded-xl border border-border bg-card px-3 py-4 text-center">
+                <div className="text-2xl mb-1">👩‍⚕️</div>
+                <p className="text-[12px] text-muted-foreground leading-tight">Nutricionista <span className="opacity-70">/consulta</span></p>
+                <s className="block mt-2 font-bold text-secondary text-[15px]">USD 50+</s>
               </div>
+              <div className="rounded-xl border border-border bg-card px-3 py-4 text-center">
+                <div className="text-2xl mb-1">📋</div>
+                <p className="text-[12px] text-muted-foreground leading-tight">Plan personalizado</p>
+                <s className="block mt-2 font-bold text-secondary text-[15px]">USD 30+</s>
+              </div>
+              <div className="rounded-xl border border-border bg-card px-3 py-4 text-center">
+                <div className="text-2xl mb-1">📱</div>
+                <p className="text-[12px] text-muted-foreground leading-tight">Apps que no usas <span className="opacity-70">/mes</span></p>
+                <s className="block mt-2 font-bold text-secondary text-[15px]">USD 20</s>
+              </div>
+            </div>
 
-              <p className="mt-5 text-center text-[15px] text-foreground/85 leading-relaxed">
-                Aquí tienes <strong className="text-secondary">todo eso resuelto</strong> — por una fracción de ese valor.{" "}
-                <span className="text-muted-foreground">👇 Mira el plan abajo.</span>
+            <div className="mt-4 flex items-center justify-center gap-3 text-[14px]">
+              <span className="text-muted-foreground">Total estimado:</span>
+              <s className="font-bold text-secondary text-lg">USD 100+</s>
+            </div>
+
+            <p className="mt-3 text-center text-[15px] text-foreground/85">
+              Aquí tienes <strong className="text-secondary">todo eso resuelto</strong> en un solo lugar 👇
+            </p>
+          </div>
+
+          {/* Card de preço com urgência integrada */}
+          <div className="mt-10 max-w-md mx-auto">
+            {/* Banner de urgência colado no topo do card */}
+            <div className="relative overflow-hidden rounded-t-2xl border-2 border-b-0 border-primary/50 bg-gradient-to-r from-primary to-accent px-5 py-3 shadow-lg shadow-primary/20 animate-pulse-glow">
+              <div className="flex items-center justify-between gap-3 text-primary-foreground">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Flame className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-[12px] sm:text-[13px] font-bold uppercase tracking-wider truncate">
+                    Quedan solo <span className="bg-primary-foreground text-primary px-1.5 py-0.5 rounded">13 cupos</span>
+                  </span>
+                </div>
+                <span className="live-dot flex-shrink-0" aria-hidden />
+              </div>
+              <div className="mt-2 h-1.5 w-full rounded-full bg-primary-foreground/25 overflow-hidden">
+                <div
+                  className="h-full bg-primary-foreground rounded-full"
+                  style={{ width: "97%" }}
+                  aria-label="97% de cupos ya tomados"
+                />
+              </div>
+              <p className="mt-1.5 text-[11px] text-primary-foreground/90">
+                487 de 500 cupos tomados · Después sube a USD 24,90/mes
               </p>
+            </div>
+
+            <div className="rounded-b-2xl border-2 border-t-0 border-primary/50 overflow-hidden">
+              <PlanCard
+                popular
+                name="Plan Mensual"
+                priceOld="USD 24,90"
+                price="13"
+                period="por mes · cancelas cuando quieras"
+                savings="Ahorras USD 11,90 al mes"
+                features={[
+                  "+200 recetas de desayuno fit",
+                  "Planificador semanal automático",
+                  "Lista de compras inteligente",
+                  "Filtros por preferencia dietética",
+                  "Acceso desde cualquier dispositivo",
+                  "+ 5 bonos exclusivos incluidos",
+                ]}
+                ctaLabel="🍳 Quiero asegurar mi cupo →"
+                onClick={() => buyPlan("mensual")}
+              />
             </div>
           </div>
 
-          <div className="mt-12 max-w-md mx-auto">
-            <PlanCard
-              popular
-              name="Plan Mensual"
-              priceOld="USD 24,90"
-              price="13"
-              period="por mes · cancelas cuando quieras"
-              savings="Precio de lanzamiento"
-              badge="🔥 OFERTA LIMITADA"
-              features={[
-                "+200 recetas de desayuno fit",
-                "Planificador semanal automático",
-                "Lista de compras inteligente",
-                "Filtros por preferencia dietética",
-                "Acceso desde cualquier dispositivo",
-                "+ 5 bonos exclusivos incluidos",
-              ]}
-              ctaLabel="🍳 Empezar ahora →"
-              onClick={() => buyPlan("mensual")}
-            />
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+          {/* Selos de confiança */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><Lock className="h-4 w-4" /> Pago 100% seguro</span>
             <span className="flex items-center gap-1.5"><Zap className="h-4 w-4" /> Acceso inmediato</span>
-            <span className="flex items-center gap-1.5"><Check className="h-4 w-4" /> Garantía 7 días</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4" /> Garantía 7 días</span>
           </div>
         </div>
       </section>
