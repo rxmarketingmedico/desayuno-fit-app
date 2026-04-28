@@ -548,7 +548,7 @@ function LandingPage() {
                     </span>
                   </div>
                   <p className="mt-1 font-display text-[16px] sm:text-[17px] text-secondary leading-tight">
-                    Quedan <strong className="text-primary">73 cupos</strong> al precio de lanzamiento
+                    Quedan <strong className="text-primary">13 cupos</strong> al precio de lanzamiento
                   </p>
                 </div>
               </div>
@@ -557,12 +557,12 @@ function LandingPage() {
                 <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all"
-                    style={{ width: "85%" }}
-                    aria-label="85% de cupos ya tomados"
+                    style={{ width: "97%" }}
+                    aria-label="97% de cupos ya tomados"
                   />
                 </div>
                 <p className="mt-2 text-[12px] text-muted-foreground">
-                  <strong className="text-foreground">427 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90/mes
+                  <strong className="text-foreground">487 de 500 cupos</strong> ya tomados · Cuando se agote, el precio sube a USD 24,90/mes
                 </p>
               </div>
             </div>
