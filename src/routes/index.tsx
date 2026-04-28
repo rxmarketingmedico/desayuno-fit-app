@@ -298,6 +298,10 @@ function LandingPage() {
             Cero decisiones. Cero improvisación. Solo sigues el plan — y tu cuerpo hace el resto.
           </p>
 
+          <div className="mt-12 mb-4">
+            <WeekPlanMockup />
+          </div>
+
           <div className="mt-10 grid md:grid-cols-3 gap-5 text-left">
             <DiffCard
               icon={<CalendarDays className="h-6 w-6" />}
