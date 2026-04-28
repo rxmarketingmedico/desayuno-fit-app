@@ -205,6 +205,31 @@
     }
   }
 
+  /* CTA destaque — pulsa, brilha e oscila levemente */
+  .cta-attention {
+    animation: cta-attention 2.4s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform, box-shadow;
+  }
+  @keyframes cta-attention {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 10px 25px -10px color-mix(in oklab, var(--primary) 50%, transparent),
+                  0 0 0 0 color-mix(in oklab, var(--primary) 55%, transparent);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 16px 35px -8px color-mix(in oklab, var(--primary) 60%, transparent),
+                  0 0 0 14px color-mix(in oklab, var(--primary) 0%, transparent);
+    }
+  }
+  .cta-attention:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-attention { animation: none; }
+  }
+
   /* Ponto pulsante (live dot) */
   .live-dot {
     position: relative;
