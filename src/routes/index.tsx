@@ -593,7 +593,7 @@ function LandingPage() {
                 />
               </div>
               <p className="mt-1.5 text-[11px] text-primary-foreground/90">
-                487 de 500 cupos tomados · Después sube a USD 24,90/mes
+                487 de 500 cupos tomados · Después sube a USD 13/mes
               </p>
             </div>
 
@@ -601,10 +601,10 @@ function LandingPage() {
               <PlanCard
                 popular
                 name="Plan Mensual"
-                priceOld="USD 24,90"
-                price="13"
+                priceOld="USD 13"
+                price="4,90"
                 period="por mes · cancelas cuando quieras"
-                savings="Ahorras USD 11,90 al mes"
+                savings="Ahorras USD 8,10 al mes"
                 features={[
                   "+200 recetas de desayuno fit",
                   "Planificador semanal automático",
@@ -746,7 +746,7 @@ function LandingPage() {
             Puedes seguir improvisando huevo con pan. O tener +200 recetas en tu celular hoy.
           </h2>
           <p className="mt-5 text-secondary-foreground/75 text-[17px]">
-            Por solo USD 13 al mes resuelves tu desayuno cada mañana — sin sufrir, sin aburrirte, sin complicarte. Cancelas cuando quieras.
+            Por menos de USD 5 al mes resuelves tu desayuno cada mañana — sin sufrir, sin aburrirte, sin complicarte. Cancelas cuando quieras.
           </p>
           <Button size="lg" onClick={scrollToPlanes} className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground text-base px-10 py-6 rounded-full shadow-xl shadow-primary/30">
             🍳 Quiero mi acceso ahora →
