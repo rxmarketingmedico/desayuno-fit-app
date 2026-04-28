@@ -201,7 +201,7 @@ function LandingPage() {
             App con <strong className="text-foreground">+200 desayunos en 10 minutos</strong> que eliminan el hambre y hacen que bajar de peso sea más fácil.
           </p>
 
-          <Button size="lg" onClick={scrollToPlanes} className="mt-8 text-base px-8 py-6 rounded-full shadow-lg shadow-primary/30">
+          <Button size="lg" onClick={scrollToPlanes} className="cta-attention mt-8 text-base px-8 py-6 rounded-full">
             🍳 Quiero empezar hoy →
           </Button>
 
