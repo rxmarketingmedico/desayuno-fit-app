@@ -37,6 +37,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "facebook-domain-verification", content: "rs91z08y5ygoussrtg42j6bv5l9uyu" },
       { title: "Desayuno Fit — Recetas saludables para empezar bien tu día" },
       { name: "description", content: "Recetas de desayunos saludables para bajar de peso sin pasar hambre. Plan personalizado, lista de compras y más." },
       { property: "og:title", content: "Desayuno Fit — Recetas saludables para empezar bien tu día" },
