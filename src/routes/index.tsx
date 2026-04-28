@@ -195,11 +195,15 @@ function LandingPage() {
             <Sparkles className="h-3 w-3" /> App creado por nutricionista
           </span>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mt-5 leading-tight">
-            No necesitas más disciplina para bajar de peso — necesitas arreglar tu desayuno
+            Inflamación, barriga hinchada y peso estancado — soluciona esto hoy cambiando tu desayuno en 10 minutos
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            Con esta app tienes <strong className="text-foreground">+200 desayunos listos en 10 minutos</strong> que eliminan el hambre, estabilizan tu energía y hacen que bajar de peso sea mucho más fácil — sin sufrir, sin repetir, sin pensar qué comer.
+            <strong className="text-foreground">+200 desayunos en 10 minutos</strong> que eliminan el hambre y hacen que bajar de peso sea más fácil.
           </p>
+
+          <Button size="lg" onClick={scrollToPlanes} className="mt-8 text-base px-8 py-6 rounded-full shadow-lg shadow-primary/30">
+            🍳 Quiero empezar hoy →
+          </Button>
 
           <div className="mt-8 max-w-[280px] sm:max-w-xs mx-auto">
             <VideoHero
@@ -210,10 +214,6 @@ function LandingPage() {
               aspect="9/16"
             />
           </div>
-
-          <Button size="lg" onClick={scrollToPlanes} className="mt-8 text-base px-8 py-6 rounded-full shadow-lg shadow-primary/30">
-            🍳 Quiero empezar hoy →
-          </Button>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5">
