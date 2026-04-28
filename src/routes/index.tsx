@@ -569,7 +569,7 @@ function LandingPage() {
           </div>
 
           <div className="text-center max-w-2xl mx-auto">
-            <SectionTitle>Empieza hoy por solo USD 13/mes</SectionTitle>
+            <SectionTitle>Toda tu rutina de desayuno resuelta — por menos de un café por semana.</SectionTitle>
             <p className="mt-5 text-muted-foreground text-[17px]">
               Acceso completo al app, +200 recetas, planificador semanal, lista de compras automática y los 5 bonos — incluidos. Cancelas cuando quieras, sin preguntas.
             </p>
@@ -597,17 +597,14 @@ function LandingPage() {
               </ul>
 
               <div className="mt-5 flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3 text-[14px]">
-                <span className="text-muted-foreground">Total que gastarías:</span>
+                <span className="text-muted-foreground">Total estimado:</span>
                 <s className="font-bold text-secondary">USD 100+</s>
               </div>
 
-              <div className="mt-5 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 border-2 border-primary/40 px-5 py-5 text-center">
-                <p className="text-[13px] font-semibold uppercase tracking-wider text-primary">Aquí tienes todo por:</p>
-                <p className="mt-2 font-display text-3xl md:text-4xl font-bold text-secondary leading-none">
-                  👉 USD <span className="text-primary">13</span><span className="text-lg text-muted-foreground font-normal">/mes</span>
-                </p>
-                <p className="mt-2 text-[13px] text-muted-foreground">Menos de lo que cuesta un café por semana</p>
-              </div>
+              <p className="mt-5 text-center text-[15px] text-foreground/85 leading-relaxed">
+                Aquí tienes <strong className="text-secondary">todo eso resuelto</strong> — por una fracción de ese valor.{" "}
+                <span className="text-muted-foreground">👇 Mira el plan abajo.</span>
+              </p>
             </div>
           </div>
 
