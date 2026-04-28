@@ -683,41 +683,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* RESUMO OFERTA */}
-      <section className="bg-background py-16 md:py-20 px-4">
-        <div className="max-w-xl mx-auto text-center">
-          <SectionTitle>Oferta de la semana</SectionTitle>
-          <p className="mt-5 text-muted-foreground text-[17px]">
-            +200 Recetas de Desayuno Fit — Todo por menos de lo que gastas en un solo desayuno fuera.
-          </p>
 
-          <div className="mt-10 bg-card rounded-3xl p-6 md:p-8 text-left border border-border shadow-sm">
-            <Row label="📱 App +200 Recetas Desayuno Fit" right={<s className="text-muted-foreground/60">USD 24,90/mes</s>} bold />
-            <Row label="🎁 Bono 01 — 200 Postres sin azúcar" right={<span className="text-secondary font-semibold">Gratis</span>} small />
-            <Row label="🎁 Bono 02 — 60 Recetas Lunch Fit" right={<span className="text-secondary font-semibold">Gratis</span>} small />
-            <Row label="🎁 Bono 03 — 60 Jugos Detox" right={<span className="text-secondary font-semibold">Gratis</span>} small />
-            <Row label="🎁 Bono 04 — 30 Antiinflamatorias" right={<span className="text-secondary font-semibold">Gratis</span>} small />
-            <Row label="🎁 Bono 05 — 20 Panes sin gluten" right={<span className="text-secondary font-semibold">Gratis</span>} small />
-            <div className="border-t-2 border-border mt-4 pt-4 flex justify-between items-end">
-              <span className="font-display text-lg text-secondary">Plan Mensual</span>
-              <div className="text-right">
-                <div className="text-xs line-through text-muted-foreground/60">USD 24,90</div>
-                <div className="font-display text-3xl font-bold text-primary leading-none">USD 13</div>
-                <div className="text-xs text-muted-foreground mt-1">por mes · cancelas cuando quieras</div>
-              </div>
-            </div>
-          </div>
-
-          <Button size="lg" className="w-full mt-8 text-base py-6 rounded-full shadow-lg shadow-primary/25" onClick={scrollToPlanes}>
-            🍳 Quiero las recetas ahora →
-          </Button>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><Lock className="h-3.5 w-3.5" /> Pago seguro</span>
-            <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5" /> Acceso inmediato</span>
-            <span className="flex items-center gap-1"><Check className="h-3.5 w-3.5" /> Garantía 7 días</span>
-          </div>
-        </div>
-      </section>
 
       {/* GARANTIA */}
       <section className="bg-card py-16 md:py-20 px-4">
