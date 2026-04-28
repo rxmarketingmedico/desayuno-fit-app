@@ -34,6 +34,7 @@ import sofiaImg from "@/assets/sofia-herrera.webp";
 const OG_IMAGE_URL = "/og-image.webp";
 import vslPoster from "@/assets/vsl-poster.webp";
 import { VideoHero } from "@/components/landing/VideoHero";
+import { WeekPlanMockup } from "@/components/landing/WeekPlanMockup";
 
 const VSL_VIDEO_URL =
   "https://eixgkuigdqcvxrnczihx.supabase.co/storage/v1/object/public/vsl/minivsl.mp4?v=2";
@@ -296,6 +297,10 @@ function LandingPage() {
           <p className="mt-5 text-muted-foreground text-[17px]">
             Cero decisiones. Cero improvisación. Solo sigues el plan — y tu cuerpo hace el resto.
           </p>
+
+          <div className="mt-12 mb-4">
+            <WeekPlanMockup />
+          </div>
 
           <div className="mt-10 grid md:grid-cols-3 gap-5 text-left">
             <DiffCard
