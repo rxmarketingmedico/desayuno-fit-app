@@ -42,9 +42,6 @@ const VSL_VIDEO_URL_LIGHT =
 import testimonioCamila from "@/assets/testimonio-camila.webp";
 import testimonioValentina from "@/assets/testimonio-valentina.webp";
 import testimonioMariana from "@/assets/testimonio-mariana.webp";
-import testimonioSofia from "@/assets/testimonio-sofia.webp";
-import testimonioPaula from "@/assets/testimonio-paula.webp";
-import testimonioAndrea from "@/assets/testimonio-andrea.webp";
 
 const TESTIMONIOS = [
   {
