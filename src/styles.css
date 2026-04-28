@@ -228,7 +228,61 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .cta-attention { animation: none; }
+
+  /* ===== Phone mockup animations (plano semanal) ===== */
+  .phone-float {
+    animation: phone-float 6s ease-in-out infinite;
   }
+  @keyframes phone-float {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-8px) rotate(-1.5deg); }
+  }
+
+  .day-pill {
+    opacity: 0;
+    transform: translateY(-6px);
+    animation: day-pill-in 0.5s ease-out forwards;
+  }
+  @keyframes day-pill-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .recipe-row {
+    opacity: 0;
+    transform: translateX(12px);
+    animation: recipe-row-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes recipe-row-in {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .phone-tap {
+    animation: phone-tap-pop 4s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes phone-tap-pop {
+    0%, 18%, 100% { transform: scale(0.6); opacity: 0; }
+    22%, 32% { transform: scale(1.1); opacity: 1; }
+    38%, 90% { transform: scale(1); opacity: 1; }
+  }
+
+  .phone-tap-2 {
+    animation: phone-tap-2 4s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes phone-tap-2 {
+    0%, 60%, 100% { transform: scale(0.6) translateY(6px); opacity: 0; }
+    72%, 92% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone-float, .day-pill, .recipe-row, .phone-tap, .phone-tap-2 {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
 
   /* Ponto pulsante (live dot) */
   .live-dot {
