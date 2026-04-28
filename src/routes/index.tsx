@@ -582,7 +582,7 @@ function LandingPage() {
           {/* Card de preço com urgência integrada */}
           <div className="mt-10 max-w-md mx-auto">
             {/* Banner de urgência colado no topo do card */}
-            <div className="relative overflow-hidden rounded-t-2xl border-2 border-b-0 border-primary/50 bg-gradient-to-r from-primary to-accent px-5 py-3 shadow-lg shadow-primary/20 animate-pulse-glow">
+            <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-r from-primary to-accent px-5 py-3 shadow-lg shadow-primary/20 animate-pulse-glow">
               <div className="flex items-center justify-between gap-3 text-primary-foreground">
                 <div className="flex items-center gap-2 min-w-0">
                   <Flame className="h-4 w-4 flex-shrink-0" />
@@ -604,7 +604,7 @@ function LandingPage() {
               </p>
             </div>
 
-            <div className="rounded-b-2xl border-2 border-t-0 border-primary/50 overflow-hidden">
+            <div className="[&>div]:rounded-t-none [&>div]:border-t-0">
               <PlanCard
                 popular
                 name="Plan Mensual"
