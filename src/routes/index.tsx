@@ -179,13 +179,6 @@ function buyPlan(plan: PlanKey) {
 function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Promo bar */}
-      <div className="bg-secondary text-secondary-foreground text-center text-xs sm:text-sm py-2.5 px-4 font-medium">
-        <Sparkles className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5 text-accent" />
-        <strong className="text-accent">OFERTA LIMITADA</strong>
-        <span className="opacity-90"> — Acceso al app por solo USD 13/mes</span>
-      </div>
-
       {/* Header */}
       <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="max-w-5xl mx-auto flex items-center justify-center px-4 py-3">
