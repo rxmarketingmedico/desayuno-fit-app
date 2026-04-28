@@ -106,22 +106,19 @@ const RECIPE_PREVIEW = [
 ];
 
 const PAINS = [
-  "Quieres comer sano pero no sabes qué hacer además de huevo con pan.",
-  "Empiezas la dieta, te aburres a los 3 días y vuelves a lo mismo de siempre.",
-  "Te despiertas sin tiempo, saltas el desayuno y a las 10 estás atacando cualquier cosa.",
-  "Crees que las recetas fit necesitan 20 ingredientes caros que ni están en el súper.",
-  "Ya compraste PDFs de recetas que se quedaron guardados y nunca usaste.",
-  "Quieres bajar de peso sin pasar hambre ni comer lo mismo todos los días.",
+  "Comes cualquier cosa en la mañana y a las 10 ya tienes hambre otra vez.",
+  "Empiezas una dieta con todo… y la dejas en pocos días.",
+  "Repites el mismo desayuno hasta que te aburres y abandonas.",
+  "Terminas picando entre comidas sin darte cuenta.",
 ];
 
 const SOLUTION_CHECKS = [
+  ["Te mantiene", "saciada por horas"],
+  ["Evita los", "picos de azúcar y antojos"],
+  ["Facilita la pérdida de peso", "sin esfuerzo"],
   ["Recetas de hasta", "350 calorías"],
-  ["Con sabor real,", "no comida aburrida"],
-  ["Con", "proteínas y vitaminas esenciales"],
-  ["Listas en", "15 minutos o menos"],
-  ["Solo ingredientes", "del súper de tu barrio"],
-  ["Solo necesitas", "licuadora y sartén"],
-  ["Paso a paso claro —", "hasta si nunca cocinaste"],
+  ["Listas en", "10 minutos"],
+  ["Con ingredientes", "de cualquier súper"],
 ];
 
 const BONUSES = [
@@ -239,8 +236,11 @@ function LandingPage() {
       {/* DOR */}
       <section className="bg-card py-16 md:py-20 px-4">
         <div className="max-w-2xl mx-auto">
-          <SectionTitle>Si te identificas con al menos 3 de estos, este app es para ti:</SectionTitle>
-          <ul className="mt-10 space-y-3">
+          <SectionTitle>Si no controlas tu desayuno, tu día ya empieza mal.</SectionTitle>
+          <p className="mt-5 text-center text-muted-foreground text-[16px]">
+            Quizás te suena familiar:
+          </p>
+          <ul className="mt-8 space-y-3">
             {PAINS.map((p, i) => (
               <li key={i} className="flex items-start gap-3 bg-background rounded-xl px-4 py-3.5 border border-border">
                 <span className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/15 text-primary flex-shrink-0 mt-0.5">
@@ -250,20 +250,31 @@ function LandingPage() {
               </li>
             ))}
           </ul>
+
+          <div className="mt-10 rounded-2xl border border-primary/30 bg-primary/5 px-5 py-6 text-center">
+            <p className="text-[15px] text-muted-foreground">Y lo peor de todo:</p>
+            <p className="mt-2 font-display text-xl md:text-2xl text-secondary leading-snug">
+              terminas creyendo que <span className="text-primary">el problema eres tú</span>.
+            </p>
+            <p className="mt-3 text-[15px] text-foreground/80">
+              No lo eres. El problema es <strong>cómo empieza tu día</strong>.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* SOLUÇÃO */}
       <section className="bg-background py-16 md:py-20 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <SectionTitle>La solución no es otra dieta. Es tener el menú listo.</SectionTitle>
+          <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full">
+            <Sparkles className="h-3 w-3" /> La solución
+          </span>
+          <SectionTitle>
+            No es un recetario. <br className="hidden sm:block" />
+            Es un sistema para eliminar el hambre desde la mañana.
+          </SectionTitle>
           <p className="mt-6 text-muted-foreground text-[17px] leading-relaxed">
-            Más de <strong className="text-foreground">200 recetas de desayuno</strong> creadas por nutricionista. Todas listas en{" "}
-            <strong className="text-foreground">máximo 15 minutos</strong>, con ingredientes que encuentras en cualquier súper de tu barrio.
-          </p>
-          <p className="mt-3 text-muted-foreground text-[17px] leading-relaxed">
-            Abres el app en tu celular, eliges qué desayunar, y en 10 minutos tienes algo delicioso y saludable en la mesa.{" "}
-            <strong className="text-foreground">Un menú rotativo de 6 meses sin repetir nada.</strong>
+            Cada desayuno está diseñado por nutricionista para trabajar a tu favor — no en tu contra.
           </p>
 
           <ul className="mt-10 grid sm:grid-cols-2 gap-3 text-left">
@@ -278,35 +289,42 @@ function LandingPage() {
               </li>
             ))}
           </ul>
+
+          <p className="mt-10 text-[16px] text-foreground/80 max-w-xl mx-auto">
+            Por eso funciona <strong>incluso si siempre fallaste</strong> con dietas antes.
+          </p>
         </div>
       </section>
 
-      {/* DIFERENCIAL */}
+      {/* DIFERENCIAL — FUNCIONALIDADES */}
       <section className="bg-card py-16 md:py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <SectionTitle>No es un PDF. Es un app de verdad.</SectionTitle>
+          <SectionTitle>Abres el app y ya sabes qué comer toda la semana.</SectionTitle>
           <p className="mt-5 text-muted-foreground text-[17px]">
-            Mientras otros te venden un PDF que se pierde en tu celular, nosotras te damos algo que usas{" "}
-            <strong className="text-foreground">todas las semanas</strong>:
+            Cero decisiones. Cero improvisación. Solo sigues el plan — y tu cuerpo hace el resto.
           </p>
 
           <div className="mt-10 grid md:grid-cols-3 gap-5 text-left">
             <DiffCard
-              icon={<Smartphone className="h-6 w-6" />}
-              title="Recetario siempre contigo"
-              desc="Abre el app desde cualquier lugar. Filtra por tiempo, calorías o ingrediente. Guarda tus favoritas. Marca las que ya hiciste."
-            />
-            <DiffCard
               icon={<CalendarDays className="h-6 w-6" />}
-              title="Planificador semanal"
-              desc="El app arma tu semana de desayunos en 1 clic. 7 recetas variadas, sin repetir, pensadas para que no te aburras."
+              title="Tu menú listo en 1 clic"
+              desc="El app arma tus 7 desayunos de la semana sin repetir, pensados para mantenerte saciada y bajar de peso."
             />
             <DiffCard
               icon={<ShoppingBasket className="h-6 w-6" />}
-              title="Lista de compras automática"
-              desc="Genera tu lista del súper con los ingredientes de toda la semana — ya sumados y organizados. Compártela por WhatsApp."
+              title="Lista del súper automática"
+              desc="Genera la lista con los ingredientes de toda la semana — ya sumados y organizados. Compártela por WhatsApp."
+            />
+            <DiffCard
+              icon={<Smartphone className="h-6 w-6" />}
+              title="Siempre en tu celular"
+              desc="Abres, eliges, cocinas en 10 minutos. Filtra por tiempo, calorías o ingrediente. Guarda tus favoritas."
             />
           </div>
+
+          <p className="mt-10 text-[16px] text-foreground/80 max-w-xl mx-auto">
+            <strong>Sin pensar qué comer. Sin improvisar en el súper.</strong> Solo sigues el plan.
+          </p>
         </div>
       </section>
 
