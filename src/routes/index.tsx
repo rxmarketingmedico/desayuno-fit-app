@@ -205,10 +205,10 @@ function LandingPage() {
             <Sparkles className="h-3 w-3" /> App creado por nutricionista
           </span>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary mt-5 leading-tight">
-            Baja de peso sin pasar hambre — empieza por cambiar tu desayuno. 200 recetas fit en tu celular, listas en 10 minutos.
+            No necesitas más disciplina para bajar de peso — necesitas arreglar tu desayuno
           </h1>
           <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            Recetas de <strong className="text-foreground">menos de 350 calorías</strong>, listas en <strong className="text-foreground">10 minutos</strong>, con ingredientes de cualquier súper. Sin hambre. Sin repetir. Sin excusas.
+            Con esta app tienes <strong className="text-foreground">+200 desayunos listos en 10 minutos</strong> que eliminan el hambre, estabilizan tu energía y hacen que bajar de peso sea mucho más fácil — sin sufrir, sin repetir, sin pensar qué comer.
           </p>
 
           <div className="mt-8 max-w-[280px] sm:max-w-xs mx-auto">
