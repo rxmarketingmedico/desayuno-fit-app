@@ -604,7 +604,6 @@ function LandingPage() {
                 priceOld="USD 13"
                 price="4,90"
                 period="por mes · cancelas cuando quieras"
-                savings="Ahorras USD 8,10 al mes"
                 features={[
                   "+200 recetas de desayuno fit",
                   "Planificador semanal automático",
