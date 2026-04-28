@@ -229,7 +229,7 @@
   @media (prefers-reduced-motion: reduce) {
     .cta-attention { animation: none; }
 
-  /* ===== Phone mockup animations (plano semanal) ===== */
+  /* ===== Phone mockup — sequência cinemática (loop ~14s) ===== */
   .phone-float {
     animation: phone-float 6s ease-in-out infinite;
   }
@@ -238,49 +238,117 @@
     50% { transform: translateY(-8px) rotate(-1.5deg); }
   }
 
+  /* Cada cena ocupa um intervalo do loop de 14s */
+  .phone-scene {
+    opacity: 0;
+    animation-duration: 14s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+  /* Scene 1: Home — visível 0–3s (com fade) */
+  .phone-scene.scene-1 { animation-name: scene-1; }
+  @keyframes scene-1 {
+    0% { opacity: 0; transform: translateX(-6%); }
+    3%, 21% { opacity: 1; transform: translateX(0); }
+    25%, 100% { opacity: 0; transform: translateX(-6%); }
+  }
+  /* Scene 2: Loading — 3.5–4.3s */
+  .phone-scene.scene-2 { animation-name: scene-2; }
+  @keyframes scene-2 {
+    0%, 24% { opacity: 0; }
+    26%, 31% { opacity: 1; }
+    33%, 100% { opacity: 0; }
+  }
+  /* Scene 3: Plano semanal — 4.5–9s */
+  .phone-scene.scene-3 { animation-name: scene-3; }
+  @keyframes scene-3 {
+    0%, 32% { opacity: 0; transform: translateX(6%); }
+    34%, 64% { opacity: 1; transform: translateX(0); }
+    68%, 100% { opacity: 0; transform: translateX(-6%); }
+  }
+  /* Scene 4: Lista de compras — 9.5–13.5s */
+  .phone-scene.scene-4 { animation-name: scene-4; }
+  @keyframes scene-4 {
+    0%, 65% { opacity: 0; transform: translateX(6%); }
+    68%, 96% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(0); }
+  }
+
+  /* Cursor que clica o botão "Generar" no fim da cena 1 */
+  .phone-cursor {
+    animation: phone-cursor 14s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes phone-cursor {
+    0%, 8% { opacity: 0; transform: translate(20px, -10px) scale(1); }
+    12% { opacity: 1; transform: translate(0, 0) scale(1); }
+    16% { opacity: 1; transform: translate(0, 0) scale(0.8); }
+    18% { opacity: 1; transform: translate(0, 0) scale(1); }
+    23%, 100% { opacity: 0; transform: translate(0, 0) scale(1); }
+  }
+  .phone-cta {
+    animation: phone-cta-press 14s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes phone-cta-press {
+    0%, 14% { transform: scale(1); filter: brightness(1); }
+    16% { transform: scale(0.96); filter: brightness(0.9); }
+    18%, 100% { transform: scale(1); filter: brightness(1); }
+  }
+
+  /* Animações DENTRO da cena 3 (timing absoluto no loop de 14s) */
   .day-pill {
     opacity: 0;
     transform: translateY(-6px);
-    animation: day-pill-in 0.5s ease-out forwards;
+    animation: day-pill-in 14s ease-out infinite;
   }
   @keyframes day-pill-in {
-    to { opacity: 1; transform: translateY(0); }
+    0%, 31% { opacity: 0; transform: translateY(-6px); }
+    34%, 64% { opacity: 1; transform: translateY(0); }
+    68%, 100% { opacity: 0; transform: translateY(-6px); }
   }
 
   .recipe-row {
     opacity: 0;
     transform: translateX(12px);
-    animation: recipe-row-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: recipe-row-in 14s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
   @keyframes recipe-row-in {
-    to { opacity: 1; transform: translateX(0); }
+    0%, 33% { opacity: 0; transform: translateX(12px); }
+    37%, 64% { opacity: 1; transform: translateX(0); }
+    68%, 100% { opacity: 0; transform: translateX(12px); }
   }
 
-  .phone-tap {
-    animation: phone-tap-pop 4s ease-in-out infinite;
-    transform-origin: center;
+  /* Animações DENTRO da cena 4 */
+  .shop-row {
+    opacity: 0;
+    transform: translateX(10px);
+    animation: shop-row-in 14s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
-  @keyframes phone-tap-pop {
-    0%, 18%, 100% { transform: scale(0.6); opacity: 0; }
-    22%, 32% { transform: scale(1.1); opacity: 1; }
-    38%, 90% { transform: scale(1); opacity: 1; }
+  @keyframes shop-row-in {
+    0%, 67% { opacity: 0; transform: translateX(10px); }
+    71%, 96% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(10px); }
   }
 
-  .phone-tap-2 {
-    animation: phone-tap-2 4s ease-in-out infinite;
-    transform-origin: center;
+  .phone-toast {
+    animation: phone-toast 14s ease-out infinite;
+    opacity: 0;
   }
-  @keyframes phone-tap-2 {
-    0%, 60%, 100% { transform: scale(0.6) translateY(6px); opacity: 0; }
-    72%, 92% { transform: scale(1) translateY(0); opacity: 1; }
+  @keyframes phone-toast {
+    0%, 88% { opacity: 0; transform: translateY(20px); }
+    91%, 96% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .phone-float, .day-pill, .recipe-row, .phone-tap, .phone-tap-2 {
+    .phone-float, .phone-scene, .day-pill, .recipe-row, .shop-row,
+    .phone-toast, .phone-cursor, .phone-cta {
       animation: none;
-      opacity: 1;
-      transform: none;
     }
+    .phone-scene.scene-3 { opacity: 1; }
+    .phone-scene.scene-1, .phone-scene.scene-2, .phone-scene.scene-4 { opacity: 0; }
+    .day-pill, .recipe-row { opacity: 1; transform: none; }
   }
 }
 
